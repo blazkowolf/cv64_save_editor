@@ -8,8 +8,8 @@
  * @author 
  */
 
-#include "include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
-#include "include/file/FileManager.h"
+#include "windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
+#include "file/FileManager.h"
 #include <QPushButton>
 
 ControllerPakSelectionWindow::ControllerPakSelectionWindow(QWidget *parent)

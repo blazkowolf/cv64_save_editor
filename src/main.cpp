@@ -7,9 +7,9 @@
  * @author 
  */
 
-#include "include/windows/Main/MainWindow.h"
-#include "include/save/SaveManager.h"
-#include "include/file/FileManager.h"
+#include "windows/Main/MainWindow.h"
+#include "save/SaveManager.h"
+#include "file/FileManager.h"
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>

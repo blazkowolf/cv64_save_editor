@@ -8,9 +8,9 @@
  * @author 
  */
 
-#include "include/windows/Main/MainWindow.h"
-#include "include/save/SaveManager.h"
-#include "include/file/FileManager.h"
+#include "windows/Main/MainWindow.h"
+#include "save/SaveManager.h"
+#include "file/FileManager.h"
 
 #include <QIntValidator>    // With "QIntValidator", we can validate the contents of an integer (see "handleNumberOnlyInput()")
 #include <QtGlobal>         // qBound()

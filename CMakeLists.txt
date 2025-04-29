@@ -40,7 +40,7 @@ qt_add_ui(${TARGET}
 
 target_link_libraries(${TARGET} PRIVATE Qt6::Widgets)
 
-target_include_directories(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 set_target_properties(${TARGET}
   PROPERTIES

@@ -7,7 +7,8 @@
  * @author 
  */
 
-#include "include/save/SaveManager.h"
+#include "save/Save.h"
+#include "save/SaveManager.h"
 
 short SaveManager::getRegion() const {
     return region;

@@ -9,9 +9,9 @@
  */
 
 #include "ui_MainWindow.h"
-#include "include/bit.h"
-#include "include/save/Save.h"
-#include "include/windows/ComboBoxData.h"
+#include "bit.h"
+#include "save/Save.h"
+#include "windows/ComboBoxData.h"
 
 #include <QMainWindow>
 #include <QSettings>        // QSettings

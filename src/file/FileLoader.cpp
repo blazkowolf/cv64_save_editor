@@ -7,8 +7,8 @@
  * @author 
  */
 
-#include "include/file/FileLoader.h"
-#include "include/file/FileManager.h"
+#include "file/FileLoader.h"
+#include "file/FileManager.h"
 #include <QDataStream>
 #include <QDebug>
 #include <algorithm> // std::search, std::distance

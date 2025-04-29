@@ -7,9 +7,9 @@
  * @author 
  */
 
-#include "include/file/FileManager.h"
-#include "include/save/SaveManager.h"
-#include "include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
+#include "file/FileManager.h"
+#include "save/SaveManager.h"
+#include "windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
 #include <QMessageBox>
 
 /**
