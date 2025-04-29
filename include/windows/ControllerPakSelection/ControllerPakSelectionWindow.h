@@ -8,7 +8,7 @@
  * @author 
  */
 
-#include "ui_ControllerPakSelectionwindow.h"
+#include "ui_ControllerPakSelectionWindow.h"
 #include <QDialog>
 
 namespace Ui {

@@ -8,7 +8,7 @@
  * @author 
  */
 
-#include "include/windows/main/MainWindow.h"
+#include "include/windows/Main/MainWindow.h"
 #include "include/save/SaveManager.h"
 #include "include/file/FileManager.h"
 

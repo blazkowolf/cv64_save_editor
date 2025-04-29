@@ -8,7 +8,7 @@
  * @author 
  */
 
-#include "include/windows/ControllerPakSelection/ControllerPakSelectionwindow.h"
+#include "include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
 #include "include/file/FileManager.h"
 #include <QPushButton>
 
