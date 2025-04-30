@@ -7,19 +7,12 @@ project(${TARGET} VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-
-# set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTOUIC ON)
-# set(CMAKE_AUTORCC ON)
 
 qt_add_executable(${TARGET}
-  # ui/MainWindow.ui
-  # ui/ControllerPakSelectionWindow.ui
+  WIN32 MACOSX_BUNDLE
   src/file/FileManager.cpp
   src/file/FileLoader.cpp
   src/save/SaveManager.cpp
@@ -29,20 +22,31 @@ qt_add_executable(${TARGET}
   include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h
   src/windows/ControllerPakSelectionWindow.cpp)
 
-# qt_wrap_cpp(${TARGET}
-#   src/windows/MainWindow.cpp
-#   src/windows/ControllerPakSelectionWindow.cpp)
-
 qt_add_ui(${TARGET}
   SOURCES
     ui/MainWindow.ui
     ui/ControllerPakSelectionWindow.ui)
 
-target_link_libraries(${TARGET} PRIVATE Qt6::Widgets)
+target_link_libraries(${TARGET}
+  PRIVATE
+    Qt::Core
+    Qt::Widgets)
 
-target_include_directories(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${TARGET}
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/include)
 
-set_target_properties(${TARGET}
-  PROPERTIES
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON)
+include(GNUInstallDirs)
+
+install(TARGETS ${TARGET}
+  BUNDLE  DESTINATION .
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+qt_generate_deploy_app_script(
+  TARGET ${TARGET}
+  OUTPUT_SCRIPT deploy_script
+  NO_UNSUPPORTED_PLATFORM_ERROR
+)
+
+install(SCRIPT ${deploy_script})
