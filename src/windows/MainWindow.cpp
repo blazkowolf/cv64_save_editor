@@ -68,104 +68,104 @@ MainWindow::~MainWindow()
 void MainWindow::setupPageMain() {
     // Initialize line edits
     setupLineEditNumberUnsigned(ui->leLife, 1, 100,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setLife(value);
         }
     );
     ui->leLife->setText(QString::number(100));
 
     setupLineEditNumberUnsigned(ui->leGold, 0, 99999,
-        [](unsigned int value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->setGold(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leRedJewels, 0, 99,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_RED_JEWEL, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leSpawn, 0, SHRT_MAX,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setSpawn(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leWhiteJewel, 0, USHRT_MAX,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setWhiteJewel(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leTimesSaved, 0, UINT_MAX,
-        [](unsigned int value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->setTimesSaved(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leDeathCount, 0, UINT_MAX,
-        [](unsigned int value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->setDeathCount(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leGoldRenon, 0, UINT_MAX,
-        [](unsigned int value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->setGoldRenon(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leHourVamp, 0, 23,
-        [](unsigned short value) {
+        [](std::uint16_t value) {
             SaveManager::getInstance()->setHourVamp(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leHealthDepletionRate, 0, SHRT_MAX,
-        [](unsigned short value) {
+        [](std::uint16_t value) {
             SaveManager::getInstance()->setHealthDepletionRate(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leWeek, 0, SHRT_MAX,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setWeek(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leDay, 0, 7 - 1,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setDay(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leHour, 0, 24 - 1,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setHour(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leMinutes, 0, 60 - 1,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setMinutes(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leSeconds, 0, 60 - 1,
-        [](short value) {
+        [](std::int16_t value) {
             SaveManager::getInstance()->setSeconds(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leMilliseconds, 0, 600 - 1,
-        [](unsigned short value) {
+        [](std::uint16_t value) {
             SaveManager::getInstance()->setMilliseconds(value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leFrameCount, 0, UINT_MAX,
-        [this](unsigned int value) {
+        [this](std::uint32_t value) {
             SaveManager::getInstance()->setFramecount(value);
             convertFrameToTime(SaveManager::getInstance()->getFrameCount(), ui->labelPlaytime);
         }
@@ -173,23 +173,23 @@ void MainWindow::setupPageMain() {
 
     // Initialize combo boxes and set their default values
     setupComboBox(ui->cbMap, comboBoxDataMap,
-        [](int value) { SaveManager::getInstance()->setMap(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setMap(value); }
     );
 
     setupComboBox(ui->cbCharacter, comboBoxDataCharacter,
-        [](int value) { SaveManager::getInstance()->setCharacter(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setCharacter(value); }
     );
 
     setupComboBox(ui->cbButtonConfig, comboBoxDataButtonConfig,
-        [](int value) { SaveManager::getInstance()->setButtonConfig(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setButtonConfig(value); }
     );
 
     setupComboBox(ui->cbSoundMode, comboBoxDataSoundMode,
-        [](int value) { SaveManager::getInstance()->setSoundMode(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setSoundMode(value); }
     );
 
     setupComboBox(ui->cbSubweapon, comboBoxDataSubweapon,
-        [](int value) { SaveManager::getInstance()->setSubweapon(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setSubweapon(value); }
     );
 
     setupComboBoxBitflag(ui->cbDifficulty, comboBoxDataDifficulty);
@@ -197,7 +197,7 @@ void MainWindow::setupPageMain() {
     setupComboBoxBitflag(ui->cbCarrieEnding, comboBoxDataEndingCarrie);
 
     setupComboBox(ui->cbRegion, comboBoxDataRegion,
-        [this](int value) {
+        [this](std::int32_t value) {
             SaveManager::getInstance()->setRegion(value);
 
         switch (value) {
@@ -230,7 +230,7 @@ void MainWindow::setupPageMain() {
     );
 
     setupComboBox(ui->cbLanguage, comboBoxDataLanguage,
-        [](int value) { SaveManager::getInstance()->setLanguage(value); }
+        [](std::int32_t value) { SaveManager::getInstance()->setLanguage(value); }
     );
 
     // Initialize cbLanguage to USA values
@@ -257,74 +257,74 @@ void MainWindow::setupPageMain() {
     // we ensure that its parent is MainWindow (since it's never disabled by the "enableUiComponents" function)
     ui->cboxEnabled->setParent(this);
     setupCheckBox(ui->cboxEnabled, SaveData::SAVE_FLAG_ACTIVE,
-        [this](unsigned int value) {
+        [this](std::uint32_t value) {
             SaveManager::getInstance()->setFlags(value);
             updateWindowVisibility(true);
         },
 
-        [this](unsigned int value) {
+        [this](std::uint32_t value) {
             SaveManager::getInstance()->unsetFlags(value);
             updateWindowVisibility(false);
         }
     );
 
     setupCheckBox(ui->cboxHardMode, SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED,
-        [](unsigned int value) { SaveManager::getInstance()->setFlags(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetFlags(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
     setupCheckBox(ui->cboxUseAlternateCostume, SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED,
-        [](unsigned int value) { SaveManager::getInstance()->setFlags(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetFlags(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
     setupCheckBox(ui->cboxReinhardtCostume, SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME,
-        [](unsigned int value) { SaveManager::getInstance()->setFlags(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetFlags(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
     setupCheckBox(ui->cboxCarrieCostume, SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME,
-        [](unsigned int value) { SaveManager::getInstance()->setFlags(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetFlags(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
     setupCheckBox(ui->cboxNitro, SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING,
-        [](unsigned int value) { SaveManager::getInstance()->setFlags(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetFlags(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
     setupCheckBox(ui->cboxVamp, SaveData::PLAYER_FLAG_VAMP,
-        [](unsigned int value) { SaveManager::getInstance()->setPlayerStatus(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
 
     setupCheckBox(ui->cboxPoison, SaveData::PLAYER_FLAG_POISON,
-        [](unsigned int value) { SaveManager::getInstance()->setPlayerStatus(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
 
     setupCheckBox(ui->cboxSto, SaveData::PLAYER_FLAG_STO,
-        [](unsigned int value) { SaveManager::getInstance()->setPlayerStatus(value); },
-        [](unsigned int value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
+        [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
+        [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
 }
 
 void MainWindow::setupPageItems() {
     // Jewels
     setupLineEditNumberUnsigned(ui->leItemsSpecial1, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SPECIAL1, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsSpecial2, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SPECIAL2, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsSpecial3, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // This item is version exclusive. Ensure we're only setting it when its associated region is set.
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
@@ -335,9 +335,9 @@ void MainWindow::setupPageItems() {
 
     // Healing and effect-cure items
     setupLineEditNumberUnsigned(ui->leItemsRoastChicken, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-            int actualItemId = SaveData::ITEM_ID_ROAST_CHICKEN;
+            std::int32_t actualItemId = SaveData::ITEM_ID_ROAST_CHICKEN;
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
                 actualItemId++;
@@ -348,9 +348,9 @@ void MainWindow::setupPageItems() {
     );
 
     setupLineEditNumberUnsigned(ui->leItemsRoastBeef, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-            int actualItemId = SaveData::ITEM_ID_ROAST_BEEF;
+            std::int32_t actualItemId = SaveData::ITEM_ID_ROAST_BEEF;
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
                 actualItemId++;
@@ -361,9 +361,9 @@ void MainWindow::setupPageItems() {
     );
 
     setupLineEditNumberUnsigned(ui->leItemsPurifying, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-            int actualItemId = SaveData::ITEM_ID_PURIFYING;
+            std::int32_t actualItemId = SaveData::ITEM_ID_PURIFYING;
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
                 actualItemId++;
@@ -374,9 +374,9 @@ void MainWindow::setupPageItems() {
     );
 
     setupLineEditNumberUnsigned(ui->leItemsCureAmpoule, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-            int actualItemId = SaveData::ITEM_ID_CURE_AMPOULE;
+            std::int32_t actualItemId = SaveData::ITEM_ID_CURE_AMPOULE;
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
                 actualItemId++;
@@ -387,7 +387,7 @@ void MainWindow::setupPageItems() {
     );
 
     setupLineEditNumberUnsigned(ui->leItemsPoutPourri, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // This item is version exclusive. Ensure we're only setting it when its associated region is set.
             if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
                 SaveManager::getInstance()->setItem(SaveData::ITEM_ID_POUT_POURRI, value);
@@ -396,9 +396,9 @@ void MainWindow::setupPageItems() {
     );
 
     setupLineEditNumberUnsigned(ui->leItemsHealingKit, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-            int actualItemId = SaveData::ITEM_ID_HEALING_KIT;
+            std::int32_t actualItemId = SaveData::ITEM_ID_HEALING_KIT;
             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
                 actualItemId++;
@@ -410,117 +410,117 @@ void MainWindow::setupPageItems() {
 
     // Quest Items
     setupLineEditNumberUnsigned(ui->leItemsSunCard, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SUN_CARD, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsMoonCard, 0, 10,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MOON_CARD, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsNitro, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MAGICAL_NITRO, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsMandragora, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MANDRAGORA, value);
         }
     );
 
     // Keys
     setupLineEditNumberUnsigned(ui->leKeyScience1, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY1, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyScience2, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY2, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyScience3, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY3, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyClocktower1, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY1, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyClocktower2, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY2, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyClocktower3, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY3, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyChamber, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CHAMBER_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyCopper, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_COPPER_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyExecution, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_EXECUTION_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyGarden, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_GARDEN_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyLeftTower, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_LEFT_TOWER_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyArchives, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_ARCHIVES_KEY, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leKeyStoreroom, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_STOREROOM_KEY, value);
         }
     );
 
     // Unused items
     setupLineEditNumberUnsigned(ui->leItemsER, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_ENGAGEMENT_RING, value);
         }
     );
 
     setupLineEditNumberUnsigned(ui->leItemsIG, 0, 1,
-        [](unsigned char value) {
+        [](std::uint8_t value) {
             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_INCANDESCENT_GAZE, value);
         }
     );
@@ -722,7 +722,7 @@ void MainWindow::populateMainWindow(SaveData* saveData) {
 
     // Event flag grids. We edit each of the line edits associated to the event flags to assign the hex value gotten
     // from the save data. Then, the checkboxes will be ticked / unticked automatically
-    for (unsigned int i = 0; i < NUM_EVENT_FLAGS; i++) {
+    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
         hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
     }
 }
@@ -731,7 +731,7 @@ void MainWindow::populateMainWindow(SaveData* saveData) {
  * When we press on a checkbox, a setter function will be called that will set a certain value.
  * Likewise, when we uncheck them, an unsetter function will be called which will remove the value setted in the setter.
  */
-void MainWindow::setupCheckBox(QCheckBox* checkBox, unsigned int value, std::function<void(unsigned int)> setter, std::function<void(unsigned int)> unsetter) {
+void MainWindow::setupCheckBox(QCheckBox* checkBox, std::uint32_t value, std::function<void(std::uint32_t)> setter, std::function<void(std::uint32_t)> unsetter) {
     connect(checkBox, &QCheckBox::toggled, [setter, unsetter, value](bool checked) {
         if (checked) {
             setter(value);
@@ -743,7 +743,7 @@ void MainWindow::setupCheckBox(QCheckBox* checkBox, unsigned int value, std::fun
 }
 
 void MainWindow::openFile(const QString& filename) {
-    int result = FileManager::getInstance()->openFile(filename);
+    std::int32_t result = FileManager::getInstance()->openFile(filename);
 
     if (result == -1) {
         QMessageBox::critical(this, "Error", "Couldn't open file.");
@@ -804,7 +804,7 @@ void MainWindow::fileSaveMenu() {
     }
 */
 
-    int result = FileManager::getInstance()->writeFile(FileManager::getInstance()->getFilepath(), false);
+    std::int32_t result = FileManager::getInstance()->writeFile(FileManager::getInstance()->getFilepath(), false);
 
     switch (result) {
         case -1:
@@ -840,7 +840,7 @@ void MainWindow::fileSaveAsMenu() {
     );
 
     if (!filepath.isEmpty()) {
-        int result = FileManager::getInstance()->writeFile(filepath, true);
+        std::int32_t result = FileManager::getInstance()->writeFile(filepath, true);
 
         switch (result) {
             case -1:
@@ -891,7 +891,7 @@ void MainWindow::setupSlotMenu() {
     QMenu* menuSlot = menuBar()->addMenu("Slot");
     menuSlot->setObjectName("Slot");
 
-    for (int i = 0; i < NUM_SAVES; ++i) {
+    for (std::int32_t i = 0; i < NUM_SAVES; ++i) {
         // Create a submenu for "Slot X"
         slotMenuOptions[i].slotOption = new QMenu(QString("Slot %1").arg(i + 1), this);
         menuSlot->addMenu(slotMenuOptions[i].slotOption);
@@ -931,10 +931,10 @@ void MainWindow::setupSlotMenu() {
 
 /// When clicking on a slot option, check it, and *also uncheck* any other unselected options
 /// This is done for the "Main" and "Beginning of Stage" slot menu options
-void MainWindow::updateSlotMenuCheckedState(int selectedSlotIndex, bool isMainSave) {
+void MainWindow::updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool isMainSave) {
     SaveManager* saveManager = SaveManager::getInstance();
 
-    for (unsigned int i = 0; i < NUM_SAVES; ++i) {
+    for (std::uint32_t i = 0; i < NUM_SAVES; ++i) {
         slotMenuOptions[i].mainSaveOption->setChecked(i == selectedSlotIndex && isMainSave);
         slotMenuOptions[i].beginningOfStageSaveOption->setChecked(i == selectedSlotIndex && !isMainSave);
     }
@@ -954,14 +954,14 @@ void MainWindow::setupEditMenu() {
 /**
  * @brief Allows both decimal and hexadecimal numbers to be innputted.
  */
-void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(unsigned int)> setter, QLineEdit* lineEdit) {
+void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit) {
     if (!lineEdit) {
         return;
     }
 
     QString text = lineEdit->text();
     bool ok = false;
-    unsigned int value = 0;
+    std::uint32_t value = 0;
 
     if (text.startsWith("0x", Qt::CaseInsensitive)) {
         value = text.mid(2).toUInt(&ok, 16);
@@ -971,10 +971,10 @@ void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(unsigned int)>
     }
 
     if (ok) {
-        const unsigned int minValue = lineEdit->property("minValue").toUInt();
-        const unsigned int maxValue = lineEdit->property("maxValue").toUInt();
+        const std::uint32_t minValue = lineEdit->property("minValue").toUInt();
+        const std::uint32_t maxValue = lineEdit->property("maxValue").toUInt();
 
-        value = qBound<unsigned int>(minValue, value, maxValue);
+        value = qBound<std::uint32_t>(minValue, value, maxValue);
 
         // We call this function just before setting the text
         checkMandragoraAndNitroLineEdits();
@@ -987,9 +987,9 @@ void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(unsigned int)>
 
 /// With this function, we can have more control during lineEdit initialization.
 /// In this case, we make it so that we can add a min and max value to each lineEdit without much copy-pasting
-void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const unsigned int minValue, const unsigned int maxValue, std::function<void(unsigned int)> setter) {
+void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter) {
     // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
-    // of up to 8 digits long (to prevent them from overflowing the max int / uint)
+    // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
     QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
     QRegularExpressionValidator* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
     lineEdit->setValidator(validator);
@@ -1003,7 +1003,7 @@ void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const unsigned
 }
 
 /// Populate a Combo box given an array of name strings and their associated numeric value
-void MainWindow::setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& array, std::function<void(int)> setter) {
+void MainWindow::setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& array, std::function<void(std::int32_t)> setter) {
     comboBox->clear();
 
     for (const auto& map: array) {
@@ -1012,9 +1012,9 @@ void MainWindow::setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& arra
         }
     }
 
-    connect(comboBox, &QComboBox::currentIndexChanged, [comboBox, setter](int index) {
+    connect(comboBox, &QComboBox::currentIndexChanged, [comboBox, setter](std::int32_t index) {
         if (index >= 0) {
-            int value = comboBox->itemData(index).toInt();
+            std::int32_t value = comboBox->itemData(index).toInt();
             setter(value);
         }
     });
@@ -1033,7 +1033,7 @@ void MainWindow::setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxDat
         }
     }
 
-    connect(comboBox, &QComboBox::currentIndexChanged, [this, comboBox, array](int) {
+    connect(comboBox, &QComboBox::currentIndexChanged, [this, comboBox, array](std::int32_t) {
         this->handleComboBoxSelection(comboBox, array);
     });
 
@@ -1041,7 +1041,7 @@ void MainWindow::setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxDat
     handleComboBoxSelection(comboBox, array);
 }
 
-void MainWindow::updateBitSelection(unsigned int newValue, const Ui::ComboBoxData& comboBoxData) {
+void MainWindow::updateBitSelection(std::uint32_t newValue, const Ui::ComboBoxData& comboBoxData) {
     for (const auto& data: comboBoxData) {
         for (const auto& entry: data) {
             SaveManager::getInstance()->unsetFlags(entry.second);
@@ -1052,9 +1052,9 @@ void MainWindow::updateBitSelection(unsigned int newValue, const Ui::ComboBoxDat
 }
 
 void MainWindow::handleComboBoxSelection(QComboBox* comboBox, const Ui::ComboBoxData& array) {
-    int index = comboBox->currentIndex();
+    std::int32_t index = comboBox->currentIndex();
     if (index >= 0) {
-        int value = comboBox->itemData(index).toInt();
+        std::int32_t value = comboBox->itemData(index).toInt();
         this->updateBitSelection(value, array);
     }
 }
@@ -1067,7 +1067,7 @@ void MainWindow::selectComboBoxOption(QComboBox& comboBox, const QVariant data) 
         return;
     }
 
-    int index = comboBox.findData(data);
+    std::int32_t index = comboBox.findData(data);
 
     if (index != -1) {
         comboBox.setCurrentIndex(index);
@@ -1101,7 +1101,7 @@ void MainWindow::checkMandragoraAndNitroLineEdits() {
 /**
  * @brief Creates the event flag grid dynamically.
  */
-QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, int flagSet, unsigned int flags) {
+QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags) {
     QLineEdit* hexBitflagDisplay = new QLineEdit();
     hexBitflagDisplay->setAlignment(Qt::AlignRight);
     hexBitflagDisplay->setText(QString("%1").arg(flags, 1, 10, QChar('0')));
@@ -1110,13 +1110,13 @@ QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, int flagSet, unsi
     /// @note We also add an extra row and column for printing the column / row number
     gridLayout->addWidget(hexBitflagDisplay, 0, 9, 5, 1);
     // Add numbers on top and to the right showing the column / row number respectively
-    for (unsigned int i = 0; i < 8; ++i) {
+    for (std::uint32_t i = 0; i < 8; ++i) {
         QLabel* colLabel = new QLabel(QString::number(7 - i));
         colLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
         gridLayout->addWidget(colLabel, 0, i + 1);
     }
 
-    for (unsigned int i = 0; i < 4; ++i) {
+    for (std::uint32_t i = 0; i < 4; ++i) {
         QLabel* rowLabel = new QLabel(QString::number(i));
         rowLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
         gridLayout->addWidget(rowLabel, 4 - i, 0);
@@ -1125,26 +1125,26 @@ QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, int flagSet, unsi
     QVector<QCheckBox*> checkBoxes(32);
 
     // Create 32 checkboxes (one for each bit)
-    for (unsigned int i = 0; i < 32; ++i) {
+    for (std::uint32_t i = 0; i < 32; ++i) {
         QCheckBox* checkBox = new QCheckBox();
         // Set the checked state based on the flag value
         checkBox->setChecked(flags & (1 << i));
         // Add the checkbox to the grid layout. Then place it in a 4x8 grid
         // We add +1 so that we don't print the checkboxes in the same row / column as the numbers
-        int row = 3 - (i / 8);
-        int col = 8 - (i % 8);
+        std::int32_t row = 3 - (i / 8);
+        std::int32_t col = 8 - (i % 8);
         gridLayout->addWidget(checkBox, row + 1, col);
 
         checkBoxes[i] = checkBox;
     }
 
     // Since now each checkbox is initialized, we can go ahead and connect them + add the function to handle them when toggled
-    for (unsigned int j = 0; j < 32; j++) {
+    for (std::uint32_t j = 0; j < 32; j++) {
         // Make sure that each checkbox is updated *on-the-fly* as we edit the hex value from the line edit
         // To do so, we directly define a lambda function that does this for us. This is executed when pressing any of the checkboxes
         connect(checkBoxes[j], &QCheckBox::toggled, this, [checkBoxes, hexBitflagDisplay]() {
-            unsigned int updatedFlags = 0;
-            for (int m = 0; m < 32; ++m) {
+            std::uint32_t updatedFlags = 0;
+            for (std::int32_t m = 0; m < 32; ++m) {
                 if (checkBoxes[m]->isChecked()) {
                     updatedFlags |= (1 << m);
                 }
@@ -1157,13 +1157,13 @@ QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, int flagSet, unsi
     // checkboxes depending on the hex bitflag value passed in the "hexBitflagDisplay" line edit
     connect(hexBitflagDisplay, &QLineEdit::textChanged, this, [checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
         bool ok = false;
-        unsigned int newFlags = text.toUInt(&ok, 10);
+        std::uint32_t newFlags = text.toUInt(&ok, 10);
 
         SaveManager::getInstance()->setEventFlags(flagSet, newFlags);
 
         // Ensure we limit the input value up to 0xFFFFFFFF
         if (ok && newFlags <= 0xFFFFFFFF) {
-            for (int k = 0; k < 32; ++k) {
+            for (std::int32_t k = 0; k < 32; ++k) {
                 checkBoxes[k]->setChecked(newFlags & (1 << k));
             }
         }
@@ -1229,11 +1229,11 @@ void MainWindow::updateWindowVisibility(bool enable) {
 }
 
 /// Given a framecount (in 30fps), converts it from frames to hours, minutes and seconds
-void MainWindow::convertFrameToTime(const unsigned int frameCount, QLabel* output) {
-    int totalSeconds = frameCount / 30;
-    int hours = totalSeconds / 3600;
-    int minutes = (totalSeconds % 3600) / 60;
-    int seconds = totalSeconds % 60;
+void MainWindow::convertFrameToTime(const std::uint32_t frameCount, QLabel* output) {
+    std::int32_t totalSeconds = frameCount / 30;
+    std::int32_t hours = totalSeconds / 3600;
+    std::int32_t minutes = (totalSeconds % 3600) / 60;
+    std::int32_t seconds = totalSeconds % 60;
 
     output->setText(QString("%1:%2:%3").arg(hours, 2, 10, QChar('0'))
                         .arg(minutes, 2, 10, QChar('0'))
@@ -1246,7 +1246,7 @@ void MainWindow::convertFrameToTime(const unsigned int frameCount, QLabel* outpu
 void MainWindow::onCopy(QWidget* parent) {
     SaveManager* saveManager = SaveManager::getInstance();
     // The save slot where the data will be copied over
-    unsigned int destSaveSlot = 0;
+    std::uint32_t destSaveSlot = 0;
 
     // Dynamically create the window
     QDialog dialog(parent);
@@ -1305,7 +1305,7 @@ void MainWindow::onDeleteAll() {
     QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Clear All", "Are you sure you want to clear all saves?", QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        for (int i = 0; i < NUM_SAVES; i++) {
+        for (std::int32_t i = 0; i < NUM_SAVES; i++) {
             SaveManager::getInstance()->getSaveSlot(i).clear();
             populateMainWindow(&SaveManager::getInstance()->getCurrentSave());
             updateWindowVisibility(BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE));

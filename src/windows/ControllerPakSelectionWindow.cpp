@@ -30,7 +30,7 @@ ControllerPakSelectionWindow::~ControllerPakSelectionWindow()
     delete ui;
 }
 
-QString ControllerPakSelectionWindow::getRegionName(const short region) const {
+QString ControllerPakSelectionWindow::getRegionName(const std::int16_t region) const {
     switch (region) {
         default:
         case SaveData::USA:
@@ -51,13 +51,13 @@ void ControllerPakSelectionWindow::setupButtonBox() {
     // Get the Controller Pak Castlevania 64 save array
     std::vector<FileManager::ControllerPakNotetableData>* saveArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
 
-    for (unsigned int i = 0; i < saveArray->size(); i++) {
-        int index = (*saveArray)[i].index;
+    for (std::uint32_t i = 0; i < saveArray->size(); i++) {
+        std::int32_t index = (*saveArray)[i].index;
         if (index == -1) {
             continue;
         }
 
-        short region = (*saveArray)[i].region;
+        std::int16_t region = (*saveArray)[i].region;
 
         QString buttonText = "Save " + QString::number(index + 1) + "\n" +
                              getRegionName(region);
@@ -75,7 +75,7 @@ void ControllerPakSelectionWindow::setupButtonBox() {
 /**
  * @brief Runs when clicking one of the save list buttons.
  */
-void ControllerPakSelectionWindow::onButtonClicked(int saveIndex) {
+void ControllerPakSelectionWindow::onButtonClicked(std::int32_t saveIndex) {
     // Set the save index needed for knowing what save file to load
     // (see FileLoaderControllerPak::getRawDataOffsetStart())
     FileManager::getInstance()->setControllerPakCurrentlySelectedSaveIndex(saveIndex);

@@ -15,7 +15,7 @@
 /**
  * @brief Given the loaded file format extension, it assigns the appropiate file-handling class.
  */
-int FileManager::determineFormat() {
+std::int32_t FileManager::determineFormat() {
     if (!filepath.isEmpty()) {
 
         if (loader != nullptr) {
@@ -54,7 +54,7 @@ int FileManager::determineFormat() {
     return -1;
 }
 
-int FileManager::openFile(const QString& filepath_) {
+std::int32_t FileManager::openFile(const QString& filepath_) {
     if (!filepath_.isEmpty()) {
         setFilePath(filepath_);
 
@@ -81,7 +81,7 @@ int FileManager::openFile(const QString& filepath_) {
 
                 // Initialize Controller Pak specific data
                 if (format == FORMAT_CONTROLLERPAK || format == FORMAT_DEXDRIVE) {
-                    unsigned int numCV64Saves = initNoteTableData(*file);
+                    std::uint32_t numCV64Saves = initNoteTableData(*file);
 
                     // Stop opening the file if the Controller Pak doesn't have any Castlevania saves
                     // previously stored on it
@@ -96,7 +96,7 @@ int FileManager::openFile(const QString& filepath_) {
 
                     // Open the selection window with the gathered Castlevania 64 saves
                     ControllerPakSelectionWindow* PakSaveSelectWindow = new ControllerPakSelectionWindow();
-                    int result = PakSaveSelectWindow->exec();
+                    std::int32_t result = PakSaveSelectWindow->exec();
 
                     // Return early if the user clicked on the X instead of on a button
                     if (result == QDialog::Rejected) {
@@ -126,7 +126,7 @@ int FileManager::openFile(const QString& filepath_) {
     return 0;
 }
 
-int FileManager::writeFile(const QString& filepath_, bool isReplacingOldFile) {
+std::int32_t FileManager::writeFile(const QString& filepath_, bool isReplacingOldFile) {
     if (SaveManager::getInstance()->areAllSavesDisabled()) {
         return -2;
     }
@@ -171,8 +171,8 @@ int FileManager::writeFile(const QString& filepath_, bool isReplacingOldFile) {
 /**
  * @brief Initialize the FileManager's "noteTableArray", in order to know extra information regarding each Castlevania 64 save it has in Controller Pak-formatted files.
  */
-unsigned int FileManager::initNoteTableData(QFile& file) {
-    unsigned int numCV64Saves = 0;
+std::uint32_t FileManager::initNoteTableData(QFile& file) {
+    std::uint32_t numCV64Saves = 0;
 
     if (loader != nullptr && (format == FORMAT_CONTROLLERPAK || format == FORMAT_DEXDRIVE)) {
         SaveManager* saveManager = SaveManager::getInstance();
@@ -186,12 +186,12 @@ unsigned int FileManager::initNoteTableData(QFile& file) {
          * Find the note table data (by searching the game ID, like "ND3EA4").
          * If found, it means a Castlevania 64 save is in the Controller Pak, so we can proceed to initialize the note table data.
          */
-        for (int i = 0; i < loader->getNoteTableNumEntries(); i++) {
-            const unsigned int GAMEID_SIZE = 6;
+        for (std::int32_t i = 0; i < loader->getNoteTableNumEntries(); i++) {
+            const std::uint32_t GAMEID_SIZE = 6;
             QByteArray gameId(GAMEID_SIZE, '\0');
 
             inputStream.device()->seek(loader->getNoteTableOffset() + (loader->getNoteTableEntrySize() * i));   // This is where the current entry data starts
-            unsigned int bytesRead = inputStream.readRawData(gameId.data(), GAMEID_SIZE);
+            std::uint32_t bytesRead = inputStream.readRawData(gameId.data(), GAMEID_SIZE);
             inputStream.device()->seek(loader->getNoteTableOffset() + (loader->getNoteTableEntrySize() * i));   // Go back to where we were previously to reading gameId
 
             if (bytesRead != GAMEID_SIZE) {
@@ -207,12 +207,12 @@ unsigned int FileManager::initNoteTableData(QFile& file) {
             (*noteTableArray)[i].index = i;
 
             // Parse the region (at offset +3)
-            unsigned char regionFromFile = loader->readData<unsigned char>(inputStream, inputStream.device()->pos() + 3);
+            std::uint8_t regionFromFile = loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
             (*noteTableArray)[i].region = loader->getRegionEnumFromChar(regionFromFile);
 
             // Parse the raw data start offset (at offset +3 after the region, and then multiplied by 0x100)
             // If this is 0, we skip over this save entry (acting as if it wasn't present), and go to the next one
-            unsigned int rawDataStartOffsetByte = loader->readData<unsigned char>(inputStream, inputStream.device()->pos() + 3);
+            std::uint32_t rawDataStartOffsetByte = loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
             if (rawDataStartOffsetByte == 0) {
                 (*noteTableArray)[i].clearEntry();
                 numCV64Saves--;

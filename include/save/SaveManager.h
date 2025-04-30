@@ -9,6 +9,7 @@
  */
 
 #include "Save.h"
+#include <cstdint>
 
 #include <QFile>
 #include <QtEndian>
@@ -39,52 +40,52 @@ class SaveManager {
             instance = nullptr;
         }
 
-        int currentSave = 0;
+        std::int32_t currentSave = 0;
         bool isMain = true;
 
         // Getters, setters and helper functions
         void parseRegion(QFile& file);
-        short getRegion() const;
-        void setRegion(const short);
-        void setLanguage(const short);
-        short getLanguage() const;
-        void setLife(const short);
-        void setGold(const unsigned int);
-        void setItem(const int, const unsigned char);
-        void setSpawn(const short);
-        void setWhiteJewel(const unsigned short);
-        void setTimesSaved(const unsigned int);
-        void setDeathCount(const unsigned int);
-        void setGoldRenon(const unsigned int);
-        void setHourVamp(const unsigned short);
-        void setHealthDepletionRate(const unsigned short);
-        void setWeek(const short);
-        void setDay(const short);
-        void setHour(const short);
-        void setMinutes(const short);
-        void setSeconds(const short);
-        void setMilliseconds(const unsigned short);
-        void setFramecount(const unsigned int);
-        unsigned int getFrameCount() const;
-        void setCharacter(const short);
-        void setButtonConfig(const short);
-        void setSoundMode(const short);
-        void setSubweapon(const short);
-        void setMap(const short);
-        unsigned int getFlags() const;
-        void setFlags(const unsigned int);
-        void unsetFlags(const unsigned int);
-        void setEventFlags(const int, const unsigned int);
-        unsigned int getPlayerStatus() const;
-        void setPlayerStatus(const unsigned int status);
-        void unsetPlayerStatus(const unsigned int status);
-        void assignEventFlags(const int, const unsigned int);
-        void unassignEventFlags(const int, const unsigned int);
-        unsigned int calcFirstChecksum(const QByteArray&);
-        unsigned int calcSecondChecksum(const QByteArray&);
+        std::int16_t getRegion() const;
+        void setRegion(const std::int16_t);
+        void setLanguage(const std::int16_t);
+        std::int16_t getLanguage() const;
+        void setLife(const std::int16_t);
+        void setGold(const std::uint32_t);
+        void setItem(const std::int32_t, const std::uint8_t);
+        void setSpawn(const std::int16_t);
+        void setWhiteJewel(const std::uint16_t);
+        void setTimesSaved(const std::uint32_t);
+        void setDeathCount(const std::uint32_t);
+        void setGoldRenon(const std::uint32_t);
+        void setHourVamp(const std::uint16_t);
+        void setHealthDepletionRate(const std::uint16_t);
+        void setWeek(const std::int16_t);
+        void setDay(const std::int16_t);
+        void setHour(const std::int16_t);
+        void setMinutes(const std::int16_t);
+        void setSeconds(const std::int16_t);
+        void setMilliseconds(const std::uint16_t);
+        void setFramecount(const std::uint32_t);
+        std::uint32_t getFrameCount() const;
+        void setCharacter(const std::int16_t);
+        void setButtonConfig(const std::int16_t);
+        void setSoundMode(const std::int16_t);
+        void setSubweapon(const std::int16_t);
+        void setMap(const std::int16_t);
+        std::uint32_t getFlags() const;
+        void setFlags(const std::uint32_t);
+        void unsetFlags(const std::uint32_t);
+        void setEventFlags(const std::int32_t, const std::uint32_t);
+        std::uint32_t getPlayerStatus() const;
+        void setPlayerStatus(const std::uint32_t status);
+        void unsetPlayerStatus(const std::uint32_t status);
+        void assignEventFlags(const std::int32_t, const std::uint32_t);
+        void unassignEventFlags(const std::int32_t, const std::uint32_t);
+        std::uint32_t calcFirstChecksum(const QByteArray&);
+        std::uint32_t calcSecondChecksum(const QByteArray&);
         bool areAllSavesDisabled();
 
-        SaveSlot& getSaveSlot(const int index) {
+        SaveSlot& getSaveSlot(const std::int32_t index) {
             return saves[index];
         }
 
@@ -92,7 +93,7 @@ class SaveManager {
             return saves[currentSave];
         }
 
-        SaveData& getSave(const int index, const bool isMain) {
+        SaveData& getSave(const std::int32_t index, const bool isMain) {
             return (isMain) ? getSaveSlot(index).mainSave : getSaveSlot(index).beginningOfStage;
         }
 
@@ -104,7 +105,7 @@ class SaveManager {
             return saves;
         }
 
-        void setSaveSlot(const SaveSlot& save, const int index) {
+        void setSaveSlot(const SaveSlot& save, const std::int32_t index) {
             saves[index] = save;
         }
 
@@ -120,7 +121,7 @@ class SaveManager {
         SaveManager(const SaveManager& obj) = delete; // Remove the copy constructor
 
         SaveSlot saves[NUM_SAVES];
-        short region = SaveData::USA;
+        std::int16_t region = SaveData::USA;
 };
 
 #endif

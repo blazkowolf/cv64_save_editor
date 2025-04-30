@@ -19,7 +19,7 @@
 
 namespace Ui {
 
-typedef std::vector<std::map<std::string, int>> ComboBoxData;
+typedef std::vector<std::map<std::string, std::int32_t>> ComboBoxData;
 
 }
 

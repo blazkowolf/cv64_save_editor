@@ -33,7 +33,7 @@ void destroySingletons() {
     FileManager::destroyInstance();
 }
 
-int main(int argc, char *argv[]) {
+std::int32_t main(std::int32_t argc, char *argv[]) {
     // Create the application and show the main window
     QApplication a(argc, argv);
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     MainWindow w;
     w.show();
 
-    int result = a.exec();
+    std::int32_t result = a.exec();
 
     destroySingletons();
 

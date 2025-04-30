@@ -49,7 +49,7 @@ public:
     };
 
     void populateMainWindow(SaveData* save);
-    void updateSlotMenuCheckedState(int selectedSlotIndex, bool isMainSave);
+    void updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool isMainSave);
 
 private slots:
     // Setup functions
@@ -59,12 +59,12 @@ private slots:
     void setupFileMenu();
     void setupSlotMenu();
     void setupEditMenu();
-    void handleNumberOnlyInputUnsigned(std::function<void(unsigned int)> setter, QLineEdit* lineEdit);
-    void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const unsigned int minValue, const unsigned int maxValue, std::function<void(unsigned int)> setter);
-    void setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& array, std::function<void(int)> setter);
+    void handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit);
+    void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter);
+    void setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& array, std::function<void(std::int32_t)> setter);
     void setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxData& array);
-    void setupCheckBox(QCheckBox* checkBox, unsigned int value, std::function<void(unsigned int)> setter, std::function<void(unsigned int)> unsetter);
-    QLineEdit* createGridFlag(QGridLayout* gridLayout, int flagSet, unsigned int flags);
+    void setupCheckBox(QCheckBox* checkBox, std::uint32_t value, std::function<void(std::uint32_t)> setter, std::function<void(std::uint32_t)> unsetter);
+    QLineEdit* createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags);
 
     // Interface event handling functions
     void fileOpenMenu();
@@ -84,15 +84,15 @@ private slots:
     void enableUIComponents(bool);
     void updateCheckboxEnabledVisibility();
     void updateWindowVisibility(bool);
-    void convertFrameToTime(const unsigned int frameCount, QLabel* output);
-    void updateBitSelection(unsigned int newValue, const Ui::ComboBoxData& comboBoxData);
+    void convertFrameToTime(const std::uint32_t frameCount, QLabel* output);
+    void updateBitSelection(std::uint32_t newValue, const Ui::ComboBoxData& comboBoxData);
 
     // Inline getters and setters
-    inline void setSelectedSave(const int slot) {
+    inline void setSelectedSave(const std::int32_t slot) {
         selectedSlot = slot;
     }
 
-    inline int getSelectedSave() const {
+    inline std::int32_t getSelectedSave() const {
         return selectedSlot;
     }
 
@@ -111,7 +111,7 @@ private:
     QLineEdit* hexBitflagLineEdits[NUM_EVENT_FLAGS] = {};
 
     /**< The currently-selected save slot */
-    int selectedSlot = 0;
+    std::int32_t selectedSlot = 0;
     /**< If true, the "Main" save is selected. Otherwise, the "Beginning of Stage" save is selected. */
     bool isMain = true;
 

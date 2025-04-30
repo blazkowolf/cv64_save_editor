@@ -9,6 +9,7 @@
 #define SAVE_H
 
 #include "bit.h"
+#include <cstdint>
 
 #define NUM_EVENT_FLAGS  16
 #define SIZE_ITEMS_ARRAY 64
@@ -21,55 +22,55 @@
  * This structure contains the gameplay variables from one single save inside the game.
  */
 struct SaveData {
-    /* 0x000 */ unsigned int event_flags[NUM_EVENT_FLAGS];
-    /* 0x040 */ unsigned int flags;
-    /* 0x044 */ short week;
-    /* 0x046 */ short day;
-    /* 0x048 */ short hour;
-    /* 0x04A */ short minute;
-    /* 0x04C */ short seconds;
-    /* 0x04E */ unsigned short milliseconds;
-    /* 0x050 */ unsigned int gameplay_framecount; // Updates at 60fps
-    /* 0x054 */ short button_config;
-    /* 0x056 */ short sound_mode;
+    /* 0x000 */ std::uint32_t event_flags[NUM_EVENT_FLAGS];
+    /* 0x040 */ std::uint32_t flags;
+    /* 0x044 */ std::int16_t week;
+    /* 0x046 */ std::int16_t day;
+    /* 0x048 */ std::int16_t hour;
+    /* 0x04A */ std::int16_t minute;
+    /* 0x04C */ std::int16_t seconds;
+    /* 0x04E */ std::uint16_t milliseconds;
+    /* 0x050 */ std::uint32_t gameplay_framecount; // Updates at 60fps
+    /* 0x054 */ std::int16_t button_config;
+    /* 0x056 */ std::int16_t sound_mode;
 
     // PAL-only
-    /* 0x058 */ short language;
-    /* 0x05A */ short padding5A_PAL;
+    /* 0x058 */ std::int16_t language;
+    /* 0x05A */ std::int16_t padding5A_PAL;
 
-    /* 0x058 */ short character;
-    /* 0x05A */ short life;
+    /* 0x058 */ std::int16_t character;
+    /* 0x05A */ std::int16_t life;
     /**
      * Only set to 100, like the life, and never used otherwise.
      */
-    /* 0x05C */ short field_0x5C;
-    /* 0x05E */ short subweapon;
-    /* 0x060 */ unsigned int gold;
-    /* 0x064 */ unsigned char items[SIZE_ITEMS_ARRAY];
-    /* 0x0A4 */ unsigned int player_status;
-    /* 0x0A8 */ short health_depletion_rate_while_poisoned;
+    /* 0x05C */ std::int16_t field_0x5C;
+    /* 0x05E */ std::int16_t subweapon;
+    /* 0x060 */ std::uint32_t gold;
+    /* 0x064 */ std::uint8_t items[SIZE_ITEMS_ARRAY];
+    /* 0x0A4 */ std::uint32_t player_status;
+    /* 0x0A8 */ std::int16_t health_depletion_rate_while_poisoned;
     /**
     * If greater than 24 (midnight), the player turns into a vampire
     */
-    /* 0x0AA */ unsigned short current_hour_VAMP;
-    /* 0x0AC */ short map;
-    /* 0x0AE */ short spawn;
-    /* 0x0B0 */ unsigned short save_crystal_number;
-    /* 0x0B2 */ unsigned char field51_0xb2;
-    /* 0x0B3 */ unsigned char field52_0xb3;
-    /* 0x0B4 */ unsigned int time_saved_counter;
-    /* 0x0B8 */ unsigned int death_counter;
-    /* 0x0BC */ int field55_0xbc;
-    /* 0x0C0 */ int field59_0xc0;
-    /* 0x0C4 */ int field63_0xc4;
-    /* 0x0C8 */ short field67_0xc8;
-    /* 0x0CA */ short field69_0xca;
-    /* 0x0CC */ int field71_0xcc;
-    /* 0x0D0 */ int field75_0xd0;
-    /* 0x0D2 */ short field77_0xd2;
-    /* 0x0D4 */ short field79_0xd4;
-    /* 0x0D8 */ int field83_0xd8;
-    /* 0x0DC */ unsigned int gold_spent_on_Renon;
+    /* 0x0AA */ std::uint16_t current_hour_VAMP;
+    /* 0x0AC */ std::int16_t map;
+    /* 0x0AE */ std::int16_t spawn;
+    /* 0x0B0 */ std::uint16_t save_crystal_number;
+    /* 0x0B2 */ std::uint8_t field51_0xb2;
+    /* 0x0B3 */ std::uint8_t field52_0xb3;
+    /* 0x0B4 */ std::uint32_t time_saved_counter;
+    /* 0x0B8 */ std::uint32_t death_counter;
+    /* 0x0BC */ std::int32_t field55_0xbc;
+    /* 0x0C0 */ std::int32_t field59_0xc0;
+    /* 0x0C4 */ std::int32_t field63_0xc4;
+    /* 0x0C8 */ std::int16_t field67_0xc8;
+    /* 0x0CA */ std::int16_t field69_0xca;
+    /* 0x0CC */ std::int32_t field71_0xcc;
+    /* 0x0D0 */ std::int32_t field75_0xd0;
+    /* 0x0D2 */ std::int16_t field77_0xd2;
+    /* 0x0D4 */ std::int16_t field79_0xd4;
+    /* 0x0D8 */ std::int32_t field83_0xd8;
+    /* 0x0DC */ std::uint32_t gold_spent_on_Renon;
 
     enum eItemId {
         ITEM_ID_NOTHING           = 0,
@@ -232,19 +233,19 @@ struct SaveData {
         FRENCH
     };
 
-    inline unsigned int getPlayerStatus(unsigned int bitFlagMask) {
+    inline std::uint32_t getPlayerStatus(std::uint32_t bitFlagMask) {
         return BITS_HAS(player_status, bitFlagMask);
     }
 
-    inline unsigned int getFlag(unsigned int bitFlagMask) {
+    inline std::uint32_t getFlag(std::uint32_t bitFlagMask) {
         return BITS_HAS(flags, bitFlagMask);
     }
 
-    inline unsigned int getItem(int itemId) {
+    inline std::uint32_t getItem(std::int32_t itemId) {
         return items[itemId - 1];
     }
 
-    inline unsigned int getEventFlags(int setIndex) {
+    inline std::uint32_t getEventFlags(std::int32_t setIndex) {
         return event_flags[setIndex];
     }
 }; /// @note Size = 0x0E0 bytes
@@ -268,8 +269,8 @@ struct SaveData {
 struct SaveSlot {
     SaveData mainSave;
     SaveData beginningOfStage;
-    unsigned int checksum1;
-    unsigned int checksum2;
+    std::uint32_t checksum1;
+    std::uint32_t checksum2;
 
     void clear() {
         mainSave = {};

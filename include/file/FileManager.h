@@ -39,9 +39,9 @@ class FileManager {
          * individual saves inside Controller Pak-formatted files.
          */
         struct ControllerPakNotetableData {
-            int index = -1;
-            short region = SaveData::USA;
-            unsigned int rawDataStartOffset = 0;
+            std::int32_t index = -1;
+            std::int16_t region = SaveData::USA;
+            std::uint32_t rawDataStartOffset = 0;
 
             ControllerPakNotetableData() { clearEntry(); }
 
@@ -52,8 +52,8 @@ class FileManager {
             }
         };
 
-        const unsigned int CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE = 0x20;  /**< Size of each entry in the note table */
-        const unsigned int CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES = 16;   /**< Total number of elements in the note table */
+        const std::uint32_t CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE = 0x20;  /**< Size of each entry in the note table */
+        const std::uint32_t CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES = 16;   /**< Total number of elements in the note table */
 
         // Singleton-related functions
         static FileManager* getInstance() {
@@ -74,11 +74,11 @@ class FileManager {
         }
 
         // Inline getters and setters
-        inline int getFileFormat() const {
+        inline std::int32_t getFileFormat() const {
             return format;
         }
 
-        inline void setFileFormat(const int format_) {
+        inline void setFileFormat(const std::int32_t format_) {
             format = format_;
         }
 
@@ -102,11 +102,11 @@ class FileManager {
             return loader;
         }
 
-        inline int getControllerPakCurrentlySelectedSaveIndex() const {
+        inline std::int32_t getControllerPakCurrentlySelectedSaveIndex() const {
             return controllerPakCurrentlySelectedSaveIndex;
         }
 
-        inline void setControllerPakCurrentlySelectedSaveIndex(int controllerPakCurrentlySelectedSaveIndex_) {
+        inline void setControllerPakCurrentlySelectedSaveIndex(std::int32_t controllerPakCurrentlySelectedSaveIndex_) {
             controllerPakCurrentlySelectedSaveIndex = controllerPakCurrentlySelectedSaveIndex_;
         }
 
@@ -123,14 +123,14 @@ class FileManager {
         }
 
         // Functions for the main file operations
-        int openFile(const QString& filepath_);
-        int writeFile(const QString& filepath_, bool isReplacingOldFile);
+        std::int32_t openFile(const QString& filepath_);
+        std::int32_t writeFile(const QString& filepath_, bool isReplacingOldFile);
 
         // Functions or handling the note table data array
-        unsigned int initNoteTableData(QFile& file);
+        std::uint32_t initNoteTableData(QFile& file);
 
         void clearNoteTableData() {
-            for (int i = 0; i < noteTableArray.size(); i++) {
+            for (std::int32_t i = 0; i < noteTableArray.size(); i++) {
                 noteTableArray[i].clearEntry();
             }
         }
@@ -164,10 +164,10 @@ class FileManager {
         }
 
         FileManager(const FileManager& obj) = delete; // Remove the copy constructor
-        int determineFormat();
+        std::int32_t determineFormat();
 
-        int format = FORMAT_NOTE;                           /**< File format */
-        int controllerPakCurrentlySelectedSaveIndex = 0;    /**< The index of the currently selected save in a loaded Controller Pak */
+        std::int32_t format = FORMAT_NOTE;                           /**< File format */
+        std::int32_t controllerPakCurrentlySelectedSaveIndex = 0;    /**< The index of the currently selected save in a loaded Controller Pak */
 
         QFile* file = nullptr;                              /**< Currently-opened file */
         QByteArray* buffer = nullptr;                       /**< File buffer containing the raw bytes for the currently-opened file */

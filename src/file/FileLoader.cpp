@@ -12,12 +12,13 @@
 #include <QDataStream>
 #include <QDebug>
 #include <algorithm> // std::search, std::distance
+#include <cstdint>
 #include <cstddef>   // offsetof
 
 /**
  * @brief Reads the data associated to a save slot from a file given the start offset within said file.
  */
-void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, unsigned int startOffset) {
+void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset) {
     QDataStream inputStream(&file);
 
     // Return if we reached the end of the file
@@ -27,20 +28,20 @@ void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, unsigned int startOff
 
     slot.mainSave = readSaveData(inputStream, startOffset);
     slot.beginningOfStage = readSaveData(inputStream, inputStream.device()->pos());
-    slot.checksum1 = readData<unsigned int>(inputStream, inputStream.device()->pos());
-    slot.checksum2 = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    slot.checksum1 = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
+    slot.checksum2 = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 }
 
 /**
  * @brief Writes the data associated from a save slot to a file at the start offset within said file.
  */
-void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, unsigned int startOffset) {
+void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset) {
     SaveManager* saveManager = SaveManager::getInstance();
     QDataStream outputStream(&file);
 
-    unsigned int firstChecksumOffset = 0;
-    unsigned int secondChecksumOffset = 0;
-    unsigned int saveDataSize = 0;
+    std::uint32_t firstChecksumOffset = 0;
+    std::uint32_t secondChecksumOffset = 0;
+    std::uint32_t saveDataSize = 0;
 
     if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
         firstChecksumOffset = offsetof(SaveSlot, checksum1);
@@ -71,8 +72,8 @@ void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, unsigned int startOf
     swapEndianness(&rawData);
 
     // Write the SaveSlot main's checksum at the specific offsets within the SaveSlot struct
-    unsigned int firstChecksum = saveManager->calcFirstChecksum(rawData);
-    unsigned int secondChecksum = saveManager->calcSecondChecksum(rawData);
+    std::uint32_t firstChecksum = saveManager->calcFirstChecksum(rawData);
+    std::uint32_t secondChecksum = saveManager->calcSecondChecksum(rawData);
 
     device->seek(startOffset + firstChecksumOffset);
     outputStream << firstChecksum;
@@ -83,7 +84,7 @@ void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, unsigned int startOf
 /**
  * @brief Returns the region numeric ID given its equivalent character ID.
  */
-short FileLoader::getRegionEnumFromChar(const unsigned char regionFromFile) {
+std::int16_t FileLoader::getRegionEnumFromChar(const std::uint8_t regionFromFile) {
     switch (regionFromFile) {
         default:
         case 'E':
@@ -104,7 +105,7 @@ void FileLoaderNote::parseRegion(QFile& file) {
     SaveManager* saveManager = SaveManager::getInstance();
     QDataStream inputStream(&file);
 
-    unsigned char regionFromFile = readData<unsigned char>(inputStream, getRegionIdOffset());
+    std::uint8_t regionFromFile = readData<std::uint8_t>(inputStream, getRegionIdOffset());
     saveManager->setRegion(getRegionEnumFromChar(regionFromFile));
 }
 
@@ -112,7 +113,7 @@ void FileLoaderNote::parseRegion(QFile& file) {
  * @brief Reads an entire save from the given file. The start offset for this data depends on the file format.
  */
 void FileLoader::readAllSaveSlots(QFile& file) {
-    for (unsigned int i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
         readSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
     }
 }
@@ -121,7 +122,7 @@ void FileLoader::readAllSaveSlots(QFile& file) {
  * @brief Writes an entire save to the given file. The start offset for this data depends on the file format.
  */
 void FileLoader::writeAllSaveSlots(QFile& file) {
-    for (unsigned int i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
         writeSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
     }
 }
@@ -129,70 +130,70 @@ void FileLoader::writeAllSaveSlots(QFile& file) {
 /**
  * @brief Reads a save data entry from the given data stream. The start offset for this data depends on the file format.
  */
-const SaveData& FileLoader::readSaveData(QDataStream& inputStream, unsigned int startOffset) {
+const SaveData& FileLoader::readSaveData(QDataStream& inputStream, std::uint32_t startOffset) {
     SaveData* currentSave = new SaveData();
 
     // Seek to the start of the save data
     inputStream.device()->seek(startOffset);
 
     // Read save data contents into "currentSave"
-    for (unsigned int i = 0; i < NUM_EVENT_FLAGS; i++) {
-        currentSave->event_flags[i] = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
+        currentSave->event_flags[i] = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
     }
-    currentSave->flags = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    currentSave->flags = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->week = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->day = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->hour = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->minute = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->seconds = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->milliseconds = readData<unsigned short>(inputStream, inputStream.device()->pos());
-    currentSave->gameplay_framecount = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    currentSave->week = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->day = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->hour = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->minute = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->seconds = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->milliseconds = readData<std::uint16_t>(inputStream, inputStream.device()->pos());
+    currentSave->gameplay_framecount = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->button_config = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->sound_mode = readData<short>(inputStream, inputStream.device()->pos());
+    currentSave->button_config = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->sound_mode = readData<std::int16_t>(inputStream, inputStream.device()->pos());
 
     // PAL-exclusive data
     if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
-        currentSave->language = readData<short>(inputStream, inputStream.device()->pos());
-        currentSave->padding5A_PAL = readData<short>(inputStream, inputStream.device()->pos());
+        currentSave->language = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+        currentSave->padding5A_PAL = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     }
 
-    currentSave->character = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->life = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->field_0x5C = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->subweapon = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->gold = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    currentSave->character = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->life = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->field_0x5C = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->subweapon = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->gold = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
-    for (unsigned int j = 0; j < SIZE_ITEMS_ARRAY; j++) {
-        currentSave->items[j] = readData<unsigned char>(inputStream, inputStream.device()->pos());
+    for (std::uint32_t j = 0; j < SIZE_ITEMS_ARRAY; j++) {
+        currentSave->items[j] = readData<std::uint8_t>(inputStream, inputStream.device()->pos());
     }
 
-    currentSave->player_status = readData<unsigned int>(inputStream, inputStream.device()->pos());
-    currentSave->health_depletion_rate_while_poisoned = readData<short>(inputStream, inputStream.device()->pos());
+    currentSave->player_status = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
+    currentSave->health_depletion_rate_while_poisoned = readData<std::int16_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->current_hour_VAMP = readData<unsigned short>(inputStream, inputStream.device()->pos());
-    currentSave->map = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->spawn = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->save_crystal_number = readData<unsigned short>(inputStream, inputStream.device()->pos());
+    currentSave->current_hour_VAMP = readData<std::uint16_t>(inputStream, inputStream.device()->pos());
+    currentSave->map = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->spawn = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->save_crystal_number = readData<std::uint16_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->field51_0xb2 = readData<unsigned char>(inputStream, inputStream.device()->pos());
-    currentSave->field52_0xb3 = readData<unsigned char>(inputStream, inputStream.device()->pos());
+    currentSave->field51_0xb2 = readData<std::uint8_t>(inputStream, inputStream.device()->pos());
+    currentSave->field52_0xb3 = readData<std::uint8_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->time_saved_counter = readData<unsigned int>(inputStream, inputStream.device()->pos());
-    currentSave->death_counter = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    currentSave->time_saved_counter = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
+    currentSave->death_counter = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
-    currentSave->field55_0xbc = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->field59_0xc0 = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->field63_0xc4 = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->field67_0xc8 = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->field69_0xca = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->field71_0xcc = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->field75_0xd0 = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->field77_0xd2 = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->field79_0xd4 = readData<short>(inputStream, inputStream.device()->pos());
-    currentSave->field83_0xd8 = readData<int>(inputStream, inputStream.device()->pos());
-    currentSave->gold_spent_on_Renon = readData<unsigned int>(inputStream, inputStream.device()->pos());
+    currentSave->field55_0xbc = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->field59_0xc0 = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->field63_0xc4 = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->field67_0xc8 = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->field69_0xca = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->field71_0xcc = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->field75_0xd0 = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->field77_0xd2 = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->field79_0xd4 = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->field83_0xd8 = readData<std::int32_t>(inputStream, inputStream.device()->pos());
+    currentSave->gold_spent_on_Renon = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
     return *currentSave;
 }
@@ -200,61 +201,61 @@ const SaveData& FileLoader::readSaveData(QDataStream& inputStream, unsigned int 
 /**
  * @brief Writes a save data entry to the given data stream. The start offset for this data depends on the file format.
  */
-void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveData, unsigned int startOffset) {
+void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveData, std::uint32_t startOffset) {
     outputStream.device()->seek(startOffset);
 
-    for (unsigned int i = 0; i < NUM_EVENT_FLAGS; i++) {
-        writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.event_flags[i]);
+    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
+        writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.event_flags[i]);
     }
 
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.flags);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.week);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.day);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.hour);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.minute);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.seconds);
-    writeData<unsigned short>(outputStream, outputStream.device()->pos(), saveData.milliseconds);
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.gameplay_framecount);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.button_config);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.sound_mode);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.flags);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.week);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.day);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.hour);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.minute);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.seconds);
+    writeData<std::uint16_t>(outputStream, outputStream.device()->pos(), saveData.milliseconds);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.gameplay_framecount);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.button_config);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.sound_mode);
 
     // PAL-related saves
     if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
-        writeData<short>(outputStream, outputStream.device()->pos(), saveData.language);
-        writeData<short>(outputStream, outputStream.device()->pos(), saveData.padding5A_PAL);
+        writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.language);
+        writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.padding5A_PAL);
     }
 
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.character);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.life);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.field_0x5C);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.subweapon);
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.gold);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.character);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.life);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field_0x5C);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.subweapon);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.gold);
 
-    for (unsigned int j = 0; j < SIZE_ITEMS_ARRAY; j++) {
-        writeData<unsigned char>(outputStream, outputStream.device()->pos(), saveData.items[j]);
+    for (std::uint32_t j = 0; j < SIZE_ITEMS_ARRAY; j++) {
+        writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), saveData.items[j]);
     }
 
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.player_status);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.health_depletion_rate_while_poisoned);
-    writeData<unsigned short>(outputStream, outputStream.device()->pos(), saveData.current_hour_VAMP);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.map);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.spawn);
-    writeData<unsigned short>(outputStream, outputStream.device()->pos(), saveData.save_crystal_number);
-    writeData<unsigned char>(outputStream, outputStream.device()->pos(), saveData.field51_0xb2);
-    writeData<unsigned char>(outputStream, outputStream.device()->pos(), saveData.field52_0xb3);
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.time_saved_counter);
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.death_counter);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field55_0xbc);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field59_0xc0);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field63_0xc4);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.field67_0xc8);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.field69_0xca);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field71_0xcc);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field75_0xd0);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.field77_0xd2);
-    writeData<short>(outputStream, outputStream.device()->pos(), saveData.field79_0xd4);
-    writeData<int>(outputStream, outputStream.device()->pos(), saveData.field83_0xd8);
-    writeData<unsigned int>(outputStream, outputStream.device()->pos(), saveData.gold_spent_on_Renon);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.player_status);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.health_depletion_rate_while_poisoned);
+    writeData<std::uint16_t>(outputStream, outputStream.device()->pos(), saveData.current_hour_VAMP);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.map);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.spawn);
+    writeData<std::uint16_t>(outputStream, outputStream.device()->pos(), saveData.save_crystal_number);
+    writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), saveData.field51_0xb2);
+    writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), saveData.field52_0xb3);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.time_saved_counter);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.death_counter);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field55_0xbc);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field59_0xc0);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field63_0xc4);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field67_0xc8);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field69_0xca);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field71_0xcc);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field75_0xd0);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field77_0xd2);
+    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field79_0xd4);
+    writeData<std::int32_t>(outputStream, outputStream.device()->pos(), saveData.field83_0xd8);
+    writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.gold_spent_on_Renon);
 }
 
 /**
@@ -263,7 +264,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveDa
  * @note source: https://github.com/bryc/mpkedit/wiki/Note-file-formats
  * @note This implements the format last updated on Sep 29, 2023.
  */
-std::vector<unsigned char> FileLoaderNote::getHeaderBytes() const {
+std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
     switch (SaveManager::getInstance()->getRegion()) {
         case SaveData::USA:
             return {
@@ -300,7 +301,7 @@ void FileLoaderCartridge::parseRegion(QFile& file) {
     SaveManager::getInstance()->setRegion(SaveData::JPN);
 }
 
-std::vector<unsigned char> FileLoaderCartridge::getHeaderBytes() const {
+std::vector<std::uint8_t> FileLoaderCartridge::getHeaderBytes() const {
     return {
         0x4B, 0x43, 0x45, 0x4B, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x31, 0x32, 0x30, 0x39
     };
@@ -309,27 +310,27 @@ std::vector<unsigned char> FileLoaderCartridge::getHeaderBytes() const {
 /**
  * @brief Get the raw save slot size + its padding.
  */
-unsigned int FileLoaderNote::getSaveSlotPaddedSize() const {
+std::uint32_t FileLoaderNote::getSaveSlotPaddedSize() const {
     return sizeof(SaveSlot) + (getSavePaddedSize() - sizeof(SaveSlot));
 }
 
 /**
  * @note Always 0x900 bytes in practice.
  */
-unsigned int FileLoaderNote::getMaxFileSize() const {
-    unsigned int headerSize = getHeaderBytes().size();
-    unsigned int maxFileSize = headerSize + (getSaveSlotPaddedSize() * NUM_SAVES) + getUnusedExtraSize();
+std::uint32_t FileLoaderNote::getMaxFileSize() const {
+    std::uint32_t headerSize = getHeaderBytes().size();
+    std::uint32_t maxFileSize = headerSize + (getSaveSlotPaddedSize() * NUM_SAVES) + getUnusedExtraSize();
 
     return maxFileSize;
 };
 
-bool FileLoader::searchHexInFile(const QByteArray& data, const std::vector<unsigned char>& target) {
+bool FileLoader::searchHexInFile(const QByteArray& data, const std::vector<std::uint8_t>& target) {
     if (data.isEmpty() || target.empty()) {
         return false;
     }
 
-    // Convert QByteArray to std::vector<unsigned char>
-    std::vector<unsigned char> fileContents(data.begin(), data.end());
+    // Convert QByteArray to std::vector<std::uint8_t>
+    std::vector<std::uint8_t> fileContents(data.begin(), data.end());
 
     // Search for the target sequence
     auto it = std::search(fileContents.begin(), fileContents.end(), target.begin(), target.end());
@@ -337,15 +338,15 @@ bool FileLoader::searchHexInFile(const QByteArray& data, const std::vector<unsig
     return it != fileContents.end(); // True if found, false otherwise
 }
 
-unsigned int FileLoaderNote::countHexOccurrences(const QByteArray& data, const std::vector<unsigned char>& target) const {
+std::uint32_t FileLoaderNote::countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const {
     if (data.isEmpty() || target.empty()) {
         return 0;
     }
 
-    // Convert QByteArray to std::vector<unsigned char>
-    std::vector<unsigned char> fileContents(data.begin(), data.end());
+    // Convert QByteArray to std::vector<std::uint8_t>
+    std::vector<std::uint8_t> fileContents(data.begin(), data.end());
 
-    int count = 0;
+    std::int32_t count = 0;
     auto it = fileContents.begin();
 
     // Search for all occurrences
@@ -363,15 +364,15 @@ unsigned int FileLoaderNote::countHexOccurrences(const QByteArray& data, const s
     return count;
 }
 
-unsigned int FileLoaderCartridge::countHexOccurrences(const QByteArray& data, const std::vector<unsigned char>& target) const {
+std::uint32_t FileLoaderCartridge::countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const {
     if (data.isEmpty() || target.empty()) {
         return 0;
     }
 
-    // Convert QByteArray to std::vector<unsigned char>
-    std::vector<unsigned char> fileContents(data.begin(), data.end());
+    // Convert QByteArray to std::vector<std::uint8_t>
+    std::vector<std::uint8_t> fileContents(data.begin(), data.end());
 
-    int count = 0;
+    std::int32_t count = 0;
     auto it = fileContents.begin();
 
     // Search for all occurrences
@@ -389,15 +390,15 @@ unsigned int FileLoaderCartridge::countHexOccurrences(const QByteArray& data, co
     return count;
 }
 
-unsigned int FileLoaderControllerPak::countHexOccurrences(const QByteArray& data, const std::vector<unsigned char>& target) const {
+std::uint32_t FileLoaderControllerPak::countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const {
     if (data.isEmpty() || target.empty()) {
         return 0;
     }
 
-    // Convert QByteArray to std::vector<unsigned char>
-    std::vector<unsigned char> fileContents(data.begin(), data.end());
+    // Convert QByteArray to std::vector<std::uint8_t>
+    std::vector<std::uint8_t> fileContents(data.begin(), data.end());
 
-    int count = 0;
+    std::int32_t count = 0;
     auto it = fileContents.begin();
 
     // Search for all occurrences
@@ -418,13 +419,13 @@ unsigned int FileLoaderControllerPak::countHexOccurrences(const QByteArray& data
 /**
  * @brief Given a cartridge save (which has dynamic size), return the number of saves it currently has.
  */
-unsigned int FileLoaderCartridge::getCartridgeNumSaves() const {
+std::uint32_t FileLoaderCartridge::getCartridgeNumSaves() const {
     // We search the number of times the cartridge header data has been found, which is equal to the number of saves the file has
     return countHexOccurrences(FileManager::getInstance()->getBuffer(), getHeaderBytes());
 }
 
-unsigned int FileLoaderCartridge::getSaveSlotPaddedSize() const {
-    unsigned int headerSize = getHeaderBytes().size();
+std::uint32_t FileLoaderCartridge::getSaveSlotPaddedSize() const {
+    std::uint32_t headerSize = getHeaderBytes().size();
 
     // The complete save slot ends at offset 0x1F0, not 0x200, so we remove -0x10 bytes from it.
     // Besides, each slot now starts with the header data.
@@ -434,8 +435,8 @@ unsigned int FileLoaderCartridge::getSaveSlotPaddedSize() const {
 /**
  * @note Cartridge saves have variable size.
  */
-unsigned int FileLoaderCartridge::getMaxFileSize() const {
-    unsigned int maxFileSize = getSaveSlotPaddedSize() * getCartridgeNumSaves();
+std::uint32_t FileLoaderCartridge::getMaxFileSize() const {
+    std::uint32_t maxFileSize = getSaveSlotPaddedSize() * getCartridgeNumSaves();
 
     return maxFileSize;
 };
@@ -447,27 +448,27 @@ void FileLoaderControllerPak::parseRegion(QFile& file) {
     SaveManager::getInstance()->setRegion((*noteTableArray)[FileManager::getInstance()->getControllerPakCurrentlySelectedSaveIndex()].region);
 }
 
-unsigned int FileLoaderControllerPak::getRawDataOffsetStart() const {
+std::uint32_t FileLoaderControllerPak::getRawDataOffsetStart() const {
     // We obtain the raw data offset start from the note table data.
     std::vector<FileManager::ControllerPakNotetableData>* noteTableArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
     return (*noteTableArray)[FileManager::getInstance()->getControllerPakCurrentlySelectedSaveIndex()].rawDataStartOffset;
 }
 
-unsigned int FileLoaderControllerPak::getSaveSlotPaddedSize() const {
+std::uint32_t FileLoaderControllerPak::getSaveSlotPaddedSize() const {
     return sizeof(SaveSlot) + (getSavePaddedSize() - sizeof(SaveSlot));
 }
 
 /**
  * @note Always 0x8000 bytes
  */
-unsigned int FileLoaderControllerPak::getMaxFileSize() const {
+std::uint32_t FileLoaderControllerPak::getMaxFileSize() const {
     return 0x8000;
 };
 
 /**
  * @note In DexDrive saves, the Controller Pak data actually starts at 0x1040.
  */
-unsigned int FileLoaderDexDrive::getMaxFileSize() const {
+std::uint32_t FileLoaderDexDrive::getMaxFileSize() const {
     return 0x8000 + 0x1040;
 };
 
@@ -480,9 +481,9 @@ void FileLoader::swapEndianness(QByteArray* rawData) {
     }
 
     char* data = rawData->data();
-    int dataSize = rawData->size();
+    std::int32_t dataSize = rawData->size();
 
-    for (int i = 0; i + 3 < dataSize; i += 4) {
+    for (std::int32_t i = 0; i + 3 < dataSize; i += 4) {
         std::swap(data[i], data[i + 3]);
         std::swap(data[i + 1], data[i + 2]);
     }
@@ -491,9 +492,9 @@ void FileLoader::swapEndianness(QByteArray* rawData) {
 void FileLoaderCartridge::writeAllSaveSlots(QFile& file) {
     file.seek(0);
 
-    for (unsigned int i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
         // First, write the header, then the saveslot data
-        std::vector<unsigned char> headerBytes = getHeaderBytes();
+        std::vector<std::uint8_t> headerBytes = getHeaderBytes();
 
         if (!headerBytes.empty()) {
             file.write(reinterpret_cast<const char*>(headerBytes.data()), headerBytes.size());
@@ -502,7 +503,7 @@ void FileLoaderCartridge::writeAllSaveSlots(QFile& file) {
         writeSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
 
         // Add padding bytes at the end of each saveslot
-        std::vector<unsigned char> paddingBytes(getSaveSlotPaddingBytesSize(), 0);
+        std::vector<std::uint8_t> paddingBytes(getSaveSlotPaddingBytesSize(), 0);
         file.write(reinterpret_cast<const char*>(paddingBytes.data()), paddingBytes.size());
     }
 }
@@ -511,29 +512,29 @@ void FileLoaderNote::writeAllSaveSlots(QFile& file) {
     file.seek(0);
 
     // First, write the header, then the saveslot data
-    std::vector<unsigned char> headerBytes = getHeaderBytes();
+    std::vector<std::uint8_t> headerBytes = getHeaderBytes();
     if (!headerBytes.empty()) {
         file.write(reinterpret_cast<const char*>(headerBytes.data()), headerBytes.size());
     }
 
-    for (unsigned int i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
         writeSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
 
         // Add padding bytes at the end of each saveslot
-        std::vector<unsigned char> paddingSlotBytes(getSaveSlotPaddingBytesSize(), 0);
+        std::vector<std::uint8_t> paddingSlotBytes(getSaveSlotPaddingBytesSize(), 0);
         file.write(reinterpret_cast<const char*>(paddingSlotBytes.data()), paddingSlotBytes.size());
     }
 
     // Add padding bytes at the end of the whole file
-    std::vector<unsigned char> paddingBytes(getUnusedExtraSize(), 0);
+    std::vector<std::uint8_t> paddingBytes(getUnusedExtraSize(), 0);
     file.write(reinterpret_cast<const char*>(paddingBytes.data()), paddingBytes.size());
 }
 
 /**
  * @brief Get the size of the padding data after the end of the actual save slot data.
  */
-unsigned int FileLoaderNote::getSaveSlotPaddingBytesSize() const {
-    unsigned int paddingBytes = getSavePaddedSize() - sizeof(SaveSlot);
+std::uint32_t FileLoaderNote::getSaveSlotPaddingBytesSize() const {
+    std::uint32_t paddingBytes = getSavePaddedSize() - sizeof(SaveSlot);
 
     switch (SaveManager::getInstance()->getRegion()) {
         case SaveData::USA:
@@ -550,18 +551,18 @@ unsigned int FileLoaderNote::getSaveSlotPaddingBytesSize() const {
 /**
  * @brief Get the size of the padding data after the end of the actual save slot data.
  */
-unsigned int FileLoaderCartridge::getSaveSlotPaddingBytesSize() const {
-    short region = SaveManager::getInstance()->getRegion();
+std::uint32_t FileLoaderCartridge::getSaveSlotPaddingBytesSize() const {
+    std::int16_t region = SaveManager::getInstance()->getRegion();
 
     // Remove the extra 8 bytes found in the PAL version of the saveslot
     // (when applicable)
-    unsigned int extraByteData = (region == SaveData::PAL) ? 0 : 8;
-    unsigned int paddingBytes = getSavePaddedSize() - (sizeof(SaveSlot) - extraByteData) - getHeaderBytes().size();
+    std::uint32_t extraByteData = (region == SaveData::PAL) ? 0 : 8;
+    std::uint32_t paddingBytes = getSavePaddedSize() - (sizeof(SaveSlot) - extraByteData) - getHeaderBytes().size();
 
     return paddingBytes;
 }
 
-int FileLoaderNote::checkFileOpenErrors() {
+std::int32_t FileLoaderNote::checkFileOpenErrors() {
     FileManager* fileManager = FileManager::getInstance();
 
     // Ensure the file has the predefined size (0x900 bytes in practice)
@@ -572,7 +573,7 @@ int FileLoaderNote::checkFileOpenErrors() {
     return 0;
 }
 
-int FileLoaderCartridge::checkFileOpenErrors() {
+std::int32_t FileLoaderCartridge::checkFileOpenErrors() {
     FileManager* fileManager = FileManager::getInstance();
 
     // Ensure the file has the predefined size (0x900 bytes in practice),
@@ -585,7 +586,7 @@ int FileLoaderCartridge::checkFileOpenErrors() {
     return 0;
 }
 
-int FileLoaderControllerPak::checkFileOpenErrors() {
+std::int32_t FileLoaderControllerPak::checkFileOpenErrors() {
     FileManager* fileManager = FileManager::getInstance();
 
     // Ensure the file has the predefined size (0x900 bytes in practice)

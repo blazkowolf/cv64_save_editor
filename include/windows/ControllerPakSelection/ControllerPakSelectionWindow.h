@@ -39,10 +39,10 @@ public:
     void setupButtonBox();
 
     // Interface event handling functions
-    void onButtonClicked(int saveIndex);
+    void onButtonClicked(std::int32_t saveIndex);
 
     // Helper functions
-    QString getRegionName(const short region) const;
+    QString getRegionName(const std::int16_t region) const;
 
 private:
     Ui::ControllerPakSelectionWindow* ui;
