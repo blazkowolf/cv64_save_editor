@@ -61,7 +61,6 @@ private slots:
     void setupEditMenu();
     void handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit);
     void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter);
-    void setupComboBox(QComboBox* comboBox, const Ui::ComboBoxData& array, std::function<void(std::int32_t)> setter);
     void setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxData& array);
     void setupCheckBox(QCheckBox* checkBox, std::uint32_t value, std::function<void(std::uint32_t)> setter, std::function<void(std::uint32_t)> unsetter);
     QLineEdit* createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags);

@@ -11,6 +11,7 @@
 #include "save/SaveManager.h"
 #include "file/FileManager.h"
 #include <QApplication>
+#include <QCoreApplication>
 #include <QLocale>
 #include <QTranslator>
 
@@ -33,15 +34,20 @@ void destroySingletons() {
     FileManager::destroyInstance();
 }
 
-std::int32_t main(std::int32_t argc, char *argv[]) {
+int main(int argc, char *argv[]) {
+    using namespace Qt::StringLiterals;
+
     // Create the application and show the main window
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName("k64ret"_L1);
+    QCoreApplication::setApplicationName("CV64SaveEditor"_L1);
+    QCoreApplication::setApplicationVersion("0.1.0"_L1);
 
     createSingletons();
 
     QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
+    const auto uiLanguages = QLocale::system().uiLanguages();
+    for (const auto &locale : uiLanguages) {
         const QString baseName = "CV64SaveEditor_" + QLocale(locale).name();
         if (translator.load(":/i18n/" + baseName)) {
             a.installTranslator(&translator);
@@ -51,7 +57,7 @@ std::int32_t main(std::int32_t argc, char *argv[]) {
     MainWindow w;
     w.show();
 
-    std::int32_t result = a.exec();
+    auto result = a.exec();
 
     destroySingletons();
 
