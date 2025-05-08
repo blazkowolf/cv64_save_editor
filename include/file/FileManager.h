@@ -78,16 +78,16 @@ class FileManager {
             return format;
         }
 
-        inline void setFileFormat(const std::int32_t format_) {
-            format = format_;
+        inline void setFileFormat(const std::int32_t format) {
+            this->format = format;
         }
 
         inline QString& getFilepath() {
             return filepath;
         }
 
-        inline void setFilePath(const QString& filepath_) {
-            filepath = filepath_;
+        inline void setFilePath(const QString& filepath) {
+            this->filepath = filepath;
         }
 
         inline QFile& getFile() {

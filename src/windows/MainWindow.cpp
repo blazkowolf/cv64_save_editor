@@ -1069,7 +1069,7 @@ void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uin
     // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
     // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
     QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
-    QRegularExpressionValidator* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
+    const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
     lineEdit->setValidator(validator);
 
     lineEdit->setProperty("minValue", minValue);

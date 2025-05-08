@@ -36,7 +36,7 @@ class MainWindow: public QMainWindow
 public:
     static MainWindow* instance;
 
-    MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
     /**
@@ -118,64 +118,6 @@ private:
     SlotMenu slotMenuOptions[4] = {};
 
     // Data for this window's combo boxes
-    const Ui::ComboBoxData comboBoxDataMap = {
-        {{"Forest of Silence", SaveData::MORI}},
-        {{"Castle Wall (Towers)", SaveData::TOU}},
-        {{"Castle Wall (Main)", SaveData::TOUOKUJI}},
-        {{"Villa (Yard)", SaveData::NAKANIWA}},
-        {{"Villa (Foyer)", SaveData::BEKKAN_1F}},
-        {{"Villa (Hallway)", SaveData::BEKKAN_2F}},
-        {{"Villa (Maze Garden)", SaveData::MEIRO_TEIEN}},
-        {{"Tunnel", SaveData::CHIKA_KODO}},
-        {{"Underground Waterway", SaveData::CHIKA_SUIRO}},
-        {{"Castle Center (Main)", SaveData::HONMARU_B1F}},
-        {{"Castle Center (Bottom Elevator)", SaveData::HONMARU_1F}},
-        {{"Castle Center (Gears)", SaveData::HONMARU_2F}},
-        {{"Castle Center (Friendly Lizard-man)", SaveData::HONMARU_3F_MINAMI}},
-        {{"Castle Center (Library)", SaveData::HONMARU_4F_MINAMI}},
-        {{"Castle Center (Nitro Room)", SaveData::HONMARU_3F_KITA}},
-        {{"Castle Center (Top Elevator)", SaveData::HONMARU_5F}},
-        {{"Tower of Execution", SaveData::SHOKEI_TOU}},
-        {{"Tower of Sorcery", SaveData::MAHOU_TOU}},
-        {{"Tower of Science", SaveData::KAGAKU_TOU}},
-        {{"Duel Tower", SaveData::KETTOU_TOU}},
-        {{"Castle Keep Stairs", SaveData::TURO_TOKEITOU}},
-        {{"Castle Keep", SaveData::TENSHU}},
-        {{"Intro Cutscene Map", SaveData::ENDING_DUMMY}},
-        {{"Clock Tower", SaveData::TOKEITOU_NAI}},
-        {{"Dracula Desert", SaveData::DRACULA}},
-        {{"Rose / Actrice Fan Room", SaveData::ROSE}},
-        {{"Villa (Vampire Crypt)", SaveData::BEKKAN_BOSS}},
-        {{"Room of Clocks", SaveData::TOU_TURO}},
-        {{"Ending Map", SaveData::ENDING}},
-        {{"Test Grid", SaveData::TEST_GRID}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataCharacter = {
-        {{"Reinhardt", SaveData::REINHARDT}},
-        {{"Carrie", SaveData::CARRIE}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataButtonConfig = {
-        {{"Type A", 0}},
-        {{"Type B", 1}},
-        {{"Type C", 2}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataSoundMode = {
-        {{"Stereo", 0}},
-        {{"Monoaural", 1}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataSubweapon = {
-        {{"None", SaveData::SUBWEAPON_NONE}},
-        {{"Knife", SaveData::SUBWEAPON_KNIFE}},
-        {{"Holy Water", SaveData::SUBWEAPON_HOLY_WATER}},
-        {{"Cross", SaveData::SUBWEAPON_CROSS}},
-        {{"Axe", SaveData::SUBWEAPON_AXE}},
-        {{"Wooden Stake", SaveData::SUBWEAPON_WOODEN_STAKE}},
-        {{"Rose", SaveData::SUBWEAPON_ROSE}}
-    };
 
     const Ui::ComboBoxData comboBoxDataDifficulty = {
         {{"Easy", SaveData::SAVE_FLAG_EASY}},
@@ -195,16 +137,6 @@ private:
         {{"Bad", SaveData::SAVE_FLAG_CARRIE_BAD_ENDING}}
     };
 
-    const Ui::ComboBoxData comboBoxDataRegion = {
-        {{"USA", SaveData::USA}},
-        {{"JPN", SaveData::JPN}},
-        {{"PAL", SaveData::PAL}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataLanguage = {
-        {{"English", SaveData::ENGLISH}},
-        {{"German", SaveData::GERMAN}},
-        {{"French", SaveData::FRENCH}}
-    };
 };
+
 #endif // MAINWINDOW_H

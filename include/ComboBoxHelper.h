@@ -35,7 +35,7 @@ template <typename TValue>
 void setup(QComboBox *cb, TValue defaultValue, const QVector<Item<TValue>> &list,
            const std::function<void(TValue)> &function = {})
 {
-    for (const Item<TValue> &item : list) {
+    for (const auto &item : list) {
         cb->addItem(item.text, QVariant::fromValue(item.value));
         if (item.value == defaultValue) {
             cb->setCurrentIndex(cb->count() - 1);
@@ -43,7 +43,7 @@ void setup(QComboBox *cb, TValue defaultValue, const QVector<Item<TValue>> &list
     }
     if (function) {
         QObject::connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [function, cb] {
-            const TValue value = cb->currentData().value<TValue>();
+            const auto value = cb->currentData().value<TValue>();
             function(value);
         });
         function(defaultValue);
@@ -57,7 +57,7 @@ void setup(QComboBox *cb, TValue defaultValue, const QVector<Item<TValue>> &list
     setup(cb, defaultValue, list);
     QObject::connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged),
                      [function, cb, target] {
-                         const TValue value = cb->currentData().value<TValue>();
+                         const auto value = cb->currentData().value<TValue>();
                          std::invoke(function, target, value);
                      });
     std::invoke(function, target, defaultValue);
@@ -66,7 +66,7 @@ void setup(QComboBox *cb, TValue defaultValue, const QVector<Item<TValue>> &list
 template <typename T>
 void setCurrentValue(QComboBox *cb, T value)
 {
-    int index = cb->findData(QVariant::fromValue(value));
+    auto index = cb->findData(QVariant::fromValue(value));
     Q_ASSERT(index != -1);
     cb->setCurrentIndex(index);
 }

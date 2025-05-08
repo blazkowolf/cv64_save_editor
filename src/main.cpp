@@ -48,8 +48,7 @@ int main(int argc, char *argv[]) {
     QTranslator translator;
     const auto uiLanguages = QLocale::system().uiLanguages();
     for (const auto &locale : uiLanguages) {
-        const QString baseName = "CV64SaveEditor_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
+        if (const auto baseName = "CV64SaveEditor_" + QLocale(locale).name(); translator.load(":/i18n/" + baseName)) {
             a.installTranslator(&translator);
             break;
         }
@@ -57,7 +56,7 @@ int main(int argc, char *argv[]) {
     MainWindow w;
     w.show();
 
-    auto result = a.exec();
+    const auto result = a.exec();
 
     destroySingletons();
 
