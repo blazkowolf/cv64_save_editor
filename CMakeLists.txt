@@ -21,11 +21,20 @@ qt_add_executable(${TARGET}
   include/windows/Main/MainWindow.h
   src/windows/MainWindow.cpp
   include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h
-  src/windows/ControllerPakSelectionWindow.cpp)
+  src/windows/ControllerPakSelectionWindow.cpp
+  include/windows/Items.h
+  src/windows/Items.cpp
+  include/windows/EventFlags.h
+  src/windows/EventFlags.cpp
+  include/windows/General.h
+  src/windows/General.cpp)
 
 qt_add_ui(${TARGET}
   SOURCES
     ui/MainWindow.ui
+    ui/General.ui
+    ui/Items.ui
+    ui/EventFlags.ui
     ui/ControllerPakSelectionWindow.ui)
 
 target_link_libraries(${TARGET}
