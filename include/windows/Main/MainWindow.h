@@ -12,8 +12,12 @@
 #include "bit.h"
 #include "save/Save.h"
 #include "windows/ComboBoxData.h"
+#include "windows/eventflags.h"
+#include "windows/general.h"
+#include "windows/items.h"
 
 #include <QMainWindow>
+#include <QWidget>
 #include <QSettings>        // QSettings
 
 QT_BEGIN_NAMESPACE
@@ -78,7 +82,7 @@ private slots:
     void checkMandragoraAndNitroLineEdits();
     void selectComboBoxOption(QComboBox& comboBox, const QVariant data);
     void enableUIComponents(bool);
-    void updateCheckboxEnabledVisibility();
+    void updateCheckboxEnabledVisibility() const;
     void updateWindowVisibility(bool);
     void convertFrameToTime(const std::uint32_t frameCount, QLabel* output);
     void updateBitSelection(std::uint32_t newValue, const Ui::ComboBoxData& comboBoxData);
@@ -102,6 +106,10 @@ private slots:
 
 private:
     Ui::MainWindow* ui;
+
+    GeneralForm *pageGeneral;
+    ItemsForm *pageItems;
+    EventFlagsForm *pageEventFlags;
 
     /**< The array of line edits that appear in the "Event Flags" page */
     QLineEdit* hexBitflagLineEdits[NUM_EVENT_FLAGS] = {};

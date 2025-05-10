@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.28)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(TARGET CV64SaveEditor)
 
-project(${TARGET} VERSION 1.0.0 LANGUAGES CXX)
+project(${TARGET} VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,19 +22,19 @@ qt_add_executable(${TARGET}
   src/windows/MainWindow.cpp
   include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h
   src/windows/ControllerPakSelectionWindow.cpp
-  include/windows/Items.h
-  src/windows/Items.cpp
-  include/windows/EventFlags.h
-  src/windows/EventFlags.cpp
-  include/windows/General.h
-  src/windows/General.cpp)
+  include/windows/general.h
+  src/windows/general.cpp
+  include/windows/items.h
+  src/windows/items.cpp
+  include/windows/eventflags.h
+  src/windows/eventflags.cpp)
 
 qt_add_ui(${TARGET}
   SOURCES
     ui/MainWindow.ui
-    ui/General.ui
-    ui/Items.ui
-    ui/EventFlags.ui
+    ui/general.ui
+    ui/items.ui
+    ui/eventflags.ui
     ui/ControllerPakSelectionWindow.ui)
 
 target_link_libraries(${TARGET}

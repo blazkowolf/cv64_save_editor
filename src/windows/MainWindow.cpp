@@ -28,6 +28,9 @@ MainWindow* MainWindow::instance = nullptr;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , pageGeneral(new GeneralForm)
+    , pageItems(new ItemsForm)
+    , pageEventFlags(new EventFlagsForm)
 {
     instance = this;
 
@@ -37,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     // Initialize pages
+    ui->stackedWidgetPages->addWidget(pageGeneral);
+    ui->stackedWidgetPages->addWidget(pageItems);
+    ui->stackedWidgetPages->addWidget(pageEventFlags);
+
     setupPageMain();
     setupPageItems();
     setupPageEventFlags();
@@ -53,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->leItemsPoutPourri->setEnabled(true);
 
     // Ensure that we start in the "Main" page
-    switchPage(ui->stackedWidgetPages, ui->pageMain);
+    switchPage(ui->stackedWidgetPages, pageGeneral);
     switchPage(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
 
     // Uncheck the "save enabled checkbox" when opening the program
@@ -320,15 +327,15 @@ void MainWindow::setupPageMain() {
     // When each button is pressed, "onPageButtonClicked" will be called passing
     // the desired page by arguments
     connect(ui->buttonMain, &QPushButton::clicked, this, [this]() {
-        onPageButtonClicked(ui->stackedWidgetPages, ui->pageMain);
+        onPageButtonClicked(ui->stackedWidgetPages, pageGeneral);
     });
 
     connect(ui->buttonItems, &QPushButton::clicked, this, [this]() {
-        onPageButtonClicked(ui->stackedWidgetPages, ui->pageItems);
+        onPageButtonClicked(ui->stackedWidgetPages, pageItems);
     });
 
     connect(ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
-        onPageButtonClicked(ui->stackedWidgetPages, ui->pageEventFlags);
+        onPageButtonClicked(ui->stackedWidgetPages, pageEventFlags);
     });
 
     // In order to avoid the checkbox from being disabled,
@@ -1150,7 +1157,7 @@ void MainWindow::checkMandragoraAndNitroLineEdits() {
     bool okMandragora = false;
     bool okNitro = false;
 
-    if ((mandragoraLineEdit->text().toUInt(&okMandragora, 10) != 0) && (nitroLineEdit->text().toUInt(&okNitro, 10) != 0)) {
+    if (mandragoraLineEdit->text().toUInt(&okMandragora, 10) != 0 && nitroLineEdit->text().toUInt(&okNitro, 10) != 0) {
         mandragoraLineEdit->setText(QString::number(0));
         nitroLineEdit->setText(QString::number(0));
     }
@@ -1160,7 +1167,7 @@ void MainWindow::checkMandragoraAndNitroLineEdits() {
  * @brief Creates the event flag grid dynamically.
  */
 QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags) {
-    QLineEdit* hexBitflagDisplay = new QLineEdit();
+    auto* hexBitflagDisplay = new QLineEdit();
     hexBitflagDisplay->setAlignment(Qt::AlignRight);
     hexBitflagDisplay->setText(QString("%1").arg(flags, 1, 10, QChar('0')));
 
@@ -1169,13 +1176,13 @@ QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, std::int32_t flag
     gridLayout->addWidget(hexBitflagDisplay, 0, 9, 5, 1);
     // Add numbers on top and to the right showing the column / row number respectively
     for (std::uint32_t i = 0; i < 8; ++i) {
-        QLabel* colLabel = new QLabel(QString::number(7 - i));
+        auto* colLabel = new QLabel(QString::number(7 - i));
         colLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
         gridLayout->addWidget(colLabel, 0, i + 1);
     }
 
     for (std::uint32_t i = 0; i < 4; ++i) {
-        QLabel* rowLabel = new QLabel(QString::number(i));
+        auto* rowLabel = new QLabel(QString::number(i));
         rowLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
         gridLayout->addWidget(rowLabel, 4 - i, 0);
     }
@@ -1184,7 +1191,7 @@ QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, std::int32_t flag
 
     // Create 32 checkboxes (one for each bit)
     for (std::uint32_t i = 0; i < 32; ++i) {
-        QCheckBox* checkBox = new QCheckBox();
+        auto* checkBox = new QCheckBox();
         // Set the checked state based on the flag value
         checkBox->setChecked(flags & (1 << i));
         // Add the checkbox to the grid layout. Then place it in a 4x8 grid
@@ -1266,7 +1273,7 @@ void MainWindow::enableUIComponents(bool enable) {
 }
 
 /// This function ensures that the "Enabled" checkbox is only visible for "Main" saves
-void MainWindow::updateCheckboxEnabledVisibility() {
+void MainWindow::updateCheckboxEnabledVisibility() const {
     if (!isMain) {
         ui->cboxEnabled->hide();
     }
