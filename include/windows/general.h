@@ -14,6 +14,7 @@ class GeneralForm : public QWidget
 public:
     explicit GeneralForm(QWidget *parent = nullptr);
     ~GeneralForm();
+    void setup();
 
 private:
     Ui::GeneralForm *ui;

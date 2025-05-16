@@ -21,6 +21,7 @@
 #include <QDir>             // QDir
 #include <QFileDialog>      // QFileDialog
 #include <QSpinBox>         // QSpinBox
+#include <QLineEdit>
 
 // Static instance for this window. We use this to access this window's functions in some parts of the code
 MainWindow* MainWindow::instance = nullptr;
@@ -56,16 +57,16 @@ MainWindow::MainWindow(QWidget *parent)
     // Set default values to the savegame at boot
     SaveManager::getInstance()->clear();
     SaveManager::getInstance()->setRegion(SaveData::USA);
-    ui->leItemsSpecial3->setEnabled(false);
-    ui->leItemsPoutPourri->setEnabled(true);
+    // ui->leItemsSpecial3->setEnabled(false);
+    // ui->leItemsPoutPourri->setEnabled(true);
 
     // Ensure that we start in the "Main" page
     switchPage(ui->stackedWidgetPages, pageGeneral);
-    switchPage(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
+    // switchPage(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
 
     // Uncheck the "save enabled checkbox" when opening the program
-    enableUIComponents(false);
-    ui->cboxEnabled->setChecked(false);
+    // enableUIComponents(false);
+    // ui->cboxEnabled->setChecked(false);
 }
 
 MainWindow::~MainWindow()
