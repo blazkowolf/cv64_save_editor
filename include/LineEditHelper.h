@@ -14,9 +14,7 @@
 
 namespace LineEditHelper {
 
-constexpr QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
-
-void setup(QLineEdit *le, const QString &defaultValue, const QValidator *validator = nullptr, const std::function<void(QString)> &function = {})
+inline void setup(QLineEdit *le, const QString &defaultValue, const QValidator *validator = nullptr, const std::function<void(QString)> &function = {})
 {
     // const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, target);
     if (validator) {
@@ -33,19 +31,19 @@ void setup(QLineEdit *le, const QString &defaultValue, const QValidator *validat
     }
 }
 
-template <typename TTarget, typename TFunction>
-void setup(QLineEdit *le, const QString &defaultValue, TTarget *target, const QValidator *validator = nullptr, TFunction function)
-{
-    setup(le, defaultValue, validator);
-    if (validator) {
-        le->setValidator(validator);
-    }
-    QObject::connect(le, &QLineEdit::editingFinished, [function, le, target]() {
-        const auto value = le->text().toUInt();
-        std::invoke(function, target, value);
-    });
-    std::invoke(function, target, defaultValue);
-}
+// template <typename TTarget, typename TFunction>
+// void setup(QLineEdit *le, const QString &defaultValue, TTarget *target, const QValidator *validator = nullptr, TFunction function)
+// {
+//     setup(le, defaultValue, validator);
+//     if (validator) {
+//         le->setValidator(validator);
+//     }
+//     QObject::connect(le, &QLineEdit::editingFinished, [function, le, target]() {
+//         const auto value = le->text().toUInt();
+//         std::invoke(function, target, value);
+//     });
+//     std::invoke(function, target, defaultValue);
+// }
 
 template <typename TValue>
 TValue handleUnsignedInteger(const QString &text, const TValue min, const TValue max)

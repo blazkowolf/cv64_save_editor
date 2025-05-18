@@ -394,3 +394,63 @@ void ItemsForm::setup()
         SaveManager::getInstance()->setItem(SaveData::ITEM_ID_INCANDESCENT_GAZE, value);
     });
 }
+
+void ItemsForm::populate(SaveData *saveData) const
+{
+    if (saveData == nullptr) {
+        return;
+    }
+
+    ui->leItemsSpecial1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL1)));
+    ui->leItemsSpecial2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL2)));
+
+    if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
+        SaveManager::getInstance()->getRegion() == SaveData::JPN) {
+        ui->leItemsSpecial3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL3)));
+    }
+    else {
+        ui->leItemsSpecial3->setText("0");
+    }
+
+    if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
+        ui->leItemsRoastChicken->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_CHICKEN)));
+        ui->leItemsRoastBeef->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_BEEF)));
+        ui->leItemsHealingKit->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_HEALING_KIT)));
+        ui->leItemsPurifying->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_PURIFYING)));
+        ui->leItemsCureAmpoule->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CURE_AMPOULE)));
+    }
+    else {
+        ui->leItemsRoastChicken->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_CHICKEN + 1)));
+        ui->leItemsRoastBeef->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_BEEF + 1)));
+        ui->leItemsHealingKit->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_HEALING_KIT + 1)));
+        ui->leItemsPurifying->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_PURIFYING + 1)));
+        ui->leItemsCureAmpoule->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CURE_AMPOULE + 1)));
+    }
+
+    if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
+        ui->leItemsPoutPourri->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_POUT_POURRI)));
+    }
+    else {
+        ui->leItemsPoutPourri->setText("0");
+    }
+
+    ui->leItemsSunCard->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SUN_CARD)));
+    ui->leItemsMoonCard->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MOON_CARD)));
+    ui->leItemsNitro->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MAGICAL_NITRO)));
+    ui->leItemsMandragora->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MANDRAGORA)));
+    ui->leKeyArchives->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ARCHIVES_KEY)));
+    ui->leKeyLeftTower->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_LEFT_TOWER_KEY)));
+    ui->leKeyStoreroom->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_STOREROOM_KEY)));
+    ui->leKeyGarden->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_GARDEN_KEY)));
+    ui->leKeyCopper->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_COPPER_KEY)));
+    ui->leKeyChamber->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CHAMBER_KEY)));
+    ui->leKeyExecution->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_EXECUTION_KEY)));
+    ui->leKeyScience1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY1)));
+    ui->leKeyScience2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY2)));
+    ui->leKeyScience3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY3)));
+    ui->leKeyClocktower1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY1)));
+    ui->leKeyClocktower2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY2)));
+    ui->leKeyClocktower3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY3)));
+    ui->leItemsER->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ENGAGEMENT_RING)));
+    ui->leItemsIG->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_INCANDESCENT_GAZE)));
+}

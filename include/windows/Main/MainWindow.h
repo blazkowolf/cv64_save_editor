@@ -16,6 +16,7 @@
 #include "windows/general.h"
 #include "windows/items.h"
 
+#include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
 #include <QMainWindow>
@@ -56,17 +57,17 @@ public:
 
 private slots:
     // Setup functions
-    void setupPageMain();
-    void setupPageItems();
-    void setupPageEventFlags();
+    // void setupPageMain();
+    // void setupPageItems();
+    // void setupPageEventFlags();
     void setupFileMenu();
     void setupSlotMenu();
     void setupEditMenu();
-    void handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit);
-    void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter);
+    // void handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit);
+    // void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter);
     void setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxData& array);
     void setupCheckBox(QCheckBox* checkBox, std::uint32_t value, std::function<void(std::uint32_t)> setter, std::function<void(std::uint32_t)> unsetter);
-    QLineEdit* createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags);
+    // QLineEdit* createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags);
 
     // Interface event handling functions
     void fileOpenMenu();
@@ -81,12 +82,12 @@ private slots:
 
     // Helper functions
     void switchPage(QStackedWidget* stackedWidgetPages, const QWidget* page);
-    void checkMandragoraAndNitroLineEdits();
+    // void checkMandragoraAndNitroLineEdits();
     void selectComboBoxOption(QComboBox& comboBox, const QVariant data);
     void enableUIComponents(bool);
-    void updateCheckboxEnabledVisibility() const;
+    // void updateCheckboxEnabledVisibility() const;
     void updateWindowVisibility(bool);
-    void convertFrameToTime(const std::uint32_t frameCount, QLabel* output);
+    // void convertFrameToTime(const std::uint32_t frameCount, QLabel* output);
     void updateBitSelection(std::uint32_t newValue, const Ui::ComboBoxData& comboBoxData);
 
     // Inline getters and setters
@@ -114,7 +115,7 @@ private:
     EventFlagsForm *pageEventFlags;
 
     /**< The array of line edits that appear in the "Event Flags" page */
-    QLineEdit* hexBitflagLineEdits[NUM_EVENT_FLAGS] = {};
+    // QLineEdit* hexBitflagLineEdits[NUM_EVENT_FLAGS] = {};
 
     /**< The currently-selected save slot */
     std::int32_t selectedSlot = 0;

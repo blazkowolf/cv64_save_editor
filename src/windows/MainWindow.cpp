@@ -706,114 +706,9 @@ void MainWindow::populateMainWindow(SaveData* saveData) {
     if (saveData == nullptr) {
         return;
     }
-
-    // Combo boxes
-    selectComboBoxOption(*ui->cbCharacter, saveData->character);
-    selectComboBoxOption(*ui->cbButtonConfig, saveData->button_config);
-    selectComboBoxOption(*ui->cbSoundMode, saveData->sound_mode);
-    selectComboBoxOption(*ui->cbSubweapon, saveData->subweapon);
-    selectComboBoxOption(*ui->cbMap, saveData->map);
-
-    selectComboBoxOption(*ui->cbDifficulty, saveData->getFlag(SaveData::SAVE_FLAG_EASY | SaveData::SAVE_FLAG_NORMAL | SaveData::SAVE_FLAG_HARD));
-    selectComboBoxOption(*ui->cbReinhardtEnding, saveData->getFlag(SaveData::SAVE_FLAG_REINDHART_GOOD_ENDING | SaveData::SAVE_FLAG_REINDHART_BAD_ENDING));
-    selectComboBoxOption(*ui->cbCarrieEnding, saveData->getFlag(SaveData::SAVE_FLAG_CARRIE_GOOD_ENDING | SaveData::SAVE_FLAG_CARRIE_BAD_ENDING));
-    selectComboBoxOption(*ui->cbRegion, SaveManager::getInstance()->getRegion());
-
-    if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
-        selectComboBoxOption(*ui->cbLanguage, saveData->language);
-    }
-
-    // Numerical Line edits
-    ui->leLife->setText(QString::number(saveData->life));
-    ui->leGold->setText(QString::number(saveData->gold));
-    ui->leRedJewels->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_RED_JEWEL)));
-    ui->leSpawn->setText(QString::number(saveData->spawn));
-    ui->leWhiteJewel->setText(QString::number(saveData->save_crystal_number));
-    ui->leTimesSaved->setText(QString::number(saveData->time_saved_counter));
-    ui->leDeathCount->setText(QString::number(saveData->death_counter));
-    ui->leGoldRenon->setText(QString::number(saveData->gold_spent_on_Renon));
-    ui->leHourVamp->setText(QString::number(saveData->current_hour_VAMP));
-    ui->leHealthDepletionRate->setText(QString::number(saveData->health_depletion_rate_while_poisoned));
-    ui->leWeek->setText(QString::number(saveData->week));
-    ui->leDay->setText(QString::number(saveData->day));
-    ui->leHour->setText(QString::number(saveData->hour));
-    ui->leMinutes->setText(QString::number(saveData->minute));
-    ui->leSeconds->setText(QString::number(saveData->seconds));
-    ui->leMilliseconds->setText(QString::number(saveData->milliseconds));
-    ui->leFrameCount->setText(QString::number(saveData->gameplay_framecount));
-    convertFrameToTime(saveData->gameplay_framecount, ui->labelPlaytime);
-
-    ui->leItemsSpecial1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL1)));
-    ui->leItemsSpecial2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL2)));
-
-    if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-        SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-        ui->leItemsSpecial3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SPECIAL3)));
-    }
-    else {
-        ui->leItemsSpecial3->setText("0");
-    }
-
-    if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
-        ui->leItemsRoastChicken->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_CHICKEN)));
-        ui->leItemsRoastBeef->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_BEEF)));
-        ui->leItemsHealingKit->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_HEALING_KIT)));
-        ui->leItemsPurifying->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_PURIFYING)));
-        ui->leItemsCureAmpoule->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CURE_AMPOULE)));
-    }
-    else {
-        ui->leItemsRoastChicken->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_CHICKEN + 1)));
-        ui->leItemsRoastBeef->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ROAST_BEEF + 1)));
-        ui->leItemsHealingKit->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_HEALING_KIT + 1)));
-        ui->leItemsPurifying->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_PURIFYING + 1)));
-        ui->leItemsCureAmpoule->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CURE_AMPOULE + 1)));
-    }
-
-    if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
-        ui->leItemsPoutPourri->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_POUT_POURRI)));
-    }
-    else {
-        ui->leItemsPoutPourri->setText("0");
-    }
-
-    ui->leItemsSunCard->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SUN_CARD)));
-    ui->leItemsMoonCard->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MOON_CARD)));
-    ui->leItemsNitro->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MAGICAL_NITRO)));
-    ui->leItemsMandragora->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_MANDRAGORA)));
-    ui->leKeyArchives->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ARCHIVES_KEY)));
-    ui->leKeyLeftTower->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_LEFT_TOWER_KEY)));
-    ui->leKeyStoreroom->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_STOREROOM_KEY)));
-    ui->leKeyGarden->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_GARDEN_KEY)));
-    ui->leKeyCopper->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_COPPER_KEY)));
-    ui->leKeyChamber->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CHAMBER_KEY)));
-    ui->leKeyExecution->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_EXECUTION_KEY)));
-    ui->leKeyScience1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY1)));
-    ui->leKeyScience2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY2)));
-    ui->leKeyScience3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_SCIENCE_KEY3)));
-    ui->leKeyClocktower1->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY1)));
-    ui->leKeyClocktower2->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY2)));
-    ui->leKeyClocktower3->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_CLOCKTOWER_KEY3)));
-    ui->leItemsER->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_ENGAGEMENT_RING)));
-    ui->leItemsIG->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_INCANDESCENT_GAZE)));
-
-    // Checkboxes
-    ui->cboxEnabled->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_ACTIVE));
-    updateCheckboxEnabledVisibility();
-
-    ui->cboxHardMode->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED));
-    ui->cboxUseAlternateCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED));
-    ui->cboxReinhardtCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME));
-    ui->cboxCarrieCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME));
-    ui->cboxNitro->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING));
-    ui->cboxVamp->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_VAMP));
-    ui->cboxPoison->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_POISON));
-    ui->cboxSto->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_STO));
-
-    // Event flag grids. We edit each of the line edits associated to the event flags to assign the hex value gotten
-    // from the save data. Then, the checkboxes will be ticked / unticked automatically
-    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
-        hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
-    }
+    pageGeneral->populate(saveData);
+    pageItems->populate(saveData);
+    pageEventFlags->populate(saveData);
 }
 
 /**
@@ -1043,53 +938,53 @@ void MainWindow::setupEditMenu() {
 /**
  * @brief Allows both decimal and hexadecimal numbers to be innputted.
  */
-void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit) {
-    if (!lineEdit) {
-        return;
-    }
-
-    QString text = lineEdit->text();
-    bool ok = false;
-    std::uint32_t value = 0;
-
-    if (text.startsWith("0x", Qt::CaseInsensitive)) {
-        value = text.mid(2).toUInt(&ok, 16);
-    }
-    else {
-        value = text.toUInt(&ok, 10);
-    }
-
-    if (ok) {
-        const std::uint32_t minValue = lineEdit->property("minValue").toUInt();
-        const std::uint32_t maxValue = lineEdit->property("maxValue").toUInt();
-
-        value = qBound<std::uint32_t>(minValue, value, maxValue);
-
-        // We call this function just before setting the text
-        checkMandragoraAndNitroLineEdits();
-
-        lineEdit->setText(QString::number(value));
-
-        setter(value);
-    }
-}
+// void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit) {
+//     if (!lineEdit) {
+//         return;
+//     }
+//
+//     QString text = lineEdit->text();
+//     bool ok = false;
+//     std::uint32_t value = 0;
+//
+//     if (text.startsWith("0x", Qt::CaseInsensitive)) {
+//         value = text.mid(2).toUInt(&ok, 16);
+//     }
+//     else {
+//         value = text.toUInt(&ok, 10);
+//     }
+//
+//     if (ok) {
+//         const std::uint32_t minValue = lineEdit->property("minValue").toUInt();
+//         const std::uint32_t maxValue = lineEdit->property("maxValue").toUInt();
+//
+//         value = qBound<std::uint32_t>(minValue, value, maxValue);
+//
+//         // We call this function just before setting the text
+//         checkMandragoraAndNitroLineEdits();
+//
+//         lineEdit->setText(QString::number(value));
+//
+//         setter(value);
+//     }
+// }
 
 /// With this function, we can have more control during lineEdit initialization.
 /// In this case, we make it so that we can add a min and max value to each lineEdit without much copy-pasting
-void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter) {
-    // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
-    // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
-    QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
-    const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
-    lineEdit->setValidator(validator);
-
-    lineEdit->setProperty("minValue", minValue);
-    lineEdit->setProperty("maxValue", maxValue);
-
-    connect(lineEdit, &QLineEdit::editingFinished, this, [this, setter, lineEdit]() {
-        handleNumberOnlyInputUnsigned(setter, lineEdit);
-    });
-}
+// void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter) {
+//     // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
+//     // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
+//     QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
+//     const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
+//     lineEdit->setValidator(validator);
+//
+//     lineEdit->setProperty("minValue", minValue);
+//     lineEdit->setProperty("maxValue", maxValue);
+//
+//     connect(lineEdit, &QLineEdit::editingFinished, this, [this, setter, lineEdit]() {
+//         handleNumberOnlyInputUnsigned(setter, lineEdit);
+//     });
+// }
 
 /// Same as "setupComboBox", but this is meant for comboboxes which are supposed to assign bitflags to a value instead,
 /// such as the combo box for setting the game's difficulty
@@ -1277,17 +1172,17 @@ void MainWindow::enableUIComponents(bool enable) {
 }
 
 /// This function ensures that the "Enabled" checkbox is only visible for "Main" saves
-void MainWindow::updateCheckboxEnabledVisibility() const {
-    if (!isMain) {
-        ui->cboxEnabled->hide();
-    }
-    else {
-        ui->cboxEnabled->show();
-    }
-}
+// void MainWindow::updateCheckboxEnabledVisibility() const {
+//     if (!isMain) {
+//         ui->cboxEnabled->hide();
+//     }
+//     else {
+//         ui->cboxEnabled->show();
+//     }
+// }
 
 /// Make sure to always have the "Beginning of Stage" save enabled only if the "Main" save is enabled
-// void MainWindow::updateWindowVisibility(bool enable) {
+void MainWindow::updateWindowVisibility(bool enable) {
 //     if (BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)
 //         && !isMain) {
 //         enableUIComponents(true);
@@ -1295,7 +1190,7 @@ void MainWindow::updateCheckboxEnabledVisibility() const {
 //     else {
 //         enableUIComponents(enable);
 //     }
-// }
+}
 
 /// Given a framecount (in 30fps), converts it from frames to hours, minutes and seconds
 // void MainWindow::convertFrameToTime(const std::uint32_t frameCount, QLabel* output) {

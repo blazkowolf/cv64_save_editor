@@ -1,6 +1,8 @@
 #ifndef ITEMS_H
 #define ITEMS_H
 
+#include "save/Save.h"
+
 #include <QWidget>
 
 namespace Ui {
@@ -15,6 +17,7 @@ public:
     explicit ItemsForm(QWidget *parent = nullptr);
     ~ItemsForm();
     void setup();
+    void populate(SaveData*) const;
 
 private:
     Ui::ItemsForm *ui;

@@ -43,7 +43,8 @@ void GeneralForm::setup()
     // );
     // ui->leLife->setText(QString::number(100));
     LineEditHelper::setup(ui->leLife, QString::number(100), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 1, 100);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 1, 100);
         ui->leLife->setText(QString::number(value));
         SaveManager::getInstance()->setLife(value);
     });
@@ -153,7 +154,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leWeek, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, SHRT_MAX);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, SHRT_MAX);
         ui->leWeek->setText(QString::number(value));
         SaveManager::getInstance()->setWeek(value);
     });
@@ -164,7 +166,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leDay, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 7 - 1);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 7 - 1);
         ui->leDay->setText(QString::number(value));
         SaveManager::getInstance()->setDay(value);
     });
@@ -175,7 +178,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leHour, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 24 - 1);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 24 - 1);
         ui->leHour->setText(QString::number(value));
         SaveManager::getInstance()->setHour(value);
     });
@@ -186,7 +190,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leMinutes, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 60 - 1);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 60 - 1);
         ui->leMinutes->setText(QString::number(value));
         SaveManager::getInstance()->setMinutes(value);
     });
@@ -197,7 +202,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leSeconds, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 60 - 1);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 60 - 1);
         ui->leSeconds->setText(QString::number(value));
         SaveManager::getInstance()->setSeconds(value);
     });
@@ -208,7 +214,8 @@ void GeneralForm::setup()
     //     }
     // );
     LineEditHelper::setup(ui->leMilliseconds, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 600 - 1);
+        // FIXME: uint16_t should be int16_t
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 600 - 1);
         ui->leMilliseconds->setText(QString::number(value));
         SaveManager::getInstance()->setMilliseconds(value);
     });
@@ -505,4 +512,68 @@ void GeneralForm::setup()
         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
+}
+
+void GeneralForm::populate(SaveData *saveData) const
+{
+    if (saveData == nullptr) {
+        return;
+    }
+
+    const auto *inst = SaveManager::getInstance();
+
+    // Combo boxes
+    // selectComboBoxOption(*ui->cbCharacter, saveData->character);
+    ComboBoxHelper::setCurrentValue(ui->cbCharacter, saveData->character);
+    // selectComboBoxOption(*ui->cbButtonConfig, saveData->button_config);
+    ComboBoxHelper::setCurrentValue(ui->cbButtonConfig, saveData->button_config);
+    // selectComboBoxOption(*ui->cbSoundMode, saveData->sound_mode);
+    ComboBoxHelper::setCurrentValue(ui->cbSoundMode, saveData->sound_mode);
+    // selectComboBoxOption(*ui->cbSubweapon, saveData->subweapon);
+    ComboBoxHelper::setCurrentValue(ui->cbSubweapon, saveData->subweapon);
+    // selectComboBoxOption(*ui->cbMap, saveData->map);
+    ComboBoxHelper::setCurrentValue(ui->cbMap, saveData->map);
+
+    ComboBoxHelper::setCurrentValue(ui->cbDifficulty, saveData->getFlag(SaveData::SAVE_FLAG_EASY | SaveData::SAVE_FLAG_NORMAL | SaveData::SAVE_FLAG_HARD));
+    ComboBoxHelper::setCurrentValue(ui->cbReinhardtEnding, saveData->getFlag(SaveData::SAVE_FLAG_REINDHART_GOOD_ENDING | SaveData::SAVE_FLAG_REINDHART_BAD_ENDING));
+    ComboBoxHelper::setCurrentValue(ui->cbCarrieEnding, saveData->getFlag(SaveData::SAVE_FLAG_CARRIE_GOOD_ENDING | SaveData::SAVE_FLAG_CARRIE_BAD_ENDING));
+    ComboBoxHelper::setCurrentValue(ui->cbRegion, inst->getRegion());
+
+    if (inst->getRegion() == SaveData::PAL) {
+        ComboBoxHelper::setCurrentValue(ui->cbLanguage, saveData->language);
+    }
+
+    // Numerical Line edits
+    ui->leLife->setText(QString::number(saveData->life));
+    ui->leGold->setText(QString::number(saveData->gold));
+    ui->leRedJewels->setText(QString::number(saveData->getItem(SaveData::ITEM_ID_RED_JEWEL)));
+    ui->leSpawn->setText(QString::number(saveData->spawn));
+    ui->leWhiteJewel->setText(QString::number(saveData->save_crystal_number));
+    ui->leTimesSaved->setText(QString::number(saveData->time_saved_counter));
+    ui->leDeathCount->setText(QString::number(saveData->death_counter));
+    ui->leGoldRenon->setText(QString::number(saveData->gold_spent_on_Renon));
+    ui->leHourVamp->setText(QString::number(saveData->current_hour_VAMP));
+    ui->leHealthDepletionRate->setText(QString::number(saveData->health_depletion_rate_while_poisoned));
+    ui->leWeek->setText(QString::number(saveData->week));
+    ui->leDay->setText(QString::number(saveData->day));
+    ui->leHour->setText(QString::number(saveData->hour));
+    ui->leMinutes->setText(QString::number(saveData->minute));
+    ui->leSeconds->setText(QString::number(saveData->seconds));
+    ui->leMilliseconds->setText(QString::number(saveData->milliseconds));
+    ui->leFrameCount->setText(QString::number(saveData->gameplay_framecount));
+    convertFrameToTime(saveData->gameplay_framecount, ui->labelPlaytime);
+
+    // Checkboxes
+    ui->cboxEnabled->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_ACTIVE));
+    // TODO: make the following function available
+    // updateCheckboxEnabledVisibility();
+
+    ui->cboxHardMode->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED));
+    ui->cboxUseAlternateCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED));
+    ui->cboxReinhardtCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME));
+    ui->cboxCarrieCostume->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME));
+    ui->cboxNitro->setChecked(saveData->getFlag(SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING));
+    ui->cboxVamp->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_VAMP));
+    ui->cboxPoison->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_POISON));
+    ui->cboxSto->setChecked(saveData->getPlayerStatus(SaveData::PLAYER_FLAG_STO));
 }

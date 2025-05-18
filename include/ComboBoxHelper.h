@@ -66,7 +66,14 @@ void setup(QComboBox *cb, TValue defaultValue, const QVector<Item<TValue>> &list
 template <typename T>
 void setCurrentValue(QComboBox *cb, T value)
 {
-    auto index = cb->findData(QVariant::fromValue(value));
+    const auto data = QVariant::fromValue(value);
+    // Workaround to fix a bug where some comboboxes wouldn't update properly when setting
+    // an option whose value was 0.
+    // if (data.toInt() == 0) {
+    //     cb->setCurrentIndex(0);
+    //     return;
+    // }
+    auto index = cb->findData(data);
     Q_ASSERT(index != -1);
     cb->setCurrentIndex(index);
 }

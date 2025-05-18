@@ -18,6 +18,7 @@ public:
     explicit EventFlagsForm(QWidget *parent = nullptr);
     ~EventFlagsForm();
     void setup();
+    void populate(SaveData*) const;
 
 private:
     Ui::EventFlagsForm *ui;

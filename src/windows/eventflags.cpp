@@ -61,7 +61,7 @@ QLineEdit* createGridFlag(SaveManager *instance, TTarget *target, QGridLayout* g
     for (std::uint32_t j = 0; j < 32; j++) {
         // Make sure that each checkbox is updated *on-the-fly* as we edit the hex value from the line edit
         // To do so, we directly define a lambda function that does target for us. This is executed when pressing any of the checkboxes
-        connect(checkBoxes[j], &QCheckBox::toggled, target, [checkBoxes, hexBitflagDisplay]() {
+        QObject::connect(checkBoxes[j], &QCheckBox::toggled, target, [checkBoxes, hexBitflagDisplay]() {
             std::uint32_t updatedFlags = 0;
             for (std::int32_t m = 0; m < 32; ++m) {
                 if (checkBoxes[m]->isChecked()) {
@@ -74,7 +74,7 @@ QLineEdit* createGridFlag(SaveManager *instance, TTarget *target, QGridLayout* g
 
     // Lastly, we connect the "hexBitflagDisplay" and add a handling function that will update all
     // checkboxes depending on the hex bitflag value passed in the "hexBitflagDisplay" line edit
-    connect(hexBitflagDisplay, &QLineEdit::textChanged, target, [instance, checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
+    QObject::connect(hexBitflagDisplay, &QLineEdit::textChanged, target, [instance, checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
         bool ok = false;
         std::uint32_t newFlags = text.toUInt(&ok, 10);
 
@@ -186,4 +186,16 @@ void EventFlagsForm::setup()
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage6);
         // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage6);
     });
+}
+
+void EventFlagsForm::populate(SaveData *saveData) const
+{
+    if (saveData == nullptr) {
+        return;
+    }
+    // Event flag grids. We edit each of the line edits associated to the event flags to assign the hex value gotten
+    // from the save data. Then, the checkboxes will be ticked / unticked automatically
+    for (unsigned int i = 0; i < NUM_EVENT_FLAGS; i++) {
+        hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
+    }
 }

@@ -1,6 +1,8 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
+#include "save/Save.h"
+
 #include <QWidget>
 
 namespace Ui {
@@ -15,6 +17,7 @@ public:
     explicit GeneralForm(QWidget *parent = nullptr);
     ~GeneralForm();
     void setup();
+    void populate(SaveData*) const;
 
 private:
     Ui::GeneralForm *ui;
