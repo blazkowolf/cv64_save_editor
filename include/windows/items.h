@@ -14,6 +14,7 @@ class ItemsForm : public QWidget
 public:
     explicit ItemsForm(QWidget *parent = nullptr);
     ~ItemsForm();
+    void setup();
 
 private:
     Ui::ItemsForm *ui;
