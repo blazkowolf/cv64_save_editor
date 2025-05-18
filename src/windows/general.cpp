@@ -1,4 +1,6 @@
 #include "windows/general.h"
+
+#include "CheckBoxHelper.h"
 #include "ComboBoxHelper.h"
 #include "LineEditHelper.h"
 #include "ui_general.h"
@@ -14,6 +16,19 @@ GeneralForm::GeneralForm(QWidget *parent)
 GeneralForm::~GeneralForm()
 {
     delete ui;
+}
+
+void convertFrameToTime(const std::uint32_t frameCount, QLabel* output) {
+    const std::int32_t totalSeconds = frameCount / 30;
+    const std::int32_t hours = totalSeconds / 3600;
+    const std::int32_t minutes = (totalSeconds % 3600) / 60;
+    const std::int32_t seconds = totalSeconds % 60;
+    output->setText(
+        QString("%1:%2:%3")
+            .arg(hours, 2, 10, QChar('0'))
+            .arg(minutes, 2, 10, QChar('0'))
+            .arg(seconds, 2, 10, QChar('0'))
+    );
 }
 
 void GeneralForm::setup()
@@ -88,72 +103,128 @@ void GeneralForm::setup()
         SaveManager::getInstance()->setTimesSaved(value);
     });
 
-    LineEditHelper::setup(ui->leDeathCount, 0, UINT_MAX,
-        [](std::uint32_t value) {
-            SaveManager::getInstance()->setDeathCount(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leDeathCount, 0, UINT_MAX,
+    //     [](std::uint32_t value) {
+    //         SaveManager::getInstance()->setDeathCount(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leDeathCount, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint32_t>(text, 0, UINT_MAX);
+        ui->leDeathCount->setText(QString::number(value));
+        SaveManager::getInstance()->setDeathCount(value);
+    });
 
-    LineEditHelper::setup(ui->leGoldRenon, 0, UINT_MAX,
-        [](std::uint32_t value) {
-            SaveManager::getInstance()->setGoldRenon(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leGoldRenon, 0, UINT_MAX,
+    //     [](std::uint32_t value) {
+    //         SaveManager::getInstance()->setGoldRenon(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leGoldRenon, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint32_t>(text, 0, UINT_MAX);
+        ui->leGoldRenon->setText(QString::number(value));
+        SaveManager::getInstance()->setGoldRenon(value);
+    });
 
-    LineEditHelper::setup(ui->leHourVamp, 0, 23,
-        [](std::uint16_t value) {
-            SaveManager::getInstance()->setHourVamp(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leHourVamp, 0, 23,
+    //     [](std::uint16_t value) {
+    //         SaveManager::getInstance()->setHourVamp(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leHourVamp, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, 23);
+        ui->leHourVamp->setText(QString::number(value));
+        SaveManager::getInstance()->setHourVamp(value);
+    });
 
-    LineEditHelper::setup(ui->leHealthDepletionRate, 0, SHRT_MAX,
-        [](std::uint16_t value) {
-            SaveManager::getInstance()->setHealthDepletionRate(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leHealthDepletionRate, 0, SHRT_MAX,
+    //     [](std::uint16_t value) {
+    //         SaveManager::getInstance()->setHealthDepletionRate(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leHealthDepletionRate, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint16_t>(text, 0, SHRT_MAX);
+        ui->leHealthDepletionRate->setText(QString::number(value));
+        SaveManager::getInstance()->setHealthDepletionRate(value);
+    });
 
-    LineEditHelper::setup(ui->leWeek, 0, SHRT_MAX,
-        [](std::int16_t value) {
-            SaveManager::getInstance()->setWeek(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leWeek, 0, SHRT_MAX,
+    //     [](std::int16_t value) {
+    //         SaveManager::getInstance()->setWeek(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leWeek, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, SHRT_MAX);
+        ui->leWeek->setText(QString::number(value));
+        SaveManager::getInstance()->setWeek(value);
+    });
 
-    LineEditHelper::setup(ui->leDay, 0, 7 - 1,
-        [](std::int16_t value) {
-            SaveManager::getInstance()->setDay(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leDay, 0, 7 - 1,
+    //     [](std::int16_t value) {
+    //         SaveManager::getInstance()->setDay(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leDay, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 7 - 1);
+        ui->leDay->setText(QString::number(value));
+        SaveManager::getInstance()->setDay(value);
+    });
 
-    LineEditHelper::setup(ui->leHour, 0, 24 - 1,
-        [](std::int16_t value) {
-            SaveManager::getInstance()->setHour(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leHour, 0, 24 - 1,
+    //     [](std::int16_t value) {
+    //         SaveManager::getInstance()->setHour(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leHour, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 24 - 1);
+        ui->leHour->setText(QString::number(value));
+        SaveManager::getInstance()->setHour(value);
+    });
 
-    LineEditHelper::setup(ui->leMinutes, 0, 60 - 1,
-        [](std::int16_t value) {
-            SaveManager::getInstance()->setMinutes(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leMinutes, 0, 60 - 1,
+    //     [](std::int16_t value) {
+    //         SaveManager::getInstance()->setMinutes(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leMinutes, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 60 - 1);
+        ui->leMinutes->setText(QString::number(value));
+        SaveManager::getInstance()->setMinutes(value);
+    });
 
-    LineEditHelper::setup(ui->leSeconds, 0, 60 - 1,
-        [](std::int16_t value) {
-            SaveManager::getInstance()->setSeconds(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leSeconds, 0, 60 - 1,
+    //     [](std::int16_t value) {
+    //         SaveManager::getInstance()->setSeconds(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leSeconds, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 60 - 1);
+        ui->leSeconds->setText(QString::number(value));
+        SaveManager::getInstance()->setSeconds(value);
+    });
 
-    LineEditHelper::setup(ui->leMilliseconds, 0, 600 - 1,
-        [](std::uint16_t value) {
-            SaveManager::getInstance()->setMilliseconds(value);
-        }
-    );
+    // LineEditHelper::setup(ui->leMilliseconds, 0, 600 - 1,
+    //     [](std::uint16_t value) {
+    //         SaveManager::getInstance()->setMilliseconds(value);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leMilliseconds, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::int16_t>(text, 0, 600 - 1);
+        ui->leMilliseconds->setText(QString::number(value));
+        SaveManager::getInstance()->setMilliseconds(value);
+    });
 
-    LineEditHelper::setup(ui->leFrameCount, 0, UINT_MAX,
-        [this](std::uint32_t value) {
-            SaveManager::getInstance()->setFramecount(value);
-            convertFrameToTime(SaveManager::getInstance()->getFrameCount(), ui->labelPlaytime);
-        }
-    );
+    // LineEditHelper::setup(ui->leFrameCount, 0, UINT_MAX,
+    //     [this](std::uint32_t value) {
+    //         SaveManager::getInstance()->setFramecount(value);
+    //         convertFrameToTime(SaveManager::getInstance()->getFrameCount(), ui->labelPlaytime);
+    //     }
+    // );
+    LineEditHelper::setup(ui->leFrameCount, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEditHelper::handleUnsignedInteger<std::uint32_t>(text, 0, UINT_MAX);
+        ui->leFrameCount->setText(QString::number(value));
+        SaveManager::getInstance()->setFramecount(value);
+        convertFrameToTime(SaveManager::getInstance()->getFrameCount(), ui->labelPlaytime);
+    });
 
     // Initialize combo boxes and set their default values
     ComboBoxHelper::setup<SaveData::MapID>(
@@ -239,9 +310,59 @@ void GeneralForm::setup()
         [](SaveData::SubweaponID value) { SaveManager::getInstance()->setSubweapon(value); }
     );
 
-    setupComboBoxBitflag(ui->cbDifficulty, comboBoxDataDifficulty);
-    setupComboBoxBitflag(ui->cbReinhardtEnding, comboBoxDataEndingReinhardt);
-    setupComboBoxBitflag(ui->cbCarrieEnding, comboBoxDataEndingCarrie);
+    // setupComboBoxBitflag(ui->cbDifficulty, comboBoxDataDifficulty);
+    const QVector<ComboBoxHelper::Item<SaveData::SaveFlag>> difficultyChoices = {
+        {"Easy", SaveData::SAVE_FLAG_EASY},
+        {"Normal", SaveData::SAVE_FLAG_NORMAL},
+        {"Hard", SaveData::SAVE_FLAG_HARD}
+    };
+    ComboBoxHelper::setup<SaveData::SaveFlag>(
+        ui->cbDifficulty,
+        SaveData::SAVE_FLAG_EASY,
+        difficultyChoices,
+        [difficultyChoices](std::int32_t value) {
+            for (const auto &[k, v] : difficultyChoices) {
+                SaveManager::getInstance()->unsetFlags(v);
+            }
+            SaveManager::getInstance()->setFlags(value);
+        }
+    );
+
+    // setupComboBoxBitflag(ui->cbReinhardtEnding, comboBoxDataEndingReinhardt);
+    const QVector<ComboBoxHelper::Item<std::int32_t>> reinhardtEndingChoices = {
+        {"-", 0},
+        {"Good", SaveData::SAVE_FLAG_REINDHART_GOOD_ENDING},
+        {"Bad", SaveData::SAVE_FLAG_REINDHART_BAD_ENDING}
+    };
+    ComboBoxHelper::setup<std::int32_t>(
+        ui->cbReinhardtEnding,
+        0,
+        reinhardtEndingChoices,
+        [reinhardtEndingChoices](std::int32_t value) {
+            for (const auto &[k, v] : reinhardtEndingChoices) {
+                SaveManager::getInstance()->unsetFlags(v);
+            }
+            SaveManager::getInstance()->setFlags(value);
+        }
+    );
+
+    // setupComboBoxBitflag(ui->cbCarrieEnding, comboBoxDataEndingCarrie);
+    const QVector<ComboBoxHelper::Item<std::int32_t>> carrieEndingChoices = {
+        {"-", 0},
+        {"Good", SaveData::SAVE_FLAG_CARRIE_GOOD_ENDING},
+        {"Bad", SaveData::SAVE_FLAG_CARRIE_BAD_ENDING}
+    };
+    ComboBoxHelper::setup<std::int32_t>(
+        ui->cbCarrieEnding,
+        0,
+        carrieEndingChoices,
+        [carrieEndingChoices](std::int32_t value) {
+            for (const auto &[k, v] : carrieEndingChoices) {
+                SaveManager::getInstance()->unsetFlags(v);
+            }
+            SaveManager::getInstance()->setFlags(value);
+        }
+    );
 
     ComboBoxHelper::setup<SaveData::eRegion>(
         ui->cbRegion,
@@ -316,54 +437,71 @@ void GeneralForm::setup()
     // In order to avoid the checkbox from being disabled,
     // we ensure that its parent is MainWindow (since it's never disabled by the "enableUiComponents" function)
     ui->cboxEnabled->setParent(this);
-    setupCheckBox(ui->cboxEnabled, SaveData::SAVE_FLAG_ACTIVE,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxEnabled,
+        SaveData::SAVE_FLAG_ACTIVE,
         [this](std::uint32_t value) {
             SaveManager::getInstance()->setFlags(value);
-            updateWindowVisibility(true);
+            // updateWindowVisibility(true);
         },
-
         [this](std::uint32_t value) {
             SaveManager::getInstance()->unsetFlags(value);
-            updateWindowVisibility(false);
+            // updateWindowVisibility(false);
         }
     );
 
-    setupCheckBox(ui->cboxHardMode, SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxHardMode,
+        SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED,
         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
-    setupCheckBox(ui->cboxUseAlternateCostume, SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxUseAlternateCostume,
+        SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED,
         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
-    setupCheckBox(ui->cboxReinhardtCostume, SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxReinhardtCostume,
+        SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME,
         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
-    setupCheckBox(ui->cboxCarrieCostume, SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxCarrieCostume,
+        SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME,
         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
-    setupCheckBox(ui->cboxNitro, SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxNitro,
+        SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING,
         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
     );
 
-    setupCheckBox(ui->cboxVamp, SaveData::PLAYER_FLAG_VAMP,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxVamp,
+        SaveData::PLAYER_FLAG_VAMP,
         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
 
-    setupCheckBox(ui->cboxPoison, SaveData::PLAYER_FLAG_POISON,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxPoison,
+        SaveData::PLAYER_FLAG_POISON,
         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
 
-    setupCheckBox(ui->cboxSto, SaveData::PLAYER_FLAG_STO,
+    CheckBoxHelper::setup<std::uint32_t>(
+        ui->cboxSto,
+        SaveData::PLAYER_FLAG_STO,
         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );

@@ -16,6 +16,8 @@
 #include "windows/general.h"
 #include "windows/items.h"
 
+#include <QCheckBox>
+#include <QLabel>
 #include <QMainWindow>
 #include <QWidget>
 #include <QSettings>        // QSettings
@@ -121,26 +123,6 @@ private:
 
     /**< The options found in the "Slot" menu */
     SlotMenu slotMenuOptions[4] = {};
-
-    // Data for this window's combo boxes
-
-    const Ui::ComboBoxData comboBoxDataDifficulty = {
-        {{"Easy", SaveData::SAVE_FLAG_EASY}},
-        {{"Normal", SaveData::SAVE_FLAG_NORMAL}},
-        {{"Hard", SaveData::SAVE_FLAG_HARD}},
-    };
-
-    const Ui::ComboBoxData comboBoxDataEndingReinhardt = {
-        {{"-", 0}},
-        {{"Good", SaveData::SAVE_FLAG_REINDHART_GOOD_ENDING}},
-        {{"Bad", SaveData::SAVE_FLAG_REINDHART_BAD_ENDING}}
-    };
-
-    const Ui::ComboBoxData comboBoxDataEndingCarrie = {
-        {{"-", 0}},
-        {{"Good", SaveData::SAVE_FLAG_CARRIE_GOOD_ENDING}},
-        {{"Bad", SaveData::SAVE_FLAG_CARRIE_BAD_ENDING}}
-    };
 
 };
 
