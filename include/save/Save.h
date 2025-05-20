@@ -19,49 +19,49 @@ constexpr std::int32_t SIZE_ITEMS_ARRAY = 64;
 constexpr std::int32_t NUM_SAVES = 4;
 
 enum struct Item : std::int32_t {
-    ITEM_ID_NOTHING           = 0,
-    ITEM_ID_WHITE_JEWEL       = 1,
-    ITEM_ID_RED_JEWEL         = 2,  /// @note We only used item ID 2 to reference the red jewels, and not 3.
-    ITEM_ID_SPECIAL1          = 4,
-    ITEM_ID_SPECIAL2          = 5,
-    ITEM_ID_SPECIAL3          = 6,  // JPN and PAL-exclusive
+    NONE              = 0,
+    WHITE_JEWEL       = 1,
+    RED_JEWEL         = 2,  /// @note We only used item ID 2 to reference the red jewels, and not 3.
+    SPECIAL1          = 4,
+    SPECIAL2          = 5,
+    SPECIAL3          = 6,  // JPN and PAL-exclusive
 
     /// @note These items IDs are the same ID, but added +1 in the JPN and PAL versions.
     /// Shown below are their IDs in the USA version, used as a base.
-    ITEM_ID_ROAST_CHICKEN     = 6,
-    ITEM_ID_ROAST_BEEF        = 7,
-    ITEM_ID_HEALING_KIT       = 8,
-    ITEM_ID_PURIFYING         = 9,
-    ITEM_ID_CURE_AMPOULE      = 10,
+    ROAST_CHICKEN     = 6,
+    ROAST_BEEF        = 7,
+    HEALING_KIT       = 8,
+    PURIFYING         = 9,
+    CURE_AMPOULE      = 10,
 
-    ITEM_ID_POUT_POURRI       = 11, // USA-exclusive
-    ITEM_ID_POWERUP           = 12,
+    POUT_POURRI       = 11, // USA-exclusive
+    POWERUP           = 12,
 
     // We don't take into account the subweapons here, as we won't treat them as items.
 
-    ITEM_ID_THE_CONTRACT      = 19,
-    ITEM_ID_ENGAGEMENT_RING   = 20,
-    ITEM_ID_MAGICAL_NITRO     = 21,
-    ITEM_ID_MANDRAGORA        = 22,
-    ITEM_ID_SUN_CARD          = 23,
-    ITEM_ID_MOON_CARD         = 24,
-    ITEM_ID_INCANDESCENT_GAZE = 25,
-    ITEM_ID_ARCHIVES_KEY      = 26,
-    ITEM_ID_LEFT_TOWER_KEY    = 27,
-    ITEM_ID_STOREROOM_KEY     = 28,
-    ITEM_ID_GARDEN_KEY        = 29,
-    ITEM_ID_COPPER_KEY        = 30,
-    ITEM_ID_CHAMBER_KEY       = 31,
-    ITEM_ID_EXECUTION_KEY     = 32,
-    ITEM_ID_SCIENCE_KEY1      = 33,
-    ITEM_ID_SCIENCE_KEY2      = 34,
-    ITEM_ID_SCIENCE_KEY3      = 35,
-    ITEM_ID_CLOCKTOWER_KEY1   = 36,
-    ITEM_ID_CLOCKTOWER_KEY2   = 37,
-    ITEM_ID_CLOCKTOWER_KEY3   = 38,
-    ITEM_ID_GOLD_500          = 39,
-    ITEM_ID_GOLD_300          = 40,
-    ITEM_ID_GOLD_100          = 41
+    THE_CONTRACT      = 19,
+    ENGAGEMENT_RING   = 20,
+    MAGICAL_NITRO     = 21,
+    MANDRAGORA        = 22,
+    SUN_CARD          = 23,
+    MOON_CARD         = 24,
+    INCANDESCENT_GAZE = 25,
+    ARCHIVES_KEY      = 26,
+    LEFT_TOWER_KEY    = 27,
+    STOREROOM_KEY     = 28,
+    GARDEN_KEY        = 29,
+    COPPER_KEY        = 30,
+    CHAMBER_KEY       = 31,
+    EXECUTION_KEY     = 32,
+    SCIENCE_KEY1      = 33,
+    SCIENCE_KEY2      = 34,
+    SCIENCE_KEY3      = 35,
+    CLOCKTOWER_KEY1   = 36,
+    CLOCKTOWER_KEY2   = 37,
+    CLOCKTOWER_KEY3   = 38,
+    GOLD_500          = 39,
+    GOLD_300          = 40,
+    GOLD_100          = 41
 };
 
 enum struct PlayerCharacter : std::int16_t {
@@ -245,7 +245,7 @@ struct Data {
     }
 
     [[nodiscard]] std::uint32_t getItem(const Item itemId) const {
-        return items[static_cast<std::underlying_type_t<Item>>(itemId) - 1];
+        return items[static_cast<std::underlying_type_t<decltype(itemId)>>(itemId) - 1];
     }
 
     [[nodiscard]] std::uint32_t getEventFlags(const std::int32_t setIndex) const {

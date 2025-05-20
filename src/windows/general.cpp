@@ -68,7 +68,7 @@ void GeneralForm::setup()
     LineEditHelper::setup(m_ui->leRedJewels, QString::number(0), validator, [this](const QString &text) {
         const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 99);
         m_ui->leRedJewels->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_RED_JEWEL, value);
+        SaveManager::getInstance()->setItem(Save::Item::RED_JEWEL, value);
     });
 
     // LineEditHelper::setup(ui->leSpawn, 0, SHRT_MAX,
@@ -512,15 +512,10 @@ void GeneralForm::populate(Save::Data *saveData) const
     const auto *inst = SaveManager::getInstance();
 
     // Combo boxes
-    // selectComboBoxOption(*ui->cbCharacter, saveData->character);
     ComboBoxHelper::setCurrentValue(m_ui->cbCharacter, saveData->character);
-    // selectComboBoxOption(*ui->cbButtonConfig, saveData->button_config);
     ComboBoxHelper::setCurrentValue(m_ui->cbButtonConfig, saveData->button_config);
-    // selectComboBoxOption(*ui->cbSoundMode, saveData->sound_mode);
     ComboBoxHelper::setCurrentValue(m_ui->cbSoundMode, saveData->sound_mode);
-    // selectComboBoxOption(*ui->cbSubweapon, saveData->subweapon);
     ComboBoxHelper::setCurrentValue(m_ui->cbSubweapon, saveData->subweapon);
-    // selectComboBoxOption(*ui->cbMap, saveData->map);
     ComboBoxHelper::setCurrentValue(m_ui->cbMap, saveData->map);
 
     ComboBoxHelper::setCurrentValue(m_ui->cbDifficulty, saveData->getFlag(Save::SAVE_FLAG_EASY | Save::SAVE_FLAG_NORMAL | Save::SAVE_FLAG_HARD));
@@ -535,7 +530,7 @@ void GeneralForm::populate(Save::Data *saveData) const
     // Numerical Line edits
     m_ui->leLife->setText(QString::number(saveData->life));
     m_ui->leGold->setText(QString::number(saveData->gold));
-    m_ui->leRedJewels->setText(QString::number(saveData->getItem(Save::Item::ITEM_ID_RED_JEWEL)));
+    m_ui->leRedJewels->setText(QString::number(saveData->getItem(Save::Item::RED_JEWEL)));
     m_ui->leSpawn->setText(QString::number(saveData->spawn));
     m_ui->leWhiteJewel->setText(QString::number(saveData->save_crystal_number));
     m_ui->leTimesSaved->setText(QString::number(saveData->time_saved_counter));
