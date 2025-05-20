@@ -76,7 +76,7 @@ class FileLoader {
 
         void swapEndianness(QByteArray*);
 
-        std::int16_t getRegionEnumFromChar(std::uint8_t regionFromFile);
+        Save::Region getRegionEnumFromChar(std::uint8_t regionFromFile);
 
         /**
          * Reads a value of type T at the given offset within the input stream's raw data.

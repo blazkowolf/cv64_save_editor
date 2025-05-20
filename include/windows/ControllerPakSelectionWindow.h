@@ -42,7 +42,7 @@ public:
     void onButtonClicked(std::int32_t saveIndex);
 
     // Helper functions
-    [[nodiscard]] QString getRegionName(std::int16_t region) const;
+    [[nodiscard]] QString getRegionName(Save::Region region) const;
 
 private:
     Ui::ControllerPakSelectionWindow* m_ui;

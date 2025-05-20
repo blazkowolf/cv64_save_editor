@@ -47,13 +47,13 @@ class SaveManager {
 
         // Getters, setters and helper functions
         void parseRegion(QFile& file);
-        [[nodiscard]] std::int16_t getRegion() const;
-        void setRegion(std::int16_t);
+        [[nodiscard]] Save::Region getRegion() const;
+        void setRegion(Save::Region);
         void setLanguage(Save::Language);
         [[nodiscard]] Save::Language getLanguage() const;
         void setLife(std::int16_t);
         void setGold(std::uint32_t);
-        void setItem(std::int32_t, std::uint8_t);
+        void setItem(Save::Item, std::uint8_t);
         void setSpawn(std::int16_t);
         void setWhiteJewel(std::uint16_t);
         void setTimesSaved(std::uint32_t);
@@ -69,11 +69,11 @@ class SaveManager {
         void setMilliseconds(std::uint16_t);
         void setFrameCount(std::uint32_t);
         [[nodiscard]] std::uint32_t getFrameCount() const;
-        void setCharacter(std::int16_t);
+        void setCharacter(Save::PlayerCharacter);
         void setButtonConfig(std::int16_t);
         void setSoundMode(std::int16_t);
-        void setSubweapon(std::int16_t);
-        void setMap(std::int16_t);
+        void setSubweapon(Save::Subweapon);
+        void setMap(Save::Map);
         [[nodiscard]] std::uint32_t getFlags() const;
         void setFlags(std::uint32_t);
         void unsetFlags(std::uint32_t);
@@ -88,11 +88,11 @@ class SaveManager {
         [[nodiscard]] bool areAllSavesDisabled() const;
 
         Save::Slot& getSaveSlot(const std::int32_t index) {
-            return saves[index];
+            return m_saves[index];
         }
 
         Save::Slot& getCurrentSaveSlot() {
-            return saves[m_currentSave];
+            return m_saves[m_currentSave];
         }
 
         Save::Data& getSave(const std::int32_t index, const bool isMain) {
@@ -104,11 +104,11 @@ class SaveManager {
         }
 
         Save::Slot* getAllSaves() {
-            return saves;
+            return m_saves;
         }
 
         void setSaveSlot(const Save::Slot& save, const std::int32_t index) {
-            saves[index] = save;
+            m_saves[index] = save;
         }
 
         void clear();
@@ -121,8 +121,8 @@ class SaveManager {
         SaveManager() {}
         ~SaveManager() = default;
 
-        Save::Slot saves[Save::NUM_SAVES];
-        std::int16_t region = Save::USA;
+        Save::Slot m_saves[Save::NUM_SAVES];
+        Save::Region m_region = Save::Region::USA;
 };
 
 #endif

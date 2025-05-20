@@ -22,14 +22,14 @@ namespace ControllerPak {
  */
 struct NoteTableData {
     std::int32_t index = -1;
-    std::int16_t region = Save::USA;
+    Save::Region region = Save::Region::USA;
     std::uint32_t rawDataStartOffset = 0;
 
     NoteTableData() { clearEntry(); }
 
     void clearEntry() {
         index = -1;
-        region = Save::USA;
+        region = Save::Region::USA;
         rawDataStartOffset = 0;
     }
 };

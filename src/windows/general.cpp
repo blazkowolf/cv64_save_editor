@@ -68,7 +68,7 @@ void GeneralForm::setup()
     LineEditHelper::setup(m_ui->leRedJewels, QString::number(0), validator, [this](const QString &text) {
         const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 99);
         m_ui->leRedJewels->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::ITEM_ID_RED_JEWEL, value);
+        SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_RED_JEWEL, value);
     });
 
     // LineEditHelper::setup(ui->leSpawn, 0, SHRT_MAX,
@@ -236,47 +236,47 @@ void GeneralForm::setup()
     // Initialize combo boxes and set their default values
     ComboBoxHelper::setup<Save::Map>(
         m_ui->cbMap,
-        Save::MORI,
+        Save::Map::MORI,
         {
-            {"Forest of Silence", Save::MORI},
-            {"Castle Wall (Towers)", Save::TOU},
-            {"Castle Wall (Main)", Save::TOUOKUJI},
-            {"Villa (Yard)", Save::NAKANIWA},
-            {"Villa (Foyer)", Save::BEKKAN_1F},
-            {"Villa (Hallway)", Save::BEKKAN_2F},
-            {"Villa (Maze Garden)", Save::MEIRO_TEIEN},
-            {"Tunnel", Save::CHIKA_KODO},
-            {"Underground Waterway", Save::CHIKA_SUIRO},
-            {"Castle Center (Main)", Save::HONMARU_B1F},
-            {"Castle Center (Bottom Elevator)", Save::HONMARU_1F},
-            {"Castle Center (Gears)", Save::HONMARU_2F},
-            {"Castle Center (Friendly Lizard-man)", Save::HONMARU_3F_MINAMI},
-            {"Castle Center (Library)", Save::HONMARU_4F_MINAMI},
-            {"Castle Center (Nitro Room)", Save::HONMARU_3F_KITA},
-            {"Castle Center (Top Elevator)", Save::HONMARU_5F},
-            {"Tower of Execution", Save::SHOKEI_TOU},
-            {"Tower of Sorcery", Save::MAHOU_TOU},
-            {"Tower of Science", Save::KAGAKU_TOU},
-            {"Duel Tower", Save::KETTOU_TOU},
-            {"Castle Keep Stairs", Save::TURO_TOKEITOU},
-            {"Castle Keep", Save::TENSHU},
-            {"Intro Cutscene Map", Save::ENDING_DUMMY},
-            {"Clock Tower", Save::TOKEITOU_NAI},
-            {"Dracula Desert", Save::DRACULA},
-            {"Rose / Actrice Fan Room", Save::ROSE},
-            {"Villa (Vampire Crypt)", Save::BEKKAN_BOSS},
-            {"Room of Clocks", Save::TOU_TURO},
-            {"Ending Map", Save::ENDING},
-            {"Test Grid", Save::TEST_GRID}
+            {"Forest of Silence", Save::Map::MORI},
+            {"Castle Wall (Towers)", Save::Map::TOU},
+            {"Castle Wall (Main)", Save::Map::TOUOKUJI},
+            {"Villa (Yard)", Save::Map::NAKANIWA},
+            {"Villa (Foyer)", Save::Map::BEKKAN_1F},
+            {"Villa (Hallway)", Save::Map::BEKKAN_2F},
+            {"Villa (Maze Garden)", Save::Map::MEIRO_TEIEN},
+            {"Tunnel", Save::Map::CHIKA_KODO},
+            {"Underground Waterway", Save::Map::CHIKA_SUIRO},
+            {"Castle Center (Main)", Save::Map::HONMARU_B1F},
+            {"Castle Center (Bottom Elevator)", Save::Map::HONMARU_1F},
+            {"Castle Center (Gears)", Save::Map::HONMARU_2F},
+            {"Castle Center (Friendly Lizard-man)", Save::Map::HONMARU_3F_MINAMI},
+            {"Castle Center (Library)", Save::Map::HONMARU_4F_MINAMI},
+            {"Castle Center (Nitro Room)", Save::Map::HONMARU_3F_KITA},
+            {"Castle Center (Top Elevator)", Save::Map::HONMARU_5F},
+            {"Tower of Execution", Save::Map::SHOKEI_TOU},
+            {"Tower of Sorcery", Save::Map::MAHOU_TOU},
+            {"Tower of Science", Save::Map::KAGAKU_TOU},
+            {"Duel Tower", Save::Map::KETTOU_TOU},
+            {"Castle Keep Stairs", Save::Map::TURO_TOKEITOU},
+            {"Castle Keep", Save::Map::TENSHU},
+            {"Intro Cutscene Map", Save::Map::ENDING_DUMMY},
+            {"Clock Tower", Save::Map::TOKEITOU_NAI},
+            {"Dracula Desert", Save::Map::DRACULA},
+            {"Rose / Actrice Fan Room", Save::Map::ROSE},
+            {"Villa (Vampire Crypt)", Save::Map::BEKKAN_BOSS},
+            {"Room of Clocks", Save::Map::TOU_TURO},
+            {"Ending Map", Save::Map::ENDING},
+            {"Test Grid", Save::Map::TEST_GRID}
         },
         [](Save::Map value) { SaveManager::getInstance()->setMap(value); }
     );
 
     ComboBoxHelper::setup<Save::PlayerCharacter>(
-        m_ui->cbCharacter, Save::REINHARDT,
+        m_ui->cbCharacter, Save::PlayerCharacter::REINHARDT,
         {
-            {"Reinhardt", Save::REINHARDT},
-            {"Carrie", Save::CARRIE}
+            {"Reinhardt", Save::PlayerCharacter::REINHARDT},
+            {"Carrie", Save::PlayerCharacter::CARRIE}
         },
         [](Save::PlayerCharacter value) { SaveManager::getInstance()->setCharacter(value); }
     );
@@ -304,15 +304,15 @@ void GeneralForm::setup()
 
     ComboBoxHelper::setup<Save::Subweapon>(
         m_ui->cbSubweapon,
-        Save::SUBWEAPON_NONE,
+        Save::Subweapon::NONE,
         {
-            {"None", Save::SUBWEAPON_NONE},
-            {"Knife", Save::SUBWEAPON_KNIFE},
-            {"Holy Water", Save::SUBWEAPON_HOLY_WATER},
-            {"Cross", Save::SUBWEAPON_CROSS},
-            {"Axe", Save::SUBWEAPON_AXE},
-            {"Wooden Stake", Save::SUBWEAPON_WOODEN_STAKE},
-            {"Rose", Save::SUBWEAPON_ROSE}
+            {"None", Save::Subweapon::NONE},
+            {"Knife", Save::Subweapon::KNIFE},
+            {"Holy Water", Save::Subweapon::HOLY_WATER},
+            {"Cross", Save::Subweapon::CROSS},
+            {"Axe", Save::Subweapon::AXE},
+            {"Wooden Stake", Save::Subweapon::WOODEN_STAKE},
+            {"Rose", Save::Subweapon::ROSE}
         },
         [](Save::Subweapon value) { SaveManager::getInstance()->setSubweapon(value); }
     );
@@ -373,17 +373,17 @@ void GeneralForm::setup()
 
     ComboBoxHelper::setup<Save::Region>(
         m_ui->cbRegion,
-        Save::USA,
+        Save::Region::USA,
         {
-            {"USA", Save::USA},
-            {"JPN", Save::JPN},
-            {"PAL", Save::PAL}
+            {"USA", Save::Region::USA},
+            {"JPN", Save::Region::JPN},
+            {"PAL", Save::Region::PAL}
         },
         [this](Save::Region value) {
             SaveManager::getInstance()->setRegion(value);
             switch (value) {
             default:
-            case Save::USA:
+            case Save::Region::USA:
                 m_ui->cbLanguage->setEnabled(false);
                 m_ui->cbLanguage->setCurrentIndex(0);
                 m_ui->cbLanguage->setItemText(0, "English");
@@ -391,7 +391,7 @@ void GeneralForm::setup()
                 // itemsUi->leItemsPoutPourri->setEnabled(true);
                 break;
 
-            case Save::JPN:
+            case Save::Region::JPN:
                 m_ui->cbLanguage->setEnabled(false);
                 m_ui->cbLanguage->setCurrentIndex(0);
                 m_ui->cbLanguage->setItemText(0, "Japanese");
@@ -399,7 +399,7 @@ void GeneralForm::setup()
                 // itemsUi->leItemsPoutPourri->setEnabled(false);
                 break;
 
-            case Save::PAL:
+            case Save::Region::PAL:
                 m_ui->cbLanguage->setEnabled(true);
                 m_ui->cbLanguage->setCurrentIndex(0);
                 m_ui->cbLanguage->setItemText(0, "English");
@@ -528,14 +528,14 @@ void GeneralForm::populate(Save::Data *saveData) const
     ComboBoxHelper::setCurrentValue(m_ui->cbCarrieEnding, saveData->getFlag(Save::SAVE_FLAG_CARRIE_GOOD_ENDING | Save::SAVE_FLAG_CARRIE_BAD_ENDING));
     ComboBoxHelper::setCurrentValue(m_ui->cbRegion, inst->getRegion());
 
-    if (inst->getRegion() == Save::PAL) {
+    if (inst->getRegion() == Save::Region::PAL) {
         ComboBoxHelper::setCurrentValue(m_ui->cbLanguage, saveData->language);
     }
 
     // Numerical Line edits
     m_ui->leLife->setText(QString::number(saveData->life));
     m_ui->leGold->setText(QString::number(saveData->gold));
-    m_ui->leRedJewels->setText(QString::number(saveData->getItem(Save::ITEM_ID_RED_JEWEL)));
+    m_ui->leRedJewels->setText(QString::number(saveData->getItem(Save::Item::ITEM_ID_RED_JEWEL)));
     m_ui->leSpawn->setText(QString::number(saveData->spawn));
     m_ui->leWhiteJewel->setText(QString::number(saveData->save_crystal_number));
     m_ui->leTimesSaved->setText(QString::number(saveData->time_saved_counter));

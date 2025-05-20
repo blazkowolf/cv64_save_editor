@@ -10,12 +10,12 @@
 #include "save/Save.h"
 #include "save/SaveManager.h"
 
-std::int16_t SaveManager::getRegion() const {
-    return region;
+Save::Region SaveManager::getRegion() const {
+    return m_region;
 }
 
-void SaveManager::setRegion(const std::int16_t region_) {
-    region = region_;
+void SaveManager::setRegion(Save::Region region_) {
+    m_region = region_;
 }
 
 void SaveManager::setLanguage(const Save::Language language) {
@@ -34,8 +34,8 @@ void SaveManager::setGold(const std::uint32_t gold) {
     getInstance()->getCurrentSave().gold = gold;
 }
 
-void SaveManager::setItem(const std::int32_t itemId, const std::uint8_t amount) {
-    getInstance()->getCurrentSave().items[itemId - 1] = amount;
+void SaveManager::setItem(const Save::Item itemId, const std::uint8_t amount) {
+    getInstance()->getCurrentSave().items[static_cast<std::underlying_type_t<Save::Item>>(itemId) - 1] = amount;
 }
 
 void SaveManager::setSpawn(const std::int16_t spawn) {
@@ -98,7 +98,7 @@ std::uint32_t SaveManager::getFrameCount() const {
     return getInstance()->getCurrentSave().gameplay_framecount;
 }
 
-void SaveManager::setCharacter(const std::int16_t character) {
+void SaveManager::setCharacter(const Save::PlayerCharacter character) {
     getInstance()->getCurrentSave().character = character;
 }
 
@@ -110,11 +110,11 @@ void SaveManager::setSoundMode(const std::int16_t sound_mode) {
     getInstance()->getCurrentSave().sound_mode = sound_mode;
 }
 
-void SaveManager::setSubweapon(const std::int16_t subweapon) {
+void SaveManager::setSubweapon(const Save::Subweapon subweapon) {
     getInstance()->getCurrentSave().subweapon = subweapon;
 }
 
-void SaveManager::setMap(const std::int16_t map) {
+void SaveManager::setMap(const Save::Map map) {
     getInstance()->getCurrentSave().map = map;
 }
 
@@ -172,7 +172,7 @@ std::uint32_t SaveManager::calcFirstChecksum(const QByteArray& dataFromFile) {
     std::uint32_t checksum = 0;
 
     std::uint32_t numElements = dataFromFile.size();
-    const std::uint8_t* data = reinterpret_cast<const std::uint8_t*>(dataFromFile.constData());
+    const auto* data = reinterpret_cast<const std::uint8_t*>(dataFromFile.constData());
 
     for (std::int32_t i = 0; i < numElements; i++) {
         checksum += data[i];
@@ -190,7 +190,7 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
     std::uint32_t checksum = 0;
 
     std::uint32_t numElements = dataFromFile.size() / 4;
-    const std::uint32_t* data = reinterpret_cast<const std::uint32_t*>(dataFromFile.constData());
+    const auto data = reinterpret_cast<const std::uint32_t*>(dataFromFile.constData());
 
     for (std::int32_t i = 0; i < numElements; i++) {
         checksum ^= data[i];
@@ -204,7 +204,7 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
  * This allows us, for example, to prevent saving if none of the saves's "Enabled" checkbox are checked.
  */
 bool SaveManager::areAllSavesDisabled() const {
-    return std::all_of(std::cbegin(saves), std::cend(saves), [](const Save::Slot& save) {
+    return std::all_of(std::cbegin(m_saves), std::cend(m_saves), [](const Save::Slot& save) {
         return BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE);
     });
     // for (const auto &save : saves) {
@@ -220,7 +220,7 @@ bool SaveManager::areAllSavesDisabled() const {
  * @brief Assign default (i.e. new game) values to all save game fields.
  */
 void SaveManager::assignDefaultValues() {
-    for (auto &save : saves) {
+    for (auto &save : m_saves) {
         save.assignDefaultValues();
     }
 }
@@ -229,7 +229,7 @@ void SaveManager::assignDefaultValues() {
  * @brief Clears all save game fields.
  */
 void SaveManager::clear() {
-    for (auto &save : saves) {
+    for (auto &save : m_saves) {
         save.clear();
     }
 }

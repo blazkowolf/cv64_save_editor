@@ -9,6 +9,7 @@
 #define SAVE_H
 
 #include "bit.h"
+#include <type_traits>
 #include <cstdint>
 
 namespace Save {
@@ -17,7 +18,7 @@ constexpr std::int32_t NUM_EVENT_FLAGS = 16;
 constexpr std::int32_t SIZE_ITEMS_ARRAY = 64;
 constexpr std::int32_t NUM_SAVES = 4;
 
-enum Item {
+enum struct Item : std::int32_t {
     ITEM_ID_NOTHING           = 0,
     ITEM_ID_WHITE_JEWEL       = 1,
     ITEM_ID_RED_JEWEL         = 2,  /// @note We only used item ID 2 to reference the red jewels, and not 3.
@@ -63,22 +64,22 @@ enum Item {
     ITEM_ID_GOLD_100          = 41
 };
 
-enum PlayerCharacter {
+enum struct PlayerCharacter : std::int16_t {
     REINHARDT = 0,
     CARRIE    = 1
 };
 
-enum Subweapon {
-    SUBWEAPON_NONE         = 0,
-    SUBWEAPON_KNIFE        = 1,
-    SUBWEAPON_HOLY_WATER   = 2,
-    SUBWEAPON_CROSS        = 3,
-    SUBWEAPON_AXE          = 4,
-    SUBWEAPON_WOODEN_STAKE = 5,
-    SUBWEAPON_ROSE         = 6
+enum struct Subweapon : std::int16_t {
+    NONE         = 0,
+    KNIFE        = 1,
+    HOLY_WATER   = 2,
+    CROSS        = 3,
+    AXE          = 4,
+    WOODEN_STAKE = 5,
+    ROSE         = 6
 };
 
-enum Map {
+enum struct Map : std::int16_t {
     /** Forest of Silence */
     MORI              = 0,
     /** Castle Wall (Towers) */
@@ -164,7 +165,7 @@ enum SaveFlag {
     SAVE_FLAG_CAN_EXPLODE_ON_JUMPING     = BIT(31)
 };
 
-enum Region {
+enum struct Region : std::int16_t {
     USA,    // Americas
     JPN,    // Japan
     PAL     // Europe
@@ -201,13 +202,13 @@ struct Data {
     /* 0x058 */ Language language;
     /* 0x05A */ std::int16_t padding5A_PAL;
 
-    /* 0x058 */ std::int16_t character;
+    /* 0x058 */ PlayerCharacter character;
     /* 0x05A */ std::int16_t life;
     /**
      * Only set to 100, like the life, and never used otherwise.
      */
     /* 0x05C */ std::int16_t field_0x5C;
-    /* 0x05E */ std::int16_t subweapon;
+    /* 0x05E */ Subweapon subweapon;
     /* 0x060 */ std::uint32_t gold;
     /* 0x064 */ std::uint8_t items[SIZE_ITEMS_ARRAY];
     /* 0x0A4 */ std::uint32_t player_status;
@@ -216,7 +217,7 @@ struct Data {
     * If greater than 24 (midnight), the player turns into a vampire
     */
     /* 0x0AA */ std::uint16_t current_hour_VAMP;
-    /* 0x0AC */ std::int16_t map;
+    /* 0x0AC */ Map map;
     /* 0x0AE */ std::int16_t spawn;
     /* 0x0B0 */ std::uint16_t save_crystal_number;
     /* 0x0B2 */ std::uint8_t field51_0xb2;
@@ -243,8 +244,8 @@ struct Data {
         return BITS_HAS(flags, bitFlagMask);
     }
 
-    [[nodiscard]] std::uint32_t getItem(const std::int32_t itemId) const {
-        return items[itemId - 1];
+    [[nodiscard]] std::uint32_t getItem(const Item itemId) const {
+        return items[static_cast<std::underlying_type_t<Item>>(itemId) - 1];
     }
 
     [[nodiscard]] std::uint32_t getEventFlags(const std::int32_t setIndex) const {

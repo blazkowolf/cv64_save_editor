@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set default values to the savegame at boot
     SaveManager::getInstance()->clear();
-    SaveManager::getInstance()->setRegion(Save::USA);
+    SaveManager::getInstance()->setRegion(Save::Region::USA);
     // ui->leItemsSpecial3->setEnabled(false);
     // ui->leItemsPoutPourri->setEnabled(true);
 

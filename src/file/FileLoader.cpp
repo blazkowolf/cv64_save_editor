@@ -43,7 +43,7 @@ void FileLoader::writeSaveSlot(QFile& file, Save::Slot& slot, const std::uint32_
     std::uint32_t secondChecksumOffset = 0;
     std::uint32_t saveDataSize = 0;
 
-    if (saveManager->getRegion() == Save::PAL) {
+    if (saveManager->getRegion() == Save::Region::PAL) {
         firstChecksumOffset = offsetof(Save::Slot, checksum1);
         secondChecksumOffset = offsetof(Save::Slot, checksum2);
         saveDataSize = sizeof(Save::Data);
@@ -83,17 +83,17 @@ void FileLoader::writeSaveSlot(QFile& file, Save::Slot& slot, const std::uint32_
 /**
  * @brief Returns the region numeric ID given its equivalent character ID.
  */
-std::int16_t FileLoader::getRegionEnumFromChar(const std::uint8_t regionFromFile) {
+Save::Region FileLoader::getRegionEnumFromChar(const std::uint8_t regionFromFile) {
     switch (regionFromFile) {
         default:
         case 'E':
-            return Save::USA;
+            return Save::Region::USA;
 
         case 'J':
-            return Save::JPN;
+            return Save::Region::JPN;
 
         case 'P':
-            return Save::PAL;
+            return Save::Region::PAL;
     }
 }
 
@@ -153,15 +153,15 @@ const Save::Data& FileLoader::readSaveData(QDataStream& inputStream, const std::
     currentSave->sound_mode = readData<std::int16_t>(inputStream, inputStream.device()->pos());
 
     // PAL-exclusive data
-    if (SaveManager::getInstance()->getRegion() == Save::PAL) {
+    if (SaveManager::getInstance()->getRegion() == Save::Region::PAL) {
         currentSave->language = readData<Save::Language>(inputStream, inputStream.device()->pos());
         currentSave->padding5A_PAL = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     }
 
-    currentSave->character = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->character = readData<Save::PlayerCharacter>(inputStream, inputStream.device()->pos());
     currentSave->life = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     currentSave->field_0x5C = readData<std::int16_t>(inputStream, inputStream.device()->pos());
-    currentSave->subweapon = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->subweapon = readData<Save::Subweapon>(inputStream, inputStream.device()->pos());
     currentSave->gold = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
     for (auto &item : currentSave->items) {
@@ -172,7 +172,7 @@ const Save::Data& FileLoader::readSaveData(QDataStream& inputStream, const std::
     currentSave->health_depletion_rate_while_poisoned = readData<std::int16_t>(inputStream, inputStream.device()->pos());
 
     currentSave->current_hour_VAMP = readData<std::uint16_t>(inputStream, inputStream.device()->pos());
-    currentSave->map = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+    currentSave->map = readData<Save::Map>(inputStream, inputStream.device()->pos());
     currentSave->spawn = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     currentSave->save_crystal_number = readData<std::uint16_t>(inputStream, inputStream.device()->pos());
 
@@ -219,15 +219,15 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const Save::Data& save
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.sound_mode);
 
     // PAL-related saves
-    if (SaveManager::getInstance()->getRegion() == Save::PAL) {
+    if (SaveManager::getInstance()->getRegion() == Save::Region::PAL) {
         writeData<Save::Language>(outputStream, outputStream.device()->pos(), saveData.language);
         writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.padding5A_PAL);
     }
 
-    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.character);
+    writeData<Save::PlayerCharacter>(outputStream, outputStream.device()->pos(), saveData.character);
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.life);
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.field_0x5C);
-    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.subweapon);
+    writeData<Save::Subweapon>(outputStream, outputStream.device()->pos(), saveData.subweapon);
     writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.gold);
 
     for (const auto item : saveData.items) {
@@ -237,7 +237,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const Save::Data& save
     writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.player_status);
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.health_depletion_rate_while_poisoned);
     writeData<std::uint16_t>(outputStream, outputStream.device()->pos(), saveData.current_hour_VAMP);
-    writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.map);
+    writeData<Save::Map>(outputStream, outputStream.device()->pos(), saveData.map);
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.spawn);
     writeData<std::uint16_t>(outputStream, outputStream.device()->pos(), saveData.save_crystal_number);
     writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), saveData.field51_0xb2);
@@ -265,7 +265,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const Save::Data& save
  */
 std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
     switch (SaveManager::getInstance()->getRegion()) {
-        case Save::USA:
+        case Save::Region::USA:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x45, 0x41, 0x34, 0xCA, 0xFE,
@@ -273,7 +273,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
                 0x25, 0x1E, 0x2F, 0x1A, 0x27, 0x22, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00
             };
 
-        case Save::JPN:
+        case Save::Region::JPN:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x4A, 0x41, 0x34, 0xCA, 0xFE,
@@ -281,7 +281,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
                 0x25, 0x1E, 0x2F, 0x1A, 0x27, 0x22, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00
             };
 
-        case Save::PAL:
+        case Save::Region::PAL:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x50, 0x41, 0x34, 0xCA, 0xFE,
@@ -297,7 +297,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
  * @note Cartridge saves are exclusive to the Japanese version.
  */
 void FileLoaderCartridge::parseRegion(QFile& file) {
-    SaveManager::getInstance()->setRegion(Save::JPN);
+    SaveManager::getInstance()->setRegion(Save::Region::JPN);
 }
 
 std::vector<std::uint8_t> FileLoaderCartridge::getHeaderBytes() const {
@@ -536,13 +536,13 @@ std::uint32_t FileLoaderNote::getSaveSlotPaddingBytesSize() const {
     std::uint32_t paddingBytes = getSavePaddedSize() - sizeof(Save::Slot);
 
     switch (SaveManager::getInstance()->getRegion()) {
-        case Save::USA:
-        case Save::JPN:
+        case Save::Region::USA:
+        case Save::Region::JPN:
         default:
             // Add the extra 8 bytes found in the PAL version of the saveslot
             return paddingBytes + 8;
 
-        case Save::PAL:
+        case Save::Region::PAL:
             return paddingBytes;
     }
 }
@@ -551,12 +551,12 @@ std::uint32_t FileLoaderNote::getSaveSlotPaddingBytesSize() const {
  * @brief Get the size of the padding data after the end of the actual save slot data.
  */
 std::uint32_t FileLoaderCartridge::getSaveSlotPaddingBytesSize() const {
-    std::int16_t region = SaveManager::getInstance()->getRegion();
+    const auto region = SaveManager::getInstance()->getRegion();
 
     // Remove the extra 8 bytes found in the PAL version of the saveslot
     // (when applicable)
-    std::uint32_t extraByteData = (region == Save::PAL) ? 0 : 8;
-    std::uint32_t paddingBytes = getSavePaddedSize() - (sizeof(Save::Slot) - extraByteData) - getHeaderBytes().size();
+    const std::uint32_t extraByteData = (region == Save::Region::PAL) ? 0 : 8;
+    const std::uint32_t paddingBytes = getSavePaddedSize() - (sizeof(Save::Slot) - extraByteData) - getHeaderBytes().size();
 
     return paddingBytes;
 }

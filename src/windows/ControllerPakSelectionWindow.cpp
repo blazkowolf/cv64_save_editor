@@ -30,16 +30,16 @@ ControllerPakSelectionWindow::~ControllerPakSelectionWindow()
     delete m_ui;
 }
 
-QString ControllerPakSelectionWindow::getRegionName(const std::int16_t region) const {
+QString ControllerPakSelectionWindow::getRegionName(Save::Region region) const {
     switch (region) {
         default:
-        case Save::USA:
+        case Save::Region::USA:
             return "USA";
 
-        case Save::JPN:
+        case Save::Region::JPN:
             return "JPN";
 
-        case Save::PAL:
+        case Save::Region::PAL:
             return "PAL";
     }
 }
@@ -57,7 +57,7 @@ void ControllerPakSelectionWindow::setupButtonBox() {
             continue;
         }
 
-        std::int16_t region = (*saveArray)[i].region;
+        const auto region = (*saveArray)[i].region;
 
         QString buttonText = "Save " + QString::number(index + 1) + "\n" +
                              getRegionName(region);
