@@ -234,7 +234,7 @@ void GeneralForm::setup()
     });
 
     // Initialize combo boxes and set their default values
-    ComboBoxHelper::setup<Save::MapID>(
+    ComboBoxHelper::setup<Save::Map>(
         m_ui->cbMap,
         Save::MORI,
         {
@@ -269,16 +269,16 @@ void GeneralForm::setup()
             {"Ending Map", Save::ENDING},
             {"Test Grid", Save::TEST_GRID}
         },
-        [](Save::MapID value) { SaveManager::getInstance()->setMap(value); }
+        [](Save::Map value) { SaveManager::getInstance()->setMap(value); }
     );
 
-    ComboBoxHelper::setup<Save::PlayerCharacterID>(
+    ComboBoxHelper::setup<Save::PlayerCharacter>(
         m_ui->cbCharacter, Save::REINHARDT,
         {
             {"Reinhardt", Save::REINHARDT},
             {"Carrie", Save::CARRIE}
         },
-        [](Save::PlayerCharacterID value) { SaveManager::getInstance()->setCharacter(value); }
+        [](Save::PlayerCharacter value) { SaveManager::getInstance()->setCharacter(value); }
     );
 
     ComboBoxHelper::setup<std::int32_t>(
@@ -302,7 +302,7 @@ void GeneralForm::setup()
         [](std::int32_t value) { SaveManager::getInstance()->setSoundMode(value); }
     );
 
-    ComboBoxHelper::setup<Save::SubweaponID>(
+    ComboBoxHelper::setup<Save::Subweapon>(
         m_ui->cbSubweapon,
         Save::SUBWEAPON_NONE,
         {
@@ -314,7 +314,7 @@ void GeneralForm::setup()
             {"Wooden Stake", Save::SUBWEAPON_WOODEN_STAKE},
             {"Rose", Save::SUBWEAPON_ROSE}
         },
-        [](Save::SubweaponID value) { SaveManager::getInstance()->setSubweapon(value); }
+        [](Save::Subweapon value) { SaveManager::getInstance()->setSubweapon(value); }
     );
 
     // setupComboBoxBitflag(ui->cbDifficulty, comboBoxDataDifficulty);
@@ -371,7 +371,7 @@ void GeneralForm::setup()
         }
     );
 
-    ComboBoxHelper::setup<Save::eRegion>(
+    ComboBoxHelper::setup<Save::Region>(
         m_ui->cbRegion,
         Save::USA,
         {
@@ -379,7 +379,7 @@ void GeneralForm::setup()
             {"JPN", Save::JPN},
             {"PAL", Save::PAL}
         },
-        [this](Save::eRegion value) {
+        [this](Save::Region value) {
             SaveManager::getInstance()->setRegion(value);
             switch (value) {
             default:
@@ -410,7 +410,7 @@ void GeneralForm::setup()
         }
     );
 
-    ComboBoxHelper::setup<Save::eLanguage>(
+    ComboBoxHelper::setup<Save::Language>(
         m_ui->cbLanguage,
         Save::ENGLISH,
         {

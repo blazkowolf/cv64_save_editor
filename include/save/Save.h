@@ -17,7 +17,7 @@ constexpr std::int32_t NUM_EVENT_FLAGS = 16;
 constexpr std::int32_t SIZE_ITEMS_ARRAY = 64;
 constexpr std::int32_t NUM_SAVES = 4;
 
-enum eItemId {
+enum Item {
     ITEM_ID_NOTHING           = 0,
     ITEM_ID_WHITE_JEWEL       = 1,
     ITEM_ID_RED_JEWEL         = 2,  /// @note We only used item ID 2 to reference the red jewels, and not 3.
@@ -63,12 +63,12 @@ enum eItemId {
     ITEM_ID_GOLD_100          = 41
 };
 
-enum PlayerCharacterID {
+enum PlayerCharacter {
     REINHARDT = 0,
     CARRIE    = 1
 };
 
-enum SubweaponID {
+enum Subweapon {
     SUBWEAPON_NONE         = 0,
     SUBWEAPON_KNIFE        = 1,
     SUBWEAPON_HOLY_WATER   = 2,
@@ -78,7 +78,7 @@ enum SubweaponID {
     SUBWEAPON_ROSE         = 6
 };
 
-enum MapID {
+enum Map {
     /** Forest of Silence */
     MORI              = 0,
     /** Castle Wall (Towers) */
@@ -164,14 +164,14 @@ enum SaveFlag {
     SAVE_FLAG_CAN_EXPLODE_ON_JUMPING     = BIT(31)
 };
 
-enum eRegion {
+enum Region {
     USA,    // Americas
     JPN,    // Japan
     PAL     // Europe
 };
 
 /// @note Only has an effect in PAL saves
-enum eLanguage {
+enum Language {
     ENGLISH = 0,
     JAPANESE = 0,
     GERMAN,

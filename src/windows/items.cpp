@@ -16,7 +16,7 @@ ItemsForm::~ItemsForm()
     delete m_ui;
 }
 
-Save::eItemId actualItemId(const SaveManager *instance, Save::eItemId item)
+Save::Item actualItemId(const SaveManager *instance, Save::Item item)
 {
     if (instance->getRegion() == Save::PAL || instance->getRegion() == Save::JPN) {
         return static_cast<decltype(item)>(static_cast<std::int32_t>(item) + 1);
