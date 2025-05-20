@@ -17,7 +17,7 @@ public:
     explicit GeneralForm(QWidget *parent = nullptr);
     ~GeneralForm();
     void setup();
-    void populate(SaveData*) const;
+    void populate(Save::Data*) const;
 
 private:
     Ui::GeneralForm *m_ui;

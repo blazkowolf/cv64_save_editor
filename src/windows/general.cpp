@@ -62,7 +62,7 @@ void GeneralForm::setup()
 
     // LineEditHelper::setup(ui->leRedJewels, 0, 99,
     //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(SaveData::ITEM_ID_RED_JEWEL, value);
+    //         SaveManager::getInstance()->setItem(Save::Data::ITEM_ID_RED_JEWEL, value);
     //     }
     // );
     LineEditHelper::setup(m_ui->leRedJewels, QString::number(0), validator, [this](const QString &text) {
@@ -338,8 +338,8 @@ void GeneralForm::setup()
     // setupComboBoxBitflag(ui->cbReinhardtEnding, comboBoxDataEndingReinhardt);
     const QVector<ComboBoxHelper::Item<std::int32_t>> reinhardtEndingChoices = {
         {"-", 0},
-        {"Good", Save::SAVE_FLAG_REINDHART_GOOD_ENDING},
-        {"Bad", Save::SAVE_FLAG_REINDHART_BAD_ENDING}
+        {"Good", Save::SAVE_FLAG_REINHARDT_GOOD_ENDING},
+        {"Bad", Save::SAVE_FLAG_REINHARDT_BAD_ENDING}
     };
     ComboBoxHelper::setup<std::int32_t>(
         m_ui->cbReinhardtEnding,
@@ -503,7 +503,7 @@ void GeneralForm::setup()
     m_ui->cboxEnabled->setChecked(false);
 }
 
-void GeneralForm::populate(SaveData *saveData) const
+void GeneralForm::populate(Save::Data *saveData) const
 {
     if (saveData == nullptr) {
         return;
@@ -524,7 +524,7 @@ void GeneralForm::populate(SaveData *saveData) const
     ComboBoxHelper::setCurrentValue(m_ui->cbMap, saveData->map);
 
     ComboBoxHelper::setCurrentValue(m_ui->cbDifficulty, saveData->getFlag(Save::SAVE_FLAG_EASY | Save::SAVE_FLAG_NORMAL | Save::SAVE_FLAG_HARD));
-    ComboBoxHelper::setCurrentValue(m_ui->cbReinhardtEnding, saveData->getFlag(Save::SAVE_FLAG_REINDHART_GOOD_ENDING | Save::SAVE_FLAG_REINDHART_BAD_ENDING));
+    ComboBoxHelper::setCurrentValue(m_ui->cbReinhardtEnding, saveData->getFlag(Save::SAVE_FLAG_REINHARDT_GOOD_ENDING | Save::SAVE_FLAG_REINHARDT_BAD_ENDING));
     ComboBoxHelper::setCurrentValue(m_ui->cbCarrieEnding, saveData->getFlag(Save::SAVE_FLAG_CARRIE_GOOD_ENDING | Save::SAVE_FLAG_CARRIE_BAD_ENDING));
     ComboBoxHelper::setCurrentValue(m_ui->cbRegion, inst->getRegion());
 

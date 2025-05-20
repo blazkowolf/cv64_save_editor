@@ -204,7 +204,7 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
  * This allows us, for example, to prevent saving if none of the saves's "Enabled" checkbox are checked.
  */
 bool SaveManager::areAllSavesDisabled() const {
-    return std::all_of(std::cbegin(saves), std::cend(saves), [](const SaveSlot& save) {
+    return std::all_of(std::cbegin(saves), std::cend(saves), [](const Save::Slot& save) {
         return BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE);
     });
     // for (const auto &save : saves) {

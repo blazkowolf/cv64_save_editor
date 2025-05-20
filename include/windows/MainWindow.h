@@ -51,7 +51,7 @@ public:
         QAction* beginningOfStageSaveOption;
     };
 
-    void populateMainWindow(SaveData* save) const;
+    void populateMainWindow(Save::Data* save) const;
     void updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool isMainSave);
 
 private slots:

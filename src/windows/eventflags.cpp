@@ -184,7 +184,7 @@ void EventFlagsForm::setup()
     m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage1);
 }
 
-void EventFlagsForm::populate(SaveData *saveData) const
+void EventFlagsForm::populate(Save::Data *saveData) const
 {
     if (saveData == nullptr) {
         return;

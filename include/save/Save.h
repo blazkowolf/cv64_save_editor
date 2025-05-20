@@ -156,9 +156,9 @@ enum SaveFlag {
     SAVE_FLAG_HARD_MODE_UNLOCKED         = BIT(8),
     SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME = BIT(9),
     SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME    = BIT(10),
-    SAVE_FLAG_REINDHART_GOOD_ENDING      = BIT(17),
+    SAVE_FLAG_REINHARDT_GOOD_ENDING      = BIT(17),
     SAVE_FLAG_CARRIE_GOOD_ENDING         = BIT(18),
-    SAVE_FLAG_REINDHART_BAD_ENDING       = BIT(19),
+    SAVE_FLAG_REINHARDT_BAD_ENDING       = BIT(19),
     SAVE_FLAG_CARRIE_BAD_ENDING          = BIT(20),
     SAVE_FLAG_COSTUME_IS_BEING_USED      = BIT(30),
     SAVE_FLAG_CAN_EXPLODE_ON_JUMPING     = BIT(31)
@@ -178,16 +178,14 @@ enum Language {
     FRENCH
 };
 
-}
-
 /**
- * @class SaveData
+ * @class Data
  * @brief The main save data structure
  *
  * This structure contains the gameplay variables from one single save inside the game.
  */
-struct SaveData {
-    /* 0x000 */ std::uint32_t event_flags[Save::NUM_EVENT_FLAGS];
+struct Data {
+    /* 0x000 */ std::uint32_t event_flags[NUM_EVENT_FLAGS];
     /* 0x040 */ std::uint32_t flags;
     /* 0x044 */ std::int16_t week;
     /* 0x046 */ std::int16_t day;
@@ -211,7 +209,7 @@ struct SaveData {
     /* 0x05C */ std::int16_t field_0x5C;
     /* 0x05E */ std::int16_t subweapon;
     /* 0x060 */ std::uint32_t gold;
-    /* 0x064 */ std::uint8_t items[Save::SIZE_ITEMS_ARRAY];
+    /* 0x064 */ std::uint8_t items[SIZE_ITEMS_ARRAY];
     /* 0x0A4 */ std::uint32_t player_status;
     /* 0x0A8 */ std::int16_t health_depletion_rate_while_poisoned;
     /**
@@ -255,7 +253,7 @@ struct SaveData {
 }; /// @note Size = 0x0E0 bytes
 
 /**
- * @class SaveSlot
+ * @class Slot
  * @brief Save slot container struct
  *
  * This structure contains all the save data associated to one single slot / file.
@@ -270,9 +268,9 @@ struct SaveData {
  *
  *     - checksum2: Second checksum value for the save. Used for checking if the file was tampered with or corrupted.
  */
-struct SaveSlot {
-    SaveData mainSave{};
-    SaveData beginningOfStage{};
+struct Slot {
+    Data mainSave{};
+    Data beginningOfStage{};
     std::uint32_t checksum1{};
     std::uint32_t checksum2{};
 
@@ -294,7 +292,9 @@ struct SaveSlot {
         beginningOfStage.field_0x5C = 100;
     }
 
-    SaveSlot() { clear(); }
+    Slot() { clear(); }
 };  /// Size = 0x200 bytes. @note Its effective size is 0x1C8 bytes, but is padded to 0x200.
+
+}
 
 #endif

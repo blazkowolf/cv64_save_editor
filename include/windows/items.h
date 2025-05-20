@@ -17,7 +17,7 @@ public:
     explicit ItemsForm(QWidget *parent = nullptr);
     ~ItemsForm();
     void setup();
-    void populate(SaveData*) const;
+    void populate(Save::Data*) const;
 
 private:
     Ui::ItemsForm *m_ui;

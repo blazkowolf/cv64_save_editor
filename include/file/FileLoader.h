@@ -22,7 +22,7 @@
  */
 class FileLoader {
     /// @note All of these offsets are relative to the very beginning of the file.
-    const std::uint32_t rawDataStartOffset = 0;  /**< Offset where the binary SaveData starts within the file */
+    const std::uint32_t rawDataStartOffset = 0;  /**< Offset where the binary Save::Data starts within the file */
     const std::uint32_t regionIdOffset = 0;      /**< Offset where region identification is stored at */
     const std::uint32_t maxFileSize = 0;         /**< Maximum allowed size for the file format we're currently handling */
 
@@ -35,10 +35,10 @@ class FileLoader {
         virtual void parseRegion(QFile& file) = 0;
         void readAllSaveSlots(QFile& file);
         virtual void writeAllSaveSlots(QFile& file);
-        void readSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset);
-        void writeSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset);
-        const SaveData& readSaveData(QDataStream& inputStream, std::uint32_t startOffset);
-        void writeSaveData(QDataStream& outputStream, const SaveData& saveData, std::uint32_t startOffset);
+        void readSaveSlot(QFile& file, Save::Slot& slot, std::uint32_t startOffset);
+        void writeSaveSlot(QFile& file, Save::Slot& slot, std::uint32_t startOffset);
+        const Save::Data& readSaveData(QDataStream& inputStream, std::uint32_t startOffset);
+        void writeSaveData(QDataStream& outputStream, const Save::Data& saveData, std::uint32_t startOffset);
 
         // Search-related functions
         // Search occurrences of an array of bytes in a QByteArray, and count its occurrences, respectively.

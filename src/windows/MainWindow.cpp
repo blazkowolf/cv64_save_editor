@@ -95,7 +95,7 @@ MainWindow::~MainWindow()
 /**
  * @brief Given a save data struct, fill all the UI components with the data from the save.
  */
-void MainWindow::populateMainWindow(SaveData* saveData) const
+void MainWindow::populateMainWindow(Save::Data* saveData) const
 {
     if (saveData == nullptr) {
         return;

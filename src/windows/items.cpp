@@ -395,7 +395,7 @@ void ItemsForm::setup()
     });
 }
 
-void ItemsForm::populate(SaveData *saveData) const
+void ItemsForm::populate(Save::Data *saveData) const
 {
     if (saveData == nullptr) {
         return;

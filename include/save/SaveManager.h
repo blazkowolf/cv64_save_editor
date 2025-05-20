@@ -87,27 +87,27 @@ class SaveManager {
         std::uint32_t calcSecondChecksum(const QByteArray&);
         [[nodiscard]] bool areAllSavesDisabled() const;
 
-        SaveSlot& getSaveSlot(const std::int32_t index) {
+        Save::Slot& getSaveSlot(const std::int32_t index) {
             return saves[index];
         }
 
-        SaveSlot& getCurrentSaveSlot() {
+        Save::Slot& getCurrentSaveSlot() {
             return saves[m_currentSave];
         }
 
-        SaveData& getSave(const std::int32_t index, const bool isMain) {
+        Save::Data& getSave(const std::int32_t index, const bool isMain) {
             return (isMain) ? getSaveSlot(index).mainSave : getSaveSlot(index).beginningOfStage;
         }
 
-        SaveData& getCurrentSave() {
+        Save::Data& getCurrentSave() {
             return (m_isMain) ? getSaveSlot(m_currentSave).mainSave : getSaveSlot(m_currentSave).beginningOfStage;
         }
 
-        SaveSlot* getAllSaves() {
+        Save::Slot* getAllSaves() {
             return saves;
         }
 
-        void setSaveSlot(const SaveSlot& save, const std::int32_t index) {
+        void setSaveSlot(const Save::Slot& save, const std::int32_t index) {
             saves[index] = save;
         }
 
@@ -121,7 +121,7 @@ class SaveManager {
         SaveManager() {}
         ~SaveManager() = default;
 
-        SaveSlot saves[Save::NUM_SAVES];
+        Save::Slot saves[Save::NUM_SAVES];
         std::int16_t region = Save::USA;
 };
 
