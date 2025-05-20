@@ -43,7 +43,7 @@ void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, const std::uint32_t 
     std::uint32_t secondChecksumOffset = 0;
     std::uint32_t saveDataSize = 0;
 
-    if (saveManager->getRegion() == SaveData::PAL) {
+    if (saveManager->getRegion() == Save::PAL) {
         firstChecksumOffset = offsetof(SaveSlot, checksum1);
         secondChecksumOffset = offsetof(SaveSlot, checksum2);
         saveDataSize = sizeof(SaveData);
@@ -87,13 +87,13 @@ std::int16_t FileLoader::getRegionEnumFromChar(const std::uint8_t regionFromFile
     switch (regionFromFile) {
         default:
         case 'E':
-            return SaveData::USA;
+            return Save::USA;
 
         case 'J':
-            return SaveData::JPN;
+            return Save::JPN;
 
         case 'P':
-            return SaveData::PAL;
+            return Save::PAL;
     }
 }
 
@@ -153,7 +153,7 @@ const SaveData& FileLoader::readSaveData(QDataStream& inputStream, const std::ui
     currentSave->sound_mode = readData<std::int16_t>(inputStream, inputStream.device()->pos());
 
     // PAL-exclusive data
-    if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
+    if (SaveManager::getInstance()->getRegion() == Save::PAL) {
         currentSave->language = readData<std::int16_t>(inputStream, inputStream.device()->pos());
         currentSave->padding5A_PAL = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     }
@@ -219,7 +219,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveDa
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.sound_mode);
 
     // PAL-related saves
-    if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
+    if (SaveManager::getInstance()->getRegion() == Save::PAL) {
         writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.language);
         writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.padding5A_PAL);
     }
@@ -265,7 +265,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveDa
  */
 std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
     switch (SaveManager::getInstance()->getRegion()) {
-        case SaveData::USA:
+        case Save::USA:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x45, 0x41, 0x34, 0xCA, 0xFE,
@@ -273,7 +273,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
                 0x25, 0x1E, 0x2F, 0x1A, 0x27, 0x22, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00
             };
 
-        case SaveData::JPN:
+        case Save::JPN:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x4A, 0x41, 0x34, 0xCA, 0xFE,
@@ -281,7 +281,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
                 0x25, 0x1E, 0x2F, 0x1A, 0x27, 0x22, 0x1A, 0x00, 0x00, 0x00, 0x00, 0x00
             };
 
-        case SaveData::PAL:
+        case Save::PAL:
             return {
                 0x01, 0x4D, 0x50, 0x4B, 0x4E, 0x6F, 0x74, 0x65, 0x00, 0x00, 0x00, 0x67,
                 0x89, 0x7E, 0x56, 0x00, 0x4E, 0x44, 0x33, 0x50, 0x41, 0x34, 0xCA, 0xFE,
@@ -297,7 +297,7 @@ std::vector<std::uint8_t> FileLoaderNote::getHeaderBytes() const {
  * @note Cartridge saves are exclusive to the Japanese version.
  */
 void FileLoaderCartridge::parseRegion(QFile& file) {
-    SaveManager::getInstance()->setRegion(SaveData::JPN);
+    SaveManager::getInstance()->setRegion(Save::JPN);
 }
 
 std::vector<std::uint8_t> FileLoaderCartridge::getHeaderBytes() const {
@@ -536,13 +536,13 @@ std::uint32_t FileLoaderNote::getSaveSlotPaddingBytesSize() const {
     std::uint32_t paddingBytes = getSavePaddedSize() - sizeof(SaveSlot);
 
     switch (SaveManager::getInstance()->getRegion()) {
-        case SaveData::USA:
-        case SaveData::JPN:
+        case Save::USA:
+        case Save::JPN:
         default:
             // Add the extra 8 bytes found in the PAL version of the saveslot
             return paddingBytes + 8;
 
-        case SaveData::PAL:
+        case Save::PAL:
             return paddingBytes;
     }
 }
@@ -555,7 +555,7 @@ std::uint32_t FileLoaderCartridge::getSaveSlotPaddingBytesSize() const {
 
     // Remove the extra 8 bytes found in the PAL version of the saveslot
     // (when applicable)
-    std::uint32_t extraByteData = (region == SaveData::PAL) ? 0 : 8;
+    std::uint32_t extraByteData = (region == Save::PAL) ? 0 : 8;
     std::uint32_t paddingBytes = getSavePaddedSize() - (sizeof(SaveSlot) - extraByteData) - getHeaderBytes().size();
 
     return paddingBytes;

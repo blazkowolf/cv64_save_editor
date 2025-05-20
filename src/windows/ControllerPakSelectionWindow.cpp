@@ -33,13 +33,13 @@ ControllerPakSelectionWindow::~ControllerPakSelectionWindow()
 QString ControllerPakSelectionWindow::getRegionName(const std::int16_t region) const {
     switch (region) {
         default:
-        case SaveData::USA:
+        case Save::USA:
             return "USA";
 
-        case SaveData::JPN:
+        case Save::JPN:
             return "JPN";
 
-        case SaveData::PAL:
+        case Save::PAL:
             return "PAL";
     }
 }

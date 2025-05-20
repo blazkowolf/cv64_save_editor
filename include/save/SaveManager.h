@@ -122,7 +122,7 @@ class SaveManager {
         ~SaveManager() = default;
 
         SaveSlot saves[Save::NUM_SAVES];
-        std::int16_t region = SaveData::USA;
+        std::int16_t region = Save::USA;
 };
 
 #endif

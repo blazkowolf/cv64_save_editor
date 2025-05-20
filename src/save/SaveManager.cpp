@@ -205,10 +205,10 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
  */
 bool SaveManager::areAllSavesDisabled() const {
     return std::all_of(std::cbegin(saves), std::cend(saves), [](const SaveSlot& save) {
-        return BITS_HAS(save.mainSave.flags, SaveData::SAVE_FLAG_ACTIVE);
+        return BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE);
     });
     // for (const auto &save : saves) {
-    //     if (BITS_HAS(save.mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)) {
+    //     if (BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE)) {
     //         return false;
     //     }
     // }
