@@ -171,7 +171,7 @@ enum Region {
 };
 
 /// @note Only has an effect in PAL saves
-enum Language {
+enum struct Language : std::int16_t {
     ENGLISH = 0,
     JAPANESE = 0,
     GERMAN,
@@ -198,7 +198,7 @@ struct Data {
     /* 0x056 */ std::int16_t sound_mode;
 
     // PAL-only
-    /* 0x058 */ std::int16_t language;
+    /* 0x058 */ Language language;
     /* 0x05A */ std::int16_t padding5A_PAL;
 
     /* 0x058 */ std::int16_t character;

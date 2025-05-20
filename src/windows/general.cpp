@@ -412,13 +412,13 @@ void GeneralForm::setup()
 
     ComboBoxHelper::setup<Save::Language>(
         m_ui->cbLanguage,
-        Save::ENGLISH,
+        Save::Language::ENGLISH,
         {
-            {"English", Save::ENGLISH},
-            {"German", Save::GERMAN},
-            {"French", Save::FRENCH}
+            {"English", Save::Language::ENGLISH},
+            {"German", Save::Language::GERMAN},
+            {"French", Save::Language::FRENCH}
         },
-        [](std::int32_t value) { SaveManager::getInstance()->setLanguage(value); }
+        [](Save::Language value) { SaveManager::getInstance()->setLanguage(value); }
     );
 
     // Initialize cbLanguage to USA values
@@ -433,11 +433,11 @@ void GeneralForm::setup()
     CheckBoxHelper::setup<std::uint32_t>(
         m_ui->cboxEnabled,
         Save::SAVE_FLAG_ACTIVE,
-        [this](std::uint32_t value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->setFlags(value);
             // updateWindowVisibility(true);
         },
-        [this](std::uint32_t value) {
+        [](std::uint32_t value) {
             SaveManager::getInstance()->unsetFlags(value);
             // updateWindowVisibility(false);
         }

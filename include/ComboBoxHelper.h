@@ -16,14 +16,15 @@
 #include <QString>
 #include <QVariant>
 #include <functional>
+#include <utility>
 
 namespace ComboBoxHelper {
 
 template <typename TValue>
 struct Item
 {
-    Item(const QString &text, const TValue &value)
-        : text(text)
+    Item(QString text, const TValue &value)
+        : text(std::move(text))
         , value(value)
     {
     }

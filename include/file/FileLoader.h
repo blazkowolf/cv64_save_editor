@@ -84,11 +84,16 @@ class FileLoader {
         template<typename T>
         T readData(QDataStream& inputStream, const long offset) {
             inputStream.device()->seek(offset);
-
-            T value;
-            inputStream.readRawData(reinterpret_cast<char*>(&value), sizeof(T));
-
-            return qFromBigEndian(value);
+            if constexpr (std::is_enum_v<T>) {
+                std::underlying_type_t<T> rawValue;
+                inputStream.readRawData(reinterpret_cast<char*>(&rawValue), sizeof(T));
+                const auto sanitized = qFromBigEndian(rawValue);
+                return static_cast<T>(sanitized);
+            } else {
+                T value;
+                inputStream.readRawData(reinterpret_cast<char*>(&value), sizeof(T));
+                return qFromBigEndian(value);
+            }
         }
 
         /**
@@ -97,9 +102,14 @@ class FileLoader {
         template<typename T>
         void writeData(QDataStream& outputStream, const long offset, T value) {
             outputStream.device()->seek(offset);
-
-            T bigEndianValue = qToBigEndian(value);
-            outputStream.writeRawData(reinterpret_cast<char*>(&bigEndianValue), sizeof(T));
+            if constexpr (std::is_enum_v<T>) {
+                const auto underlyingValue = static_cast<std::underlying_type_t<T>>(value);
+                auto bigEndianValue = qToBigEndian(underlyingValue);
+                outputStream.writeRawData(reinterpret_cast<char*>(&bigEndianValue), sizeof(T));
+            } else {
+                T bigEndianValue = qToBigEndian(value);
+                outputStream.writeRawData(reinterpret_cast<char*>(&bigEndianValue), sizeof(T));
+            }
         }
 
         /**

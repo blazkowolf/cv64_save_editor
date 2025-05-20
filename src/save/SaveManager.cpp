@@ -18,11 +18,11 @@ void SaveManager::setRegion(const std::int16_t region_) {
     region = region_;
 }
 
-void SaveManager::setLanguage(const std::int16_t language) {
+void SaveManager::setLanguage(const Save::Language language) {
     getInstance()->getCurrentSave().language = language;
 }
 
-std::int16_t SaveManager::getLanguage() const {
+Save::Language SaveManager::getLanguage() const {
     return getInstance()->getCurrentSave().language;
 }
 

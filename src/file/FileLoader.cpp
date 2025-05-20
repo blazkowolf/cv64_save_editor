@@ -154,7 +154,7 @@ const Save::Data& FileLoader::readSaveData(QDataStream& inputStream, const std::
 
     // PAL-exclusive data
     if (SaveManager::getInstance()->getRegion() == Save::PAL) {
-        currentSave->language = readData<std::int16_t>(inputStream, inputStream.device()->pos());
+        currentSave->language = readData<Save::Language>(inputStream, inputStream.device()->pos());
         currentSave->padding5A_PAL = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     }
 
@@ -220,7 +220,7 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const Save::Data& save
 
     // PAL-related saves
     if (SaveManager::getInstance()->getRegion() == Save::PAL) {
-        writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.language);
+        writeData<Save::Language>(outputStream, outputStream.device()->pos(), saveData.language);
         writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.padding5A_PAL);
     }
 

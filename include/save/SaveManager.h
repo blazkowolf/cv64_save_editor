@@ -49,8 +49,8 @@ class SaveManager {
         void parseRegion(QFile& file);
         [[nodiscard]] std::int16_t getRegion() const;
         void setRegion(std::int16_t);
-        void setLanguage(std::int16_t);
-        [[nodiscard]] std::int16_t getLanguage() const;
+        void setLanguage(Save::Language);
+        [[nodiscard]] Save::Language getLanguage() const;
         void setLife(std::int16_t);
         void setGold(std::uint32_t);
         void setItem(std::int32_t, std::uint8_t);
