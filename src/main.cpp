@@ -7,7 +7,7 @@
  * @author 
  */
 
-#include "windows/Main/MainWindow.h"
+#include "../include/windows/MainWindow.h"
 #include "save/SaveManager.h"
 #include "file/FileManager.h"
 #include <QApplication>
@@ -21,8 +21,8 @@
  *
  * Since these are static, these will live for the entire lifetime of the application.
  */
-SaveManager* SaveManager::instance = nullptr;
-FileManager* FileManager::instance = nullptr;
+SaveManager* SaveManager::m_instance = nullptr;
+FileManager* FileManager::m_instance = nullptr;
 
 void createSingletons() {
     SaveManager::createInstance();

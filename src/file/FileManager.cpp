@@ -9,39 +9,39 @@
 
 #include "file/FileManager.h"
 #include "save/SaveManager.h"
-#include "windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
+#include "../../include/windows/ControllerPakSelectionWindow.h"
 #include <QMessageBox>
 
 /**
  * @brief Given the loaded file format extension, it assigns the appropiate file-handling class.
  */
 std::int32_t FileManager::determineFormat() {
-    if (!filepath.isEmpty()) {
+    if (!m_filepath.isEmpty()) {
 
-        if (loader != nullptr) {
-            delete loader;
-            loader = nullptr;
+        if (m_loader != nullptr) {
+            delete m_loader;
+            m_loader = nullptr;
         }
 
-        QFileInfo fileInfo(filepath);
+        QFileInfo fileInfo(m_filepath);
 
         QString fileExtension = fileInfo.suffix();
 
         if (fileExtension == "note") {
-            loader = new FileLoaderNote();
-            format = FORMAT_NOTE;
+            m_loader = new FileLoaderNote();
+            m_format = FORMAT_NOTE;
         }
         else if (fileExtension == "eep") {
-            loader = new FileLoaderCartridge();
-            format = FORMAT_CARTRIDGE;
+            m_loader = new FileLoaderCartridge();
+            m_format = FORMAT_CARTRIDGE;
         }
         else if (fileExtension == "mpk" || fileExtension == "pak") {
-            loader = new FileLoaderControllerPak();
-            format = FORMAT_CONTROLLERPAK;
+            m_loader = new FileLoaderControllerPak();
+            m_format = FORMAT_CONTROLLERPAK;
         }
         else if (fileExtension == "n64" || fileExtension == "t64") {
-            loader = new FileLoaderDexDrive();
-            format = FORMAT_DEXDRIVE;
+            m_loader = new FileLoaderDexDrive();
+            m_format = FORMAT_DEXDRIVE;
         }
         else {
             // Unsupported file
@@ -54,41 +54,41 @@ std::int32_t FileManager::determineFormat() {
     return -1;
 }
 
-std::int32_t FileManager::openFile(const QString& filepath_) {
-    if (!filepath_.isEmpty()) {
-        setFilePath(filepath_);
+std::int32_t FileManager::openFile(const QString& filepath) {
+    if (!filepath.isEmpty()) {
+        setFilePath(filepath);
 
         if (determineFormat() == -1)  {
             return -1;
         }
 
-        file = new QFile(filepath);
+        m_file = new QFile(m_filepath);
 
-        if (file->open(QIODevice::ReadOnly)) {
+        if (m_file->open(QIODevice::ReadOnly)) {
             // First, write to the buffer
-            QDataStream inputStream(file);
+            QDataStream inputStream(m_file);
 
-            QByteArray fileData = file->readAll();
-            *buffer = file->readAll();
-            buffer->resize(fileData.size());
-            *buffer = fileData;
+            QByteArray fileData = m_file->readAll();
+            *m_buffer = m_file->readAll();
+            m_buffer->resize(fileData.size());
+            *m_buffer = fileData;
 
             // Then, parse the contents of the file
-            if (loader != nullptr) {
-                if (loader->checkFileOpenErrors() != 0) {
+            if (m_loader != nullptr) {
+                if (m_loader->checkFileOpenErrors() != 0) {
                     return -1;
                 }
 
                 // Initialize Controller Pak specific data
-                if (format == FORMAT_CONTROLLERPAK || format == FORMAT_DEXDRIVE) {
-                    std::uint32_t numCV64Saves = initNoteTableData(*file);
+                if (m_format == FORMAT_CONTROLLERPAK || m_format == FORMAT_DEXDRIVE) {
+                    std::uint32_t numCV64Saves = initNoteTableData(*m_file);
 
                     // Stop opening the file if the Controller Pak doesn't have any Castlevania saves
                     // previously stored on it
                     if (numCV64Saves == 0) {
-                        buffer->clear();
-                        buffer->resize(0);
-                        file->close();
+                        m_buffer->clear();
+                        m_buffer->resize(0);
+                        m_file->close();
 
                         QMessageBox::critical(nullptr, "Error", "This file doesn't have any active, valid saves.");
                         return -1;
@@ -100,19 +100,19 @@ std::int32_t FileManager::openFile(const QString& filepath_) {
 
                     // Return early if the user clicked on the X instead of on a button
                     if (result == QDialog::Rejected) {
-                        buffer->clear();
-                        buffer->resize(0);
-                        file->close();
+                        m_buffer->clear();
+                        m_buffer->resize(0);
+                        m_file->close();
                         return -2;
                     }
                 }
 
                 // Actually parse the contents from the file
-                loader->parseRegion(*file);
-                loader->readAllSaveSlots(*file);
+                m_loader->parseRegion(*m_file);
+                m_loader->readAllSaveSlots(*m_file);
 
-                if (fileOpened == false) {
-                    fileOpened = true;
+                if (m_fileOpened == false) {
+                    m_fileOpened = true;
                 }
             }
         }
@@ -120,47 +120,47 @@ std::int32_t FileManager::openFile(const QString& filepath_) {
             return -1;
         }
 
-        file->close();
+        m_file->close();
     }
 
     return 0;
 }
 
-std::int32_t FileManager::writeFile(const QString& filepath_, bool isReplacingOldFile) {
+std::int32_t FileManager::writeFile(const QString& filepath, bool isReplacingOldFile) {
     if (SaveManager::getInstance()->areAllSavesDisabled()) {
         return -2;
     }
 
-    if (!filepath_.isEmpty()) {
-        setFilePath(filepath_);
+    if (!filepath.isEmpty()) {
+        setFilePath(filepath);
 
         if (determineFormat() == -1)  {
             return -1;
         }
 
-        file = new QFile(filepath);
+        m_file = new QFile(m_filepath);
 
-        if (file->open(QIODevice::ReadWrite)) {
+        if (m_file->open(QIODevice::ReadWrite)) {
             if (isReplacingOldFile) {
                 // If we're replacing a file (i.e. when using the "Save As..." feature),
                 // ensure that we clear the file before proceeding.
-                file->resize(0);
+                m_file->resize(0);
             }
             else {
                 // Copy the contents of the file buffer containing the previously unsaved data.
                 // Then, overwrite with the new data.
-                file->write(*buffer);
+                m_file->write(*m_buffer);
             }
 
-            if (loader != nullptr) {
-                loader->writeAllSaveSlots(*file);
+            if (m_loader != nullptr) {
+                m_loader->writeAllSaveSlots(*m_file);
             }
         }
         else {
             return -1;
         }
 
-        file->close();
+        m_file->close();
 
         return 0;
     }
@@ -174,10 +174,10 @@ std::int32_t FileManager::writeFile(const QString& filepath_, bool isReplacingOl
 std::uint32_t FileManager::initNoteTableData(QFile& file) {
     std::uint32_t numCV64Saves = 0;
 
-    if (loader != nullptr && (format == FORMAT_CONTROLLERPAK || format == FORMAT_DEXDRIVE)) {
+    if (m_loader != nullptr && (m_format == FORMAT_CONTROLLERPAK || m_format == FORMAT_DEXDRIVE)) {
         SaveManager* saveManager = SaveManager::getInstance();
         QDataStream inputStream(&file);
-        std::vector<FileManager::ControllerPakNotetableData>* noteTableArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
+        std::vector<ControllerPak::NoteTableData>* noteTableArray = FileManager::getInstance()->getControllerPakNoteTableDataArray();
 
         // If opening another Controller Pak file, make sure to clear the index data array first
         clearNoteTableData();
@@ -186,13 +186,13 @@ std::uint32_t FileManager::initNoteTableData(QFile& file) {
          * Find the note table data (by searching the game ID, like "ND3EA4").
          * If found, it means a Castlevania 64 save is in the Controller Pak, so we can proceed to initialize the note table data.
          */
-        for (std::int32_t i = 0; i < loader->getNoteTableNumEntries(); i++) {
+        for (std::int32_t i = 0; i < m_loader->getNoteTableNumEntries(); i++) {
             const std::uint32_t GAMEID_SIZE = 6;
             QByteArray gameId(GAMEID_SIZE, '\0');
 
-            inputStream.device()->seek(loader->getNoteTableOffset() + (loader->getNoteTableEntrySize() * i));   // This is where the current entry data starts
+            inputStream.device()->seek(m_loader->getNoteTableOffset() + (m_loader->getNoteTableEntrySize() * i));   // This is where the current entry data starts
             std::uint32_t bytesRead = inputStream.readRawData(gameId.data(), GAMEID_SIZE);
-            inputStream.device()->seek(loader->getNoteTableOffset() + (loader->getNoteTableEntrySize() * i));   // Go back to where we were previously to reading gameId
+            inputStream.device()->seek(m_loader->getNoteTableOffset() + (m_loader->getNoteTableEntrySize() * i));   // Go back to where we were previously to reading gameId
 
             if (bytesRead != GAMEID_SIZE) {
                 return 0;
@@ -207,18 +207,18 @@ std::uint32_t FileManager::initNoteTableData(QFile& file) {
             (*noteTableArray)[i].index = i;
 
             // Parse the region (at offset +3)
-            std::uint8_t regionFromFile = loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
-            (*noteTableArray)[i].region = loader->getRegionEnumFromChar(regionFromFile);
+            std::uint8_t regionFromFile = m_loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
+            (*noteTableArray)[i].region = m_loader->getRegionEnumFromChar(regionFromFile);
 
             // Parse the raw data start offset (at offset +3 after the region, and then multiplied by 0x100)
             // If this is 0, we skip over this save entry (acting as if it wasn't present), and go to the next one
-            std::uint32_t rawDataStartOffsetByte = loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
+            std::uint32_t rawDataStartOffsetByte = m_loader->readData<std::uint8_t>(inputStream, inputStream.device()->pos() + 3);
             if (rawDataStartOffsetByte == 0) {
                 (*noteTableArray)[i].clearEntry();
                 numCV64Saves--;
                 continue;
             }
-            (*noteTableArray)[i].rawDataStartOffset = loader->getRawDataOffsetPerEntry(rawDataStartOffsetByte);
+            (*noteTableArray)[i].rawDataStartOffset = m_loader->getRawDataOffsetPerEntry(rawDataStartOffsetByte);
 
             numCV64Saves++;
         }

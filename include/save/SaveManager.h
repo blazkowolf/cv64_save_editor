@@ -22,75 +22,77 @@
  */
 class SaveManager {
     public:
+        SaveManager(const SaveManager& obj) = delete; // Remove the copy constructor
+
         // Singleton-related functions
         static SaveManager* getInstance() {
-            if (instance == nullptr) {
+            if (m_instance == nullptr) {
                 createInstance();
             }
 
-            return instance;
+            return m_instance;
         }
 
         static void createInstance() {
-            instance = new SaveManager();
+            m_instance = new SaveManager();
         }
 
         static void destroyInstance() {
-            delete instance;
-            instance = nullptr;
+            delete m_instance;
+            m_instance = nullptr;
         }
 
-        std::int32_t currentSave = 0;
-        bool isMain = true;
+        std::int32_t m_currentSave = 0;
+        bool m_isMain = true;
 
         // Getters, setters and helper functions
         void parseRegion(QFile& file);
-        std::int16_t getRegion() const;
-        void setRegion(const std::int16_t);
-        void setLanguage(const std::int16_t);
-        std::int16_t getLanguage() const;
-        void setLife(const std::int16_t);
-        void setGold(const std::uint32_t);
-        void setItem(const std::int32_t, const std::uint8_t);
-        void setSpawn(const std::int16_t);
-        void setWhiteJewel(const std::uint16_t);
-        void setTimesSaved(const std::uint32_t);
-        void setDeathCount(const std::uint32_t);
-        void setGoldRenon(const std::uint32_t);
-        void setHourVamp(const std::uint16_t);
-        void setHealthDepletionRate(const std::uint16_t);
-        void setWeek(const std::int16_t);
-        void setDay(const std::int16_t);
-        void setHour(const std::int16_t);
-        void setMinutes(const std::int16_t);
-        void setSeconds(const std::int16_t);
-        void setMilliseconds(const std::uint16_t);
-        void setFramecount(const std::uint32_t);
-        std::uint32_t getFrameCount() const;
-        void setCharacter(const std::int16_t);
-        void setButtonConfig(const std::int16_t);
-        void setSoundMode(const std::int16_t);
-        void setSubweapon(const std::int16_t);
-        void setMap(const std::int16_t);
-        std::uint32_t getFlags() const;
-        void setFlags(const std::uint32_t);
-        void unsetFlags(const std::uint32_t);
-        void setEventFlags(const std::int32_t, const std::uint32_t);
-        std::uint32_t getPlayerStatus() const;
-        void setPlayerStatus(const std::uint32_t status);
-        void unsetPlayerStatus(const std::uint32_t status);
-        void assignEventFlags(const std::int32_t, const std::uint32_t);
-        void unassignEventFlags(const std::int32_t, const std::uint32_t);
+        [[nodiscard]] std::int16_t getRegion() const;
+        void setRegion(std::int16_t);
+        void setLanguage(std::int16_t);
+        [[nodiscard]] std::int16_t getLanguage() const;
+        void setLife(std::int16_t);
+        void setGold(std::uint32_t);
+        void setItem(std::int32_t, std::uint8_t);
+        void setSpawn(std::int16_t);
+        void setWhiteJewel(std::uint16_t);
+        void setTimesSaved(std::uint32_t);
+        void setDeathCount(std::uint32_t);
+        void setGoldRenon(std::uint32_t);
+        void setHourVamp(std::uint16_t);
+        void setHealthDepletionRate(std::uint16_t);
+        void setWeek(std::int16_t);
+        void setDay(std::int16_t);
+        void setHour(std::int16_t);
+        void setMinutes(std::int16_t);
+        void setSeconds(std::int16_t);
+        void setMilliseconds(std::uint16_t);
+        void setFrameCount(std::uint32_t);
+        [[nodiscard]] std::uint32_t getFrameCount() const;
+        void setCharacter(std::int16_t);
+        void setButtonConfig(std::int16_t);
+        void setSoundMode(std::int16_t);
+        void setSubweapon(std::int16_t);
+        void setMap(std::int16_t);
+        [[nodiscard]] std::uint32_t getFlags() const;
+        void setFlags(std::uint32_t);
+        void unsetFlags(std::uint32_t);
+        void setEventFlags(std::int32_t, std::uint32_t);
+        [[nodiscard]] std::uint32_t getPlayerStatus() const;
+        void setPlayerStatus(std::uint32_t status);
+        void unsetPlayerStatus(std::uint32_t status);
+        void assignEventFlags(std::int32_t, std::uint32_t);
+        void unassignEventFlags(std::int32_t, std::uint32_t);
         std::uint32_t calcFirstChecksum(const QByteArray&);
         std::uint32_t calcSecondChecksum(const QByteArray&);
-        bool areAllSavesDisabled();
+        [[nodiscard]] bool areAllSavesDisabled() const;
 
         SaveSlot& getSaveSlot(const std::int32_t index) {
             return saves[index];
         }
 
         SaveSlot& getCurrentSaveSlot() {
-            return saves[currentSave];
+            return saves[m_currentSave];
         }
 
         SaveData& getSave(const std::int32_t index, const bool isMain) {
@@ -98,7 +100,7 @@ class SaveManager {
         }
 
         SaveData& getCurrentSave() {
-            return (isMain) ? getSaveSlot(currentSave).mainSave : getSaveSlot(currentSave).beginningOfStage;
+            return (m_isMain) ? getSaveSlot(m_currentSave).mainSave : getSaveSlot(m_currentSave).beginningOfStage;
         }
 
         SaveSlot* getAllSaves() {
@@ -113,14 +115,13 @@ class SaveManager {
         void assignDefaultValues();
 
     private:
-        static SaveManager* instance;
+        static SaveManager* m_instance;
 
         // Constructors and destructor
         SaveManager() {}
-        ~SaveManager() {}
-        SaveManager(const SaveManager& obj) = delete; // Remove the copy constructor
+        ~SaveManager() = default;
 
-        SaveSlot saves[NUM_SAVES];
+        SaveSlot saves[Save::NUM_SAVES];
         std::int16_t region = SaveData::USA;
 };
 

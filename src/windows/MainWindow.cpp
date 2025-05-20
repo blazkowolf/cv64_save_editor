@@ -8,7 +8,7 @@
  * @author 
  */
 
-#include "windows/Main/MainWindow.h"
+#include "../../include/windows/MainWindow.h"
 #include "ComboBoxHelper.h"
 #include "save/Save.h"
 #include "save/SaveManager.h"
@@ -28,40 +28,40 @@ MainWindow* MainWindow::instance = nullptr;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    , pageGeneral(new GeneralForm)
-    , pageItems(new ItemsForm)
-    , pageEventFlags(new EventFlagsForm)
+    , m_ui(new Ui::MainWindow)
+    , m_pageGeneral(new GeneralForm)
+    , m_pageItems(new ItemsForm)
+    , m_pageEventFlags(new EventFlagsForm)
 {
     instance = this;
 
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     // Avoid being able to maximize the window, as the layout looks worse
     setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     // Initialize pages
-    ui->stackedWidgetPages->addWidget(pageGeneral);
-    ui->stackedWidgetPages->addWidget(pageItems);
-    ui->stackedWidgetPages->addWidget(pageEventFlags);
+    m_ui->stackedWidgetPages->addWidget(m_pageGeneral);
+    m_ui->stackedWidgetPages->addWidget(m_pageItems);
+    m_ui->stackedWidgetPages->addWidget(m_pageEventFlags);
 
-    pageGeneral->setup();
-    pageItems->setup();
-    pageEventFlags->setup();
+    m_pageGeneral->setup();
+    m_pageItems->setup();
+    m_pageEventFlags->setup();
 
     // Initialize pages and the buttons that travel to those pages
     // When each button is pressed, "onPageButtonClicked" will be called passing
     // the desired page by arguments
-    QObject::connect(ui->buttonMain, &QPushButton::clicked, this, [this]() {
-        ui->stackedWidgetPages->setCurrentWidget(pageGeneral);
+    QObject::connect(m_ui->buttonMain, &QPushButton::clicked, this, [this]() {
+        m_ui->stackedWidgetPages->setCurrentWidget(m_pageGeneral);
     });
 
-    QObject::connect(ui->buttonItems, &QPushButton::clicked, this, [this]() {
-        ui->stackedWidgetPages->setCurrentWidget(pageItems);
+    QObject::connect(m_ui->buttonItems, &QPushButton::clicked, this, [this]() {
+        m_ui->stackedWidgetPages->setCurrentWidget(m_pageItems);
     });
 
-    QObject::connect(ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
-        ui->stackedWidgetPages->setCurrentWidget(pageEventFlags);
+    QObject::connect(m_ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
+        m_ui->stackedWidgetPages->setCurrentWidget(m_pageEventFlags);
     });
 
     // Initialize toolbar options
@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->leItemsPoutPourri->setEnabled(true);
 
     // Ensure that we start in the "Main" page
-    ui->stackedWidgetPages->setCurrentWidget(pageGeneral);
+    m_ui->stackedWidgetPages->setCurrentWidget(m_pageGeneral);
 
     // Uncheck the "save enabled checkbox" when opening the program
     // enableUIComponents(false);
@@ -85,11 +85,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete m_ui;
     instance = nullptr;
-    delete pageGeneral;
-    delete pageItems;
-    delete pageEventFlags;
+    delete m_pageGeneral;
+    delete m_pageItems;
+    delete m_pageEventFlags;
 }
 
 /**
@@ -100,9 +100,9 @@ void MainWindow::populateMainWindow(SaveData* saveData) const
     if (saveData == nullptr) {
         return;
     }
-    pageGeneral->populate(saveData);
-    pageItems->populate(saveData);
-    pageEventFlags->populate(saveData);
+    m_pageGeneral->populate(saveData);
+    m_pageItems->populate(saveData);
+    m_pageEventFlags->populate(saveData);
 }
 
 void MainWindow::openFile(const QString& filename)
@@ -120,7 +120,7 @@ void MainWindow::openFile(const QString& filename)
     /// Set default Slot option to the currently selected save.
     /// @note We must call this function after calling "populateMainWindow" in order to have the checkboxes
     /// ready. Otherwise the program will throw SIGSEV.
-    updateSlotMenuCheckedState(SaveManager::getInstance()->currentSave, SaveManager::getInstance()->isMain);
+    updateSlotMenuCheckedState(SaveManager::getInstance()->m_currentSave, SaveManager::getInstance()->m_isMain);
 }
 
 void MainWindow::fileOpenMenu()
@@ -241,16 +241,16 @@ void MainWindow::fileSaveAsMenu()
 void MainWindow::setupFileMenu()
 {
     // Setup the "Open" button
-    connect(ui->actionOpenFile, &QAction::triggered, this, &MainWindow::fileOpenMenu);
+    connect(m_ui->actionOpenFile, &QAction::triggered, this, &MainWindow::fileOpenMenu);
 
     // Setup the "Save" button
-    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::fileSaveMenu);
+    connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::fileSaveMenu);
 
     // Setup the "Save As..." button
-    connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::fileSaveAsMenu);
+    connect(m_ui->actionSave_As, &QAction::triggered, this, &MainWindow::fileSaveAsMenu);
 
     // Setup the "Exit" button
-    connect(ui->actionExit, &QAction::triggered, this, []() {
+    connect(m_ui->actionExit, &QAction::triggered, this, []() {
         if (const auto reply = QMessageBox::question(nullptr, "Exit", "Are you sure you want to quit?", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
             QApplication::exit();
         }
@@ -262,31 +262,31 @@ void MainWindow::setupSlotMenu()
     QMenu* menuSlot = menuBar()->addMenu("Slot");
     menuSlot->setObjectName("Slot");
 
-    for (std::int32_t i = 0; i < NUM_SAVES; ++i) {
+    for (std::int32_t i = 0; i < Save::NUM_SAVES; ++i) {
         // Create a submenu for "Slot X"
-        slotMenuOptions[i].slotOption = new QMenu(QString("Slot %1").arg(i + 1), this);
-        menuSlot->addMenu(slotMenuOptions[i].slotOption);
-        slotMenuOptions[i].slotOption->setObjectName(QString("Slot %1").arg(i + 1));
+        m_slotMenuOptions[i].slotOption = new QMenu(QString("Slot %1").arg(i + 1), this);
+        menuSlot->addMenu(m_slotMenuOptions[i].slotOption);
+        m_slotMenuOptions[i].slotOption->setObjectName(QString("Slot %1").arg(i + 1));
 
         // Create "Main" action inside the Slot X menu
-        slotMenuOptions[i].mainSaveOption = new QAction("Main", this);
-        slotMenuOptions[i].mainSaveOption->setCheckable(true);
-        slotMenuOptions[i].slotOption->addAction(slotMenuOptions[i].mainSaveOption);
-        connect(slotMenuOptions[i].mainSaveOption, &QAction::triggered, this, [this, i]() {
-            selectedSlot = i;
-            isMain = true;
+        m_slotMenuOptions[i].mainSaveOption = new QAction("Main", this);
+        m_slotMenuOptions[i].mainSaveOption->setCheckable(true);
+        m_slotMenuOptions[i].slotOption->addAction(m_slotMenuOptions[i].mainSaveOption);
+        connect(m_slotMenuOptions[i].mainSaveOption, &QAction::triggered, this, [this, i]() {
+            m_selectedSlot = i;
+            m_isMain = true;
             updateSlotMenuCheckedState(i, true);
             populateMainWindow(&SaveManager::getInstance()->getSaveSlot(i).mainSave);
             updateWindowVisibility(BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE));
         });
 
         // Create "Beginning of Stage" action inside the Slot X menu
-        slotMenuOptions[i].beginningOfStageSaveOption = new QAction("Beginning of Stage", this);
-        slotMenuOptions[i].beginningOfStageSaveOption->setCheckable(true);
-        slotMenuOptions[i].slotOption->addAction(slotMenuOptions[i].beginningOfStageSaveOption);
-        connect(slotMenuOptions[i].beginningOfStageSaveOption, &QAction::triggered, this, [this, i]() {
-            selectedSlot = i;
-            isMain = false;
+        m_slotMenuOptions[i].beginningOfStageSaveOption = new QAction("Beginning of Stage", this);
+        m_slotMenuOptions[i].beginningOfStageSaveOption->setCheckable(true);
+        m_slotMenuOptions[i].slotOption->addAction(m_slotMenuOptions[i].beginningOfStageSaveOption);
+        connect(m_slotMenuOptions[i].beginningOfStageSaveOption, &QAction::triggered, this, [this, i]() {
+            m_selectedSlot = i;
+            m_isMain = false;
             updateSlotMenuCheckedState(i, false);
             populateMainWindow(&SaveManager::getInstance()->getSaveSlot(i).beginningOfStage);
             /// @note For enabling / disabling the interface, we only look at the active flag from "mainSave", NOT the one in "beginningOfStage"
@@ -306,22 +306,22 @@ void MainWindow::updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool
 {
     SaveManager* saveManager = SaveManager::getInstance();
 
-    for (std::uint32_t i = 0; i < NUM_SAVES; ++i) {
-        slotMenuOptions[i].mainSaveOption->setChecked(i == selectedSlotIndex && isMainSave);
-        slotMenuOptions[i].beginningOfStageSaveOption->setChecked(i == selectedSlotIndex && !isMainSave);
+    for (std::uint32_t i = 0; i < Save::NUM_SAVES; ++i) {
+        m_slotMenuOptions[i].mainSaveOption->setChecked(i == selectedSlotIndex && isMainSave);
+        m_slotMenuOptions[i].beginningOfStageSaveOption->setChecked(i == selectedSlotIndex && !isMainSave);
     }
 
-    saveManager->isMain = isMainSave;
-    saveManager->currentSave = selectedSlotIndex;
+    saveManager->m_isMain = isMainSave;
+    saveManager->m_currentSave = selectedSlotIndex;
 }
 
 void MainWindow::setupEditMenu()
 {
-    connect(ui->actionCopy, &QAction::triggered, this, [this]() {
+    connect(m_ui->actionCopy, &QAction::triggered, this, [this]() {
         onCopy(this);
     });
-    connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::onDelete);
-    connect(ui->actionDelete_All, &QAction::triggered, this, &MainWindow::onDeleteAll);
+    connect(m_ui->actionDelete, &QAction::triggered, this, &MainWindow::onDelete);
+    connect(m_ui->actionDelete_All, &QAction::triggered, this, &MainWindow::onDeleteAll);
 }
 
 /// The player can only have a Mandragora *OR* a Magical Nitro at the same time.
@@ -459,7 +459,7 @@ void MainWindow::onDelete()
 void MainWindow::onDeleteAll()
 {
     if (const auto reply = QMessageBox::question(nullptr, "Clear All", "Are you sure you want to clear all saves?", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
-        for (std::int32_t i = 0; i < NUM_SAVES; i++) {
+        for (std::int32_t i = 0; i < Save::NUM_SAVES; i++) {
             SaveManager::getInstance()->getSaveSlot(i).clear();
             populateMainWindow(&SaveManager::getInstance()->getCurrentSave());
             updateWindowVisibility(BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE));

@@ -90,7 +90,7 @@ void SaveManager::setMilliseconds(const std::uint16_t milliseconds) {
     getInstance()->getCurrentSave().milliseconds = milliseconds;
 }
 
-void SaveManager::setFramecount(const std::uint32_t gameplay_framecount) {
+void SaveManager::setFrameCount(const std::uint32_t gameplay_framecount) {
     getInstance()->getCurrentSave().gameplay_framecount = gameplay_framecount;
 }
 
@@ -203,22 +203,25 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
  * If none of the saves are enabled, return true.
  * This allows us, for example, to prevent saving if none of the saves's "Enabled" checkbox are checked.
  */
-bool SaveManager::areAllSavesDisabled() {
-    for (std::int32_t i = 0; i < NUM_SAVES; i++) {
-        if (BITS_HAS(saves[i].mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)) {
-            return false;
-        }
-    }
-
-    return true;
+bool SaveManager::areAllSavesDisabled() const {
+    return std::all_of(std::cbegin(saves), std::cend(saves), [](const SaveSlot& save) {
+        return BITS_HAS(save.mainSave.flags, SaveData::SAVE_FLAG_ACTIVE);
+    });
+    // for (const auto &save : saves) {
+    //     if (BITS_HAS(save.mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)) {
+    //         return false;
+    //     }
+    // }
+    //
+    // return true;
 }
 
 /**
  * @brief Assign default (i.e. new game) values to all save game fields.
  */
 void SaveManager::assignDefaultValues() {
-    for (std::int32_t i = 0; i < NUM_SAVES; i++) {
-        saves[i].assignDefaultValues();
+    for (auto &save : saves) {
+        save.assignDefaultValues();
     }
 }
 
@@ -226,7 +229,7 @@ void SaveManager::assignDefaultValues() {
  * @brief Clears all save game fields.
  */
 void SaveManager::clear() {
-    for (std::int32_t i = 0; i < NUM_SAVES; i++) {
-        saves[i].clear();
+    for (auto &save : saves) {
+        save.clear();
     }
 }

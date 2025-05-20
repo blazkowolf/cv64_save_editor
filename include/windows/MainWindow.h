@@ -11,7 +11,6 @@
 #include "ui_MainWindow.h"
 #include "bit.h"
 #include "save/Save.h"
-#include "windows/ComboBoxData.h"
 #include "windows/eventflags.h"
 #include "windows/general.h"
 #include "windows/items.h"
@@ -79,35 +78,35 @@ private slots:
 
     // Inline getters and setters
     void setSelectedSave(const std::int32_t slot) {
-        selectedSlot = slot;
+        m_selectedSlot = slot;
     }
 
     [[nodiscard]] std::int32_t getSelectedSave() const {
-        return selectedSlot;
+        return m_selectedSlot;
     }
 
-    void setIsMain(const bool isMain_) {
-        isMain = isMain_;
+    void setIsMain(const bool isMain) {
+        m_isMain = isMain;
     }
 
     [[nodiscard]] bool getIsMain() const {
-        return isMain;
+        return m_isMain;
     }
 
 private:
-    Ui::MainWindow* ui;
+    Ui::MainWindow* m_ui;
 
-    GeneralForm *pageGeneral;
-    ItemsForm *pageItems;
-    EventFlagsForm *pageEventFlags;
+    GeneralForm *m_pageGeneral;
+    ItemsForm *m_pageItems;
+    EventFlagsForm *m_pageEventFlags;
 
     /**< The currently-selected save slot */
-    std::int32_t selectedSlot = 0;
+    std::int32_t m_selectedSlot = 0;
     /**< If true, the "Main" save is selected. Otherwise, the "Beginning of Stage" save is selected. */
-    bool isMain = true;
+    bool m_isMain = true;
 
     /**< The options found in the "Slot" menu */
-    SlotMenu slotMenuOptions[4] = {};
+    SlotMenu m_slotMenuOptions[4] = {};
 
 };
 

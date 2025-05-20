@@ -18,9 +18,9 @@ qt_add_executable(${TARGET}
   src/file/FileLoader.cpp
   src/save/SaveManager.cpp
   src/main.cpp
-  include/windows/Main/MainWindow.h
+  include/windows/MainWindow.h
   src/windows/MainWindow.cpp
-  include/windows/ControllerPakSelection/ControllerPakSelectionWindow.h
+  include/windows/ControllerPakSelectionWindow.h
   src/windows/ControllerPakSelectionWindow.cpp
   include/windows/general.h
   src/windows/general.cpp

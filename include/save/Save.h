@@ -11,9 +11,13 @@
 #include "bit.h"
 #include <cstdint>
 
-#define NUM_EVENT_FLAGS  16
-#define SIZE_ITEMS_ARRAY 64
-#define NUM_SAVES 4
+namespace Save {
+
+constexpr std::int32_t NUM_EVENT_FLAGS = 16;
+constexpr std::int32_t SIZE_ITEMS_ARRAY = 64;
+constexpr std::int32_t NUM_SAVES = 4;
+
+}
 
 /**
  * @class SaveData
@@ -22,7 +26,7 @@
  * This structure contains the gameplay variables from one single save inside the game.
  */
 struct SaveData {
-    /* 0x000 */ std::uint32_t event_flags[NUM_EVENT_FLAGS];
+    /* 0x000 */ std::uint32_t event_flags[Save::NUM_EVENT_FLAGS];
     /* 0x040 */ std::uint32_t flags;
     /* 0x044 */ std::int16_t week;
     /* 0x046 */ std::int16_t day;
@@ -46,7 +50,7 @@ struct SaveData {
     /* 0x05C */ std::int16_t field_0x5C;
     /* 0x05E */ std::int16_t subweapon;
     /* 0x060 */ std::uint32_t gold;
-    /* 0x064 */ std::uint8_t items[SIZE_ITEMS_ARRAY];
+    /* 0x064 */ std::uint8_t items[Save::SIZE_ITEMS_ARRAY];
     /* 0x0A4 */ std::uint32_t player_status;
     /* 0x0A8 */ std::int16_t health_depletion_rate_while_poisoned;
     /**
@@ -233,19 +237,19 @@ struct SaveData {
         FRENCH
     };
 
-    inline std::uint32_t getPlayerStatus(std::uint32_t bitFlagMask) {
+    [[nodiscard]] std::uint32_t getPlayerStatus(const std::uint32_t bitFlagMask) const {
         return BITS_HAS(player_status, bitFlagMask);
     }
 
-    inline std::uint32_t getFlag(std::uint32_t bitFlagMask) {
+    [[nodiscard]] std::uint32_t getFlag(const std::uint32_t bitFlagMask) const {
         return BITS_HAS(flags, bitFlagMask);
     }
 
-    inline std::uint32_t getItem(std::int32_t itemId) {
+    [[nodiscard]] std::uint32_t getItem(const std::int32_t itemId) const {
         return items[itemId - 1];
     }
 
-    inline std::uint32_t getEventFlags(std::int32_t setIndex) {
+    [[nodiscard]] std::uint32_t getEventFlags(const std::int32_t setIndex) const {
         return event_flags[setIndex];
     }
 }; /// @note Size = 0x0E0 bytes
@@ -267,10 +271,10 @@ struct SaveData {
  *     - checksum2: Second checksum value for the save. Used for checking if the file was tampered with or corrupted.
  */
 struct SaveSlot {
-    SaveData mainSave;
-    SaveData beginningOfStage;
-    std::uint32_t checksum1;
-    std::uint32_t checksum2;
+    SaveData mainSave{};
+    SaveData beginningOfStage{};
+    std::uint32_t checksum1{};
+    std::uint32_t checksum2{};
 
     void clear() {
         mainSave = {};

@@ -8,15 +8,15 @@
  * @author 
  */
 
-#include "windows/ControllerPakSelection/ControllerPakSelectionWindow.h"
+#include "../../include/windows/ControllerPakSelectionWindow.h"
 #include "file/FileManager.h"
 #include <QPushButton>
 
 ControllerPakSelectionWindow::ControllerPakSelectionWindow(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::ControllerPakSelectionWindow)
+    , m_ui(new Ui::ControllerPakSelectionWindow)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     // Make sure to only set this window up if we're working with Controller Pak or DexDrive saves
     if (((FileManager::getInstance()->getFileFormat() == FileManager::FORMAT_CONTROLLERPAK) || (FileManager::getInstance()->getFileFormat() == FileManager::FORMAT_DEXDRIVE))
@@ -27,7 +27,7 @@ ControllerPakSelectionWindow::ControllerPakSelectionWindow(QWidget *parent)
 
 ControllerPakSelectionWindow::~ControllerPakSelectionWindow()
 {
-    delete ui;
+    delete m_ui;
 }
 
 QString ControllerPakSelectionWindow::getRegionName(const std::int16_t region) const {
@@ -49,7 +49,7 @@ QString ControllerPakSelectionWindow::getRegionName(const std::int16_t region) c
  */
 void ControllerPakSelectionWindow::setupButtonBox() {
     // Get the Controller Pak Castlevania 64 save array
-    std::vector<FileManager::ControllerPakNotetableData>* saveArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
+    const auto* saveArray = FileManager::getInstance()->getControllerPakNoteTableDataArray();
 
     for (std::uint32_t i = 0; i < saveArray->size(); i++) {
         std::int32_t index = (*saveArray)[i].index;
@@ -64,7 +64,7 @@ void ControllerPakSelectionWindow::setupButtonBox() {
 
         QPushButton* button = new QPushButton(buttonText);
         button->setFixedWidth(500);
-        ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
+        m_ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
 
         connect(button, &QPushButton::clicked, this, [this, index]() {
             onButtonClicked(index);

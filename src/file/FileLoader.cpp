@@ -18,7 +18,7 @@
 /**
  * @brief Reads the data associated to a save slot from a file given the start offset within said file.
  */
-void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset) {
+void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, const std::uint32_t startOffset) {
     QDataStream inputStream(&file);
 
     // Return if we reached the end of the file
@@ -35,20 +35,19 @@ void FileLoader::readSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOf
 /**
  * @brief Writes the data associated from a save slot to a file at the start offset within said file.
  */
-void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startOffset) {
-    SaveManager* saveManager = SaveManager::getInstance();
+void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, const std::uint32_t startOffset) {
+    auto* saveManager = SaveManager::getInstance();
     QDataStream outputStream(&file);
 
     std::uint32_t firstChecksumOffset = 0;
     std::uint32_t secondChecksumOffset = 0;
     std::uint32_t saveDataSize = 0;
 
-    if (SaveManager::getInstance()->getRegion() == SaveData::PAL) {
+    if (saveManager->getRegion() == SaveData::PAL) {
         firstChecksumOffset = offsetof(SaveSlot, checksum1);
         secondChecksumOffset = offsetof(SaveSlot, checksum2);
         saveDataSize = sizeof(SaveData);
-    }
-    else {
+    } else {
         // Since the PAL version of the SaveSlot added 4 extra bytes (and this project uses the PAL definition of the struct),
         // we will remove those extra 4 bytes (plus 4 -> 8 bytes) from the offset to get the correct address to write the checksums to.
         firstChecksumOffset = offsetof(SaveSlot, checksum1) - 8;
@@ -64,16 +63,16 @@ void FileLoader::writeSaveSlot(QFile& file, SaveSlot& slot, std::uint32_t startO
      * Write the checksums. To ensure the checksums are properly calculated,
      * we convert the data to a byte array, then swap the endianness (since the save file is stored in big endian)
      */
-    QIODevice* device = outputStream.device();
+    auto* device = outputStream.device();
     device->seek(startOffset);
-    QByteArray rawData = device->read(saveDataSize);
+    auto rawData = device->read(saveDataSize);
 
     // Convert "rawData" to big-endian
     swapEndianness(&rawData);
 
     // Write the SaveSlot main's checksum at the specific offsets within the SaveSlot struct
-    std::uint32_t firstChecksum = saveManager->calcFirstChecksum(rawData);
-    std::uint32_t secondChecksum = saveManager->calcSecondChecksum(rawData);
+    const auto firstChecksum = saveManager->calcFirstChecksum(rawData);
+    const auto secondChecksum = saveManager->calcSecondChecksum(rawData);
 
     device->seek(startOffset + firstChecksumOffset);
     outputStream << firstChecksum;
@@ -105,7 +104,7 @@ void FileLoaderNote::parseRegion(QFile& file) {
     SaveManager* saveManager = SaveManager::getInstance();
     QDataStream inputStream(&file);
 
-    std::uint8_t regionFromFile = readData<std::uint8_t>(inputStream, getRegionIdOffset());
+    const auto regionFromFile = readData<std::uint8_t>(inputStream, getRegionIdOffset());
     saveManager->setRegion(getRegionEnumFromChar(regionFromFile));
 }
 
@@ -113,7 +112,7 @@ void FileLoaderNote::parseRegion(QFile& file) {
  * @brief Reads an entire save from the given file. The start offset for this data depends on the file format.
  */
 void FileLoader::readAllSaveSlots(QFile& file) {
-    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < Save::NUM_SAVES; i++) {
         readSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
     }
 }
@@ -122,7 +121,7 @@ void FileLoader::readAllSaveSlots(QFile& file) {
  * @brief Writes an entire save to the given file. The start offset for this data depends on the file format.
  */
 void FileLoader::writeAllSaveSlots(QFile& file) {
-    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < Save::NUM_SAVES; i++) {
         writeSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
     }
 }
@@ -130,15 +129,15 @@ void FileLoader::writeAllSaveSlots(QFile& file) {
 /**
  * @brief Reads a save data entry from the given data stream. The start offset for this data depends on the file format.
  */
-const SaveData& FileLoader::readSaveData(QDataStream& inputStream, std::uint32_t startOffset) {
-    SaveData* currentSave = new SaveData();
+const SaveData& FileLoader::readSaveData(QDataStream& inputStream, const std::uint32_t startOffset) {
+    auto* currentSave = new SaveData();
 
     // Seek to the start of the save data
     inputStream.device()->seek(startOffset);
 
     // Read save data contents into "currentSave"
-    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
-        currentSave->event_flags[i] = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
+    for (auto &flag : currentSave->event_flags) {
+        flag = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
     }
     currentSave->flags = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
@@ -165,8 +164,8 @@ const SaveData& FileLoader::readSaveData(QDataStream& inputStream, std::uint32_t
     currentSave->subweapon = readData<std::int16_t>(inputStream, inputStream.device()->pos());
     currentSave->gold = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
 
-    for (std::uint32_t j = 0; j < SIZE_ITEMS_ARRAY; j++) {
-        currentSave->items[j] = readData<std::uint8_t>(inputStream, inputStream.device()->pos());
+    for (auto &item : currentSave->items) {
+        item = readData<std::uint8_t>(inputStream, inputStream.device()->pos());
     }
 
     currentSave->player_status = readData<std::uint32_t>(inputStream, inputStream.device()->pos());
@@ -201,11 +200,11 @@ const SaveData& FileLoader::readSaveData(QDataStream& inputStream, std::uint32_t
 /**
  * @brief Writes a save data entry to the given data stream. The start offset for this data depends on the file format.
  */
-void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveData, std::uint32_t startOffset) {
+void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveData, const std::uint32_t startOffset) {
     outputStream.device()->seek(startOffset);
 
-    for (std::uint32_t i = 0; i < NUM_EVENT_FLAGS; i++) {
-        writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.event_flags[i]);
+    for (const auto flag : saveData.event_flags) {
+        writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), flag);
     }
 
     writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.flags);
@@ -231,8 +230,8 @@ void FileLoader::writeSaveData(QDataStream& outputStream, const SaveData& saveDa
     writeData<std::int16_t>(outputStream, outputStream.device()->pos(), saveData.subweapon);
     writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.gold);
 
-    for (std::uint32_t j = 0; j < SIZE_ITEMS_ARRAY; j++) {
-        writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), saveData.items[j]);
+    for (const auto item : saveData.items) {
+        writeData<std::uint8_t>(outputStream, outputStream.device()->pos(), item);
     }
 
     writeData<std::uint32_t>(outputStream, outputStream.device()->pos(), saveData.player_status);
@@ -318,8 +317,8 @@ std::uint32_t FileLoaderNote::getSaveSlotPaddedSize() const {
  * @note Always 0x900 bytes in practice.
  */
 std::uint32_t FileLoaderNote::getMaxFileSize() const {
-    std::uint32_t headerSize = getHeaderBytes().size();
-    std::uint32_t maxFileSize = headerSize + (getSaveSlotPaddedSize() * NUM_SAVES) + getUnusedExtraSize();
+    const std::uint32_t headerSize = getHeaderBytes().size();
+    const std::uint32_t maxFileSize = headerSize + (getSaveSlotPaddedSize() * Save::NUM_SAVES) + getUnusedExtraSize();
 
     return maxFileSize;
 };
@@ -333,7 +332,7 @@ bool FileLoader::searchHexInFile(const QByteArray& data, const std::vector<std::
     std::vector<std::uint8_t> fileContents(data.begin(), data.end());
 
     // Search for the target sequence
-    auto it = std::search(fileContents.begin(), fileContents.end(), target.begin(), target.end());
+    const auto it = std::search(fileContents.begin(), fileContents.end(), target.begin(), target.end());
 
     return it != fileContents.end(); // True if found, false otherwise
 }
@@ -425,7 +424,7 @@ std::uint32_t FileLoaderCartridge::getCartridgeNumSaves() const {
 }
 
 std::uint32_t FileLoaderCartridge::getSaveSlotPaddedSize() const {
-    std::uint32_t headerSize = getHeaderBytes().size();
+    const std::uint32_t headerSize = getHeaderBytes().size();
 
     // The complete save slot ends at offset 0x1F0, not 0x200, so we remove -0x10 bytes from it.
     // Besides, each slot now starts with the header data.
@@ -436,13 +435,13 @@ std::uint32_t FileLoaderCartridge::getSaveSlotPaddedSize() const {
  * @note Cartridge saves have variable size.
  */
 std::uint32_t FileLoaderCartridge::getMaxFileSize() const {
-    std::uint32_t maxFileSize = getSaveSlotPaddedSize() * getCartridgeNumSaves();
+    const std::uint32_t maxFileSize = getSaveSlotPaddedSize() * getCartridgeNumSaves();
 
     return maxFileSize;
 };
 
 void FileLoaderControllerPak::parseRegion(QFile& file) {
-    std::vector<FileManager::ControllerPakNotetableData>* noteTableArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
+    const auto* noteTableArray = FileManager::getInstance()->getControllerPakNoteTableDataArray();
 
     // Set the region of the currently selected Controller Pak save
     SaveManager::getInstance()->setRegion((*noteTableArray)[FileManager::getInstance()->getControllerPakCurrentlySelectedSaveIndex()].region);
@@ -450,7 +449,7 @@ void FileLoaderControllerPak::parseRegion(QFile& file) {
 
 std::uint32_t FileLoaderControllerPak::getRawDataOffsetStart() const {
     // We obtain the raw data offset start from the note table data.
-    std::vector<FileManager::ControllerPakNotetableData>* noteTableArray = FileManager::getInstance()->getControllerPakNotetableDataArray();
+    const auto* noteTableArray = FileManager::getInstance()->getControllerPakNoteTableDataArray();
     return (*noteTableArray)[FileManager::getInstance()->getControllerPakCurrentlySelectedSaveIndex()].rawDataStartOffset;
 }
 
@@ -492,7 +491,7 @@ void FileLoader::swapEndianness(QByteArray* rawData) {
 void FileLoaderCartridge::writeAllSaveSlots(QFile& file) {
     file.seek(0);
 
-    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < Save::NUM_SAVES; i++) {
         // First, write the header, then the saveslot data
         std::vector<std::uint8_t> headerBytes = getHeaderBytes();
 
@@ -517,7 +516,7 @@ void FileLoaderNote::writeAllSaveSlots(QFile& file) {
         file.write(reinterpret_cast<const char*>(headerBytes.data()), headerBytes.size());
     }
 
-    for (std::uint32_t i = 0; i < NUM_SAVES; i++) {
+    for (std::uint32_t i = 0; i < Save::NUM_SAVES; i++) {
         writeSaveSlot(file, SaveManager::getInstance()->getSaveSlot(i), getRawDataOffsetStart() + (getSaveSlotPaddedSize() * i));
 
         // Add padding bytes at the end of each saveslot

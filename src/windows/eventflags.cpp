@@ -6,14 +6,14 @@
 
 EventFlagsForm::EventFlagsForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::EventFlagsForm)
+    , m_ui(new Ui::EventFlagsForm)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 }
 
 EventFlagsForm::~EventFlagsForm()
 {
-    delete ui;
+    delete m_ui;
 }
 
 /**
@@ -100,88 +100,88 @@ void EventFlagsForm::setup()
     auto *inst = SaveManager::getInstance();
 
     /* Page 1 */
-    ui->labelSet0->setText("Set 0 (Forest of Silence, Intro Narration Map, Test Grid)");
-    hexBitflagLineEdits[0] = createGridFlag(inst, this, ui->gridFlagSet0, 0, 0);
+    m_ui->labelSet0->setText("Set 0 (Forest of Silence, Intro Narration Map, Test Grid)");
+    m_hexBitflagLineEdits[0] = createGridFlag(inst, this, m_ui->gridFlagSet0, 0, 0);
 
-    ui->labelSet1->setText("Set 1 (Villa Foyer, Villa Hallway)");
-    hexBitflagLineEdits[1] = createGridFlag(inst, this, ui->gridFlagSet1, 1, 0);
+    m_ui->labelSet1->setText("Set 1 (Villa Foyer, Villa Hallway)");
+    m_hexBitflagLineEdits[1] = createGridFlag(inst, this, m_ui->gridFlagSet1, 1, 0);
 
-    ui->labelSet2->setText("Set 2 (Underground Waterway, Castle Center - Top elevator room)");
-    hexBitflagLineEdits[2] = createGridFlag(inst, this, ui->gridFlagSet2, 2, 0);
+    m_ui->labelSet2->setText("Set 2 (Underground Waterway, Castle Center - Top elevator room)");
+    m_hexBitflagLineEdits[2] = createGridFlag(inst, this, m_ui->gridFlagSet2, 2, 0);
 
     /* Page 2 */
-    ui->labelSet3->setText("Set 3 (Castle Center - Friendly lizard man, Castle Center - Nitro room)");
-    hexBitflagLineEdits[3] = createGridFlag(inst, this, ui->gridFlagSet3, 3, 0);
+    m_ui->labelSet3->setText("Set 3 (Castle Center - Friendly lizard man, Castle Center - Nitro room)");
+    m_hexBitflagLineEdits[3] = createGridFlag(inst, this, m_ui->gridFlagSet3, 3, 0);
 
-    ui->labelSet4->setText("Set 4 (Tower of Execution, Tower of Sorcery, Duel Tower)");
-    hexBitflagLineEdits[4] = createGridFlag(inst, this, ui->gridFlagSet4, 4, 0);
+    m_ui->labelSet4->setText("Set 4 (Tower of Execution, Tower of Sorcery, Duel Tower)");
+    m_hexBitflagLineEdits[4] = createGridFlag(inst, this, m_ui->gridFlagSet4, 4, 0);
 
-    ui->labelSet5->setText("Set 5 (Castle Keep - Stairs, Castle Keep, Clock Tower)");
-    hexBitflagLineEdits[5] = createGridFlag(inst, this, ui->gridFlagSet5, 5, 0);
+    m_ui->labelSet5->setText("Set 5 (Castle Keep - Stairs, Castle Keep, Clock Tower)");
+    m_hexBitflagLineEdits[5] = createGridFlag(inst, this, m_ui->gridFlagSet5, 5, 0);
 
     /* Page 3 */
-    ui->labelSet6->setText("Set 6 (Dracula Desert, Rose / Actriese room, Room of Clocks)");
-    hexBitflagLineEdits[6] = createGridFlag(inst, this, ui->gridFlagSet6, 6, 0);
+    m_ui->labelSet6->setText("Set 6 (Dracula Desert, Rose / Actriese room, Room of Clocks)");
+    m_hexBitflagLineEdits[6] = createGridFlag(inst, this, m_ui->gridFlagSet6, 6, 0);
 
-    ui->labelSet7->setText("Set 7 (Tower of Science - Turrets)");
-    hexBitflagLineEdits[7] = createGridFlag(inst, this, ui->gridFlagSet7, 7, 0);
+    m_ui->labelSet7->setText("Set 7 (Tower of Science - Turrets)");
+    m_hexBitflagLineEdits[7] = createGridFlag(inst, this, m_ui->gridFlagSet7, 7, 0);
 
-    ui->labelSet8->setText("Set 8 (Castle Center - Bottom Elevator, Castle Center - Gears room)");
-    hexBitflagLineEdits[8] = createGridFlag(inst, this, ui->gridFlagSet8, 8, 0);
+    m_ui->labelSet8->setText("Set 8 (Castle Center - Bottom Elevator, Castle Center - Gears room)");
+    m_hexBitflagLineEdits[8] = createGridFlag(inst, this, m_ui->gridFlagSet8, 8, 0);
 
     /* Page 4 */
-    ui->labelSet9->setText("Set 9 (Villa - Front Yard)");
-    hexBitflagLineEdits[9] = createGridFlag(inst, this, ui->gridFlagSet9, 9, 0);
+    m_ui->labelSet9->setText("Set 9 (Villa - Front Yard)");
+    m_hexBitflagLineEdits[9] = createGridFlag(inst, this, m_ui->gridFlagSet9, 9, 0);
 
-    ui->labelSet10->setText("Set 10 (Castle Wall - Main)");
-    hexBitflagLineEdits[10] = createGridFlag(inst, this, ui->gridFlagSet10, 10, 0);
+    m_ui->labelSet10->setText("Set 10 (Castle Wall - Main)");
+    m_hexBitflagLineEdits[10] = createGridFlag(inst, this, m_ui->gridFlagSet10, 10, 0);
 
-    ui->labelSet11->setText("Set 11 (Maze Garden, Castle Center - Library)");
-    hexBitflagLineEdits[11] = createGridFlag(inst, this, ui->gridFlagSet11, 11, 0);
+    m_ui->labelSet11->setText("Set 11 (Maze Garden, Castle Center - Library)");
+    m_hexBitflagLineEdits[11] = createGridFlag(inst, this, m_ui->gridFlagSet11, 11, 0);
 
     /* Page 5 */
-    ui->labelSet12->setText("Set 12 (Tunnel)");
-    hexBitflagLineEdits[12] = createGridFlag(inst, this, ui->gridFlagSet12, 12, 0);
+    m_ui->labelSet12->setText("Set 12 (Tunnel)");
+    m_hexBitflagLineEdits[12] = createGridFlag(inst, this, m_ui->gridFlagSet12, 12, 0);
 
-    ui->labelSet13->setText("Set 13 (Castle Center - Main)");
-    hexBitflagLineEdits[13] = createGridFlag(inst, this, ui->gridFlagSet13, 13, 0);
+    m_ui->labelSet13->setText("Set 13 (Castle Center - Main)");
+    m_hexBitflagLineEdits[13] = createGridFlag(inst, this, m_ui->gridFlagSet13, 13, 0);
 
-    ui->labelSet14->setText("Set 14 (Castle Wall - Towers)");
-    hexBitflagLineEdits[14] = createGridFlag(inst, this, ui->gridFlagSet14, 14, 0);
+    m_ui->labelSet14->setText("Set 14 (Castle Wall - Towers)");
+    m_hexBitflagLineEdits[14] = createGridFlag(inst, this, m_ui->gridFlagSet14, 14, 0);
 
     /* Page 6 */
-    ui->labelSet15->setText("Set 15 (Tower of Science)");
-    hexBitflagLineEdits[15] = createGridFlag(inst, this, ui->gridFlagSet15, 15, 0);
+    m_ui->labelSet15->setText("Set 15 (Tower of Science)");
+    m_hexBitflagLineEdits[15] = createGridFlag(inst, this, m_ui->gridFlagSet15, 15, 0);
 
 
     // Initialize pages and the buttons that travel to those pages
     // When each button is pressed, "onPageButtonClicked" will be called passing
     // the desired page by arguments
-    QObject::connect(ui->rbEventFlagPage1, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage1);
+    QObject::connect(m_ui->rbEventFlagPage1, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage1);
     });
 
-    QObject::connect(ui->rbEventFlagPage2, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage2);
+    QObject::connect(m_ui->rbEventFlagPage2, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage2);
     });
 
-    QObject::connect(ui->rbEventFlagPage3, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage3);
+    QObject::connect(m_ui->rbEventFlagPage3, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage3);
     });
 
-    QObject::connect(ui->rbEventFlagPage4, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage4);
+    QObject::connect(m_ui->rbEventFlagPage4, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage4);
     });
 
-    QObject::connect(ui->rbEventFlagPage5, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage5);
+    QObject::connect(m_ui->rbEventFlagPage5, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage5);
     });
 
-    QObject::connect(ui->rbEventFlagPage6, &QRadioButton::clicked, this, [this]() {
-        ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage6);
+    QObject::connect(m_ui->rbEventFlagPage6, &QRadioButton::clicked, this, [this]() {
+        m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage6);
     });
 
-    ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage1);
+    m_ui->stackWidgetEventFlagsPages->setCurrentWidget(m_ui->EventFlagsPage1);
 }
 
 void EventFlagsForm::populate(SaveData *saveData) const
@@ -191,7 +191,7 @@ void EventFlagsForm::populate(SaveData *saveData) const
     }
     // Event flag grids. We edit each of the line edits associated to the event flags to assign the hex value gotten
     // from the save data. Then, the checkboxes will be ticked / unticked automatically
-    for (unsigned int i = 0; i < NUM_EVENT_FLAGS; i++) {
-        hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
+    for (unsigned int i = 0; i < Save::NUM_EVENT_FLAGS; i++) {
+        m_hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
     }
 }

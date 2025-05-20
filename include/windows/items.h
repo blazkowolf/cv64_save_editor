@@ -20,7 +20,7 @@ public:
     void populate(SaveData*) const;
 
 private:
-    Ui::ItemsForm *ui;
+    Ui::ItemsForm *m_ui;
 };
 
 #endif // ITEMS_H

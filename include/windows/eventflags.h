@@ -21,10 +21,10 @@ public:
     void populate(SaveData*) const;
 
 private:
-    Ui::EventFlagsForm *ui;
+    Ui::EventFlagsForm *m_ui;
 
     /**< The array of line edits that appear in the "Event Flags" page */
-    QLineEdit* hexBitflagLineEdits[NUM_EVENT_FLAGS] = {};
+    QLineEdit* m_hexBitflagLineEdits[Save::NUM_EVENT_FLAGS] = {};
 };
 
 #endif // EVENTFLAGS_H

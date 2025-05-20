@@ -20,7 +20,7 @@ public:
     void populate(SaveData*) const;
 
 private:
-    Ui::GeneralForm *ui;
+    Ui::GeneralForm *m_ui;
 };
 
 #endif // GENERAL_H

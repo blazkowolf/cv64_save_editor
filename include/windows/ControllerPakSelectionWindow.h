@@ -29,7 +29,7 @@ class ControllerPakSelectionWindow : public QDialog
     Q_OBJECT
 
 public:
-    bool userClosedWithX = false;
+    bool m_userClosedWithX = false;
 
     // Constructors and destructor
     explicit ControllerPakSelectionWindow(QWidget *parent = nullptr);
@@ -42,10 +42,10 @@ public:
     void onButtonClicked(std::int32_t saveIndex);
 
     // Helper functions
-    QString getRegionName(const std::int16_t region) const;
+    [[nodiscard]] QString getRegionName(std::int16_t region) const;
 
 private:
-    Ui::ControllerPakSelectionWindow* ui;
+    Ui::ControllerPakSelectionWindow* m_ui;
 
 protected:
     /**
@@ -55,7 +55,7 @@ protected:
     void closeEvent(QCloseEvent* event) override {
         if (this->result() == QDialog::Rejected) {
             // User clicked the X button to exit
-            userClosedWithX = true;
+            m_userClosedWithX = true;
         }
 
         QDialog::closeEvent(event);

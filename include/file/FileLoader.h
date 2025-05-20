@@ -28,8 +28,8 @@ class FileLoader {
 
     public:
         // Constructors and destructor
-        FileLoader() {}
-        virtual ~FileLoader() {}
+        FileLoader() = default;
+        virtual ~FileLoader() = default;
 
         // Main file read and write functions
         virtual void parseRegion(QFile& file) = 0;
@@ -41,27 +41,27 @@ class FileLoader {
         void writeSaveData(QDataStream& outputStream, const SaveData& saveData, std::uint32_t startOffset);
 
         // Search-related functions
-        // Search occurences of an array of bytes in a QByteArray, and count its occurences, respectively.
+        // Search occurrences of an array of bytes in a QByteArray, and count its occurrences, respectively.
         static bool searchHexInFile(const QByteArray& data, const std::vector<std::uint8_t>& target);
-        virtual std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const = 0;
+        [[nodiscard]] virtual std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const = 0;
 
         // Getter functions related to file-handling tasks
-        virtual std::uint32_t getRawDataOffsetStart() const { return rawDataStartOffset; }
-        virtual std::uint32_t getRegionIdOffset() const { return regionIdOffset; }
-        virtual std::uint32_t getMaxFileSize() const { return 0; }
-        virtual std::uint32_t getUnusedExtraSize() const { return 0; }
-        virtual std::uint32_t getSaveSlotPaddedSize() const = 0;
-        virtual std::uint32_t getSaveSlotPaddingBytesSize() const { return 0; }
-        virtual std::uint32_t getSavePaddedSize() const { return 0x200; }
+        [[nodiscard]] virtual std::uint32_t getRawDataOffsetStart() const { return rawDataStartOffset; }
+        [[nodiscard]] virtual std::uint32_t getRegionIdOffset() const { return regionIdOffset; }
+        [[nodiscard]] virtual std::uint32_t getMaxFileSize() const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getUnusedExtraSize() const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getSaveSlotPaddedSize() const = 0;
+        [[nodiscard]] virtual std::uint32_t getSaveSlotPaddingBytesSize() const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getSavePaddedSize() const { return 0x200; }
 
         /**
          * @brief getHeaderBytes
          * Get the raw bytes associated to the file's header, when applicable.
          */
-        virtual std::vector<std::uint8_t> getHeaderBytes() const = 0;
-        virtual std::uint32_t getNoteTableOffset() const { return 0; }
-        virtual std::uint32_t getNoteTableEntrySize() const { return 0; }
-        virtual std::uint32_t getNoteTableNumEntries() const { return 0; }
+        [[nodiscard]] virtual std::vector<std::uint8_t> getHeaderBytes() const = 0;
+        [[nodiscard]] virtual std::uint32_t getNoteTableOffset() const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getNoteTableEntrySize() const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getNoteTableNumEntries() const { return 0; }
 
         /**
          * @brief getRawDataOffsetPerEntry
@@ -72,17 +72,17 @@ class FileLoader {
          * For example, for Controller Paks, if the raw data byte is associated to a given save is 0x05,
          * then the actual offset where the raw data for that save starts is at 0x05 * 0x100 = 0x500
          */
-        virtual std::uint32_t getRawDataOffsetPerEntry(std::uint32_t rawDataStartOffsetByte) const { return 0; }
+        [[nodiscard]] virtual std::uint32_t getRawDataOffsetPerEntry(std::uint32_t rawDataStartOffsetByte) const { return 0; }
 
         void swapEndianness(QByteArray*);
 
-        std::int16_t getRegionEnumFromChar(const std::uint8_t regionFromFile);
+        std::int16_t getRegionEnumFromChar(std::uint8_t regionFromFile);
 
         /**
          * Reads a value of type T at the given offset within the input stream's raw data.
          */
         template<typename T>
-        T readData(QDataStream& inputStream, long offset) {
+        T readData(QDataStream& inputStream, const long offset) {
             inputStream.device()->seek(offset);
 
             T value;
@@ -95,7 +95,7 @@ class FileLoader {
          * Writes a value of type T at the given offset within the input stream's raw data.
          */
         template<typename T>
-        void writeData(QDataStream& outputStream, long offset, T value) {
+        void writeData(QDataStream& outputStream, const long offset, T value) {
             outputStream.device()->seek(offset);
 
             T bigEndianValue = qToBigEndian(value);
@@ -124,23 +124,23 @@ class FileLoaderNote: public FileLoader {
 
     public:
         // Constructors and destructor
-        FileLoaderNote() {}
-        ~FileLoaderNote() {}
+        FileLoaderNote() = default;
+        ~FileLoaderNote() override = default;
 
         // Main file read and write functions
-        void parseRegion(QFile& file);
-        void writeAllSaveSlots(QFile& file);
+        void parseRegion(QFile& file) override;
+        void writeAllSaveSlots(QFile& file) override;
 
         // Getter functions related to file-handling tasks
-        std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const;
-        std::uint32_t getRawDataOffsetStart() const { return rawDataStartOffset; }
-        std::uint32_t getRegionIdOffset() const { return regionIdOffset; }
-        std::uint32_t getMaxFileSize() const;
-        std::uint32_t getUnusedExtraSize() const { return 0x100; }  // Unused extra 100 bytes at the end of notes
-        std::uint32_t getSaveSlotPaddedSize() const;
-        std::vector<std::uint8_t> getHeaderBytes() const;
-        std::uint32_t getSaveSlotPaddingBytesSize() const;
-        std::int32_t checkFileOpenErrors();
+        [[nodiscard]] std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const override;
+        [[nodiscard]] std::uint32_t getRawDataOffsetStart() const override { return rawDataStartOffset; }
+        [[nodiscard]] std::uint32_t getRegionIdOffset() const override { return regionIdOffset; }
+        [[nodiscard]] std::uint32_t getMaxFileSize() const override;
+        [[nodiscard]] std::uint32_t getUnusedExtraSize() const override { return 0x100; }  // Unused extra 100 bytes at the end of notes
+        [[nodiscard]] std::uint32_t getSaveSlotPaddedSize() const override;
+        [[nodiscard]] std::vector<std::uint8_t> getHeaderBytes() const override;
+        [[nodiscard]] std::uint32_t getSaveSlotPaddingBytesSize() const override;
+        std::int32_t checkFileOpenErrors() override;
 };
 
 /**
@@ -158,24 +158,24 @@ class FileLoaderCartridge: public FileLoader {
 
     public:
         // Constructors and destructor
-        FileLoaderCartridge() {}
-        ~FileLoaderCartridge() {}
+        FileLoaderCartridge() = default;
+        ~FileLoaderCartridge() override = default;
 
         // Main file read and write functions
-        void parseRegion(QFile& file);
-        void writeAllSaveSlots(QFile& file);
+        void parseRegion(QFile& file) override;
+        void writeAllSaveSlots(QFile& file) override;
 
         // Getter functions related to file-handling tasks
-        std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const;
-        std::uint32_t getRawDataOffsetStart() const { return rawDataStartOffset; }
-        std::uint32_t getRegionIdOffset() const { return 0; }   // Not needed for cartridge saves, so we return 0
-        std::uint32_t getMaxFileSize() const;
-        std::uint32_t getUnusedExtraSize() const { return 0; }
-        std::uint32_t getSaveSlotPaddedSize() const;
-        std::vector<std::uint8_t> getHeaderBytes() const;
-        std::uint32_t getCartridgeNumSaves() const;
-        std::uint32_t getSaveSlotPaddingBytesSize() const;
-        std::int32_t checkFileOpenErrors();
+        [[nodiscard]] std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const override;
+        [[nodiscard]] std::uint32_t getRawDataOffsetStart() const override { return rawDataStartOffset; }
+        [[nodiscard]] std::uint32_t getRegionIdOffset() const override { return 0; }   // Not needed for cartridge saves, so we return 0
+        [[nodiscard]] std::uint32_t getMaxFileSize() const override;
+        [[nodiscard]] std::uint32_t getUnusedExtraSize() const override { return 0; }
+        [[nodiscard]] std::uint32_t getSaveSlotPaddedSize() const override;
+        [[nodiscard]] std::vector<std::uint8_t> getHeaderBytes() const override;
+        [[nodiscard]] std::uint32_t getCartridgeNumSaves() const;
+        [[nodiscard]] std::uint32_t getSaveSlotPaddingBytesSize() const override;
+        std::int32_t checkFileOpenErrors() override;
 };
 
 /**
@@ -194,25 +194,25 @@ struct FileLoaderControllerPak: public FileLoader {
 
     public:
         // Constructors and destructor
-        FileLoaderControllerPak() {}
-        ~FileLoaderControllerPak() {}
+        FileLoaderControllerPak() = default;
+        ~FileLoaderControllerPak() override = default;
 
         // Main file read and write functions
-        void parseRegion(QFile& file);
+        void parseRegion(QFile& file) override;
 
         // Getter functions related to file-handling tasks
-        std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const;
-        std::uint32_t getRawDataOffsetStart() const;
-        std::uint32_t getRegionIdOffset() const { return 0; }
-        std::uint32_t getMaxFileSize() const;
-        std::uint32_t getUnusedExtraSize() const { return 0x100; }  // Unused extra 100 bytes at the end of notes
-        std::uint32_t getSaveSlotPaddedSize() const;
-        std::vector<std::uint8_t> getHeaderBytes() const { return {}; }
-        std::uint32_t getNoteTableOffset() const { return CONTROLLER_PAK_NOTE_TABLE_OFFSET; }
-        std::uint32_t getNoteTableEntrySize() const { return CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE; }
-        std::uint32_t getNoteTableNumEntries() const { return CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES; }
-        std::uint32_t getRawDataOffsetPerEntry(std::uint32_t rawDataStartOffsetByte) const { return rawDataStartOffsetByte * 0x100; }
-        std::int32_t checkFileOpenErrors();
+        [[nodiscard]] std::uint32_t countHexOccurrences(const QByteArray& data, const std::vector<std::uint8_t>& target) const override;
+        [[nodiscard]] std::uint32_t getRawDataOffsetStart() const override;
+        [[nodiscard]] std::uint32_t getRegionIdOffset() const override { return 0; }
+        [[nodiscard]] std::uint32_t getMaxFileSize() const override;
+        [[nodiscard]] std::uint32_t getUnusedExtraSize() const override { return 0x100; }  // Unused extra 100 bytes at the end of notes
+        [[nodiscard]] std::uint32_t getSaveSlotPaddedSize() const override;
+        [[nodiscard]] std::vector<std::uint8_t> getHeaderBytes() const override { return {}; }
+        [[nodiscard]] std::uint32_t getNoteTableOffset() const override { return CONTROLLER_PAK_NOTE_TABLE_OFFSET; }
+        [[nodiscard]] std::uint32_t getNoteTableEntrySize() const override { return CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE; }
+        [[nodiscard]] std::uint32_t getNoteTableNumEntries() const override { return CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES; }
+        [[nodiscard]] std::uint32_t getRawDataOffsetPerEntry(const std::uint32_t rawDataStartOffsetByte) const override { return rawDataStartOffsetByte * 0x100; }
+        std::int32_t checkFileOpenErrors() override;
 };
 
 /**
@@ -232,15 +232,15 @@ struct FileLoaderDexDrive: public FileLoaderControllerPak {
 
     public:
         // Constructors and destructor
-        FileLoaderDexDrive() {}
-        ~FileLoaderDexDrive() {}
+        FileLoaderDexDrive() = default;
+        ~FileLoaderDexDrive() override = default;
 
         // Getter functions related to file-handling tasks
-        std::uint32_t getMaxFileSize() const;
-        std::uint32_t getNoteTableOffset() const { return CONTROLLER_PAK_NOTE_TABLE_OFFSET; }
-        std::uint32_t getNoteTableEntrySize() const { return CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE; }
-        std::uint32_t getNoteTableNumEntries() const { return CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES; }
-        std::uint32_t getRawDataOffsetPerEntry(std::uint32_t rawDataStartOffsetByte) const { return (rawDataStartOffsetByte * 0x100) + 0x1040; }
+        [[nodiscard]] std::uint32_t getMaxFileSize() const override;
+        [[nodiscard]] std::uint32_t getNoteTableOffset() const override { return CONTROLLER_PAK_NOTE_TABLE_OFFSET; }
+        [[nodiscard]] std::uint32_t getNoteTableEntrySize() const override { return CONTROLLER_PAK_NOTE_TABLE_ENTRY_SIZE; }
+        [[nodiscard]] std::uint32_t getNoteTableNumEntries() const override { return CONTROLLER_PAK_NOTE_TABLE_NUM_ENTRIES; }
+        [[nodiscard]] std::uint32_t getRawDataOffsetPerEntry(const std::uint32_t rawDataStartOffsetByte) const override { return (rawDataStartOffsetByte * 0x100) + 0x1040; }
 };
 
 #endif
