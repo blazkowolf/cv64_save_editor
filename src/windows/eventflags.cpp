@@ -157,35 +157,31 @@ void EventFlagsForm::setup()
     // Initialize pages and the buttons that travel to those pages
     // When each button is pressed, "onPageButtonClicked" will be called passing
     // the desired page by arguments
-    connect(ui->rbEventFlagPage1, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage1, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage1);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
     });
 
-    connect(ui->rbEventFlagPage2, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage2, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage2);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage2);
     });
 
-    connect(ui->rbEventFlagPage3, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage3, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage3);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage3);
     });
 
-    connect(ui->rbEventFlagPage4, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage4, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage4);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage4);
     });
 
-    connect(ui->rbEventFlagPage5, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage5, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage5);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage5);
     });
 
-    connect(ui->rbEventFlagPage6, &QRadioButton::clicked, this, [this]() {
+    QObject::connect(ui->rbEventFlagPage6, &QRadioButton::clicked, this, [this]() {
         ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage6);
-        // onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage6);
     });
+
+    ui->stackWidgetEventFlagsPages->setCurrentWidget(ui->EventFlagsPage1);
 }
 
 void EventFlagsForm::populate(SaveData *saveData) const

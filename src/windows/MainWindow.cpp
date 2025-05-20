@@ -45,12 +45,24 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidgetPages->addWidget(pageItems);
     ui->stackedWidgetPages->addWidget(pageEventFlags);
 
-    // setupPageMain();
     pageGeneral->setup();
-    // setupPageItems();
     pageItems->setup();
-    // setupPageEventFlags();
     pageEventFlags->setup();
+
+    // Initialize pages and the buttons that travel to those pages
+    // When each button is pressed, "onPageButtonClicked" will be called passing
+    // the desired page by arguments
+    QObject::connect(ui->buttonMain, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidgetPages->setCurrentWidget(pageGeneral);
+    });
+
+    QObject::connect(ui->buttonItems, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidgetPages->setCurrentWidget(pageItems);
+    });
+
+    QObject::connect(ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidgetPages->setCurrentWidget(pageEventFlags);
+    });
 
     // Initialize toolbar options
     setupFileMenu();
@@ -64,8 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->leItemsPoutPourri->setEnabled(true);
 
     // Ensure that we start in the "Main" page
-    switchPage(ui->stackedWidgetPages, pageGeneral);
-    // switchPage(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
+    ui->stackedWidgetPages->setCurrentWidget(pageGeneral);
 
     // Uncheck the "save enabled checkbox" when opening the program
     // enableUIComponents(false);
@@ -76,633 +87,16 @@ MainWindow::~MainWindow()
 {
     delete ui;
     instance = nullptr;
+    delete pageGeneral;
+    delete pageItems;
+    delete pageEventFlags;
 }
-
-// void MainWindow::setupPageMain() {
-//     // Initialize line edits
-//     setupLineEditNumberUnsigned(ui->leLife, 1, 100,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setLife(value);
-//         }
-//     );
-//     ui->leLife->setText(QString::number(100));
-//
-//     setupLineEditNumberUnsigned(ui->leGold, 0, 99999,
-//         [](std::uint32_t value) {
-//             SaveManager::getInstance()->setGold(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leRedJewels, 0, 99,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_RED_JEWEL, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leSpawn, 0, SHRT_MAX,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setSpawn(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leWhiteJewel, 0, USHRT_MAX,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setWhiteJewel(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leTimesSaved, 0, UINT_MAX,
-//         [](std::uint32_t value) {
-//             SaveManager::getInstance()->setTimesSaved(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leDeathCount, 0, UINT_MAX,
-//         [](std::uint32_t value) {
-//             SaveManager::getInstance()->setDeathCount(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leGoldRenon, 0, UINT_MAX,
-//         [](std::uint32_t value) {
-//             SaveManager::getInstance()->setGoldRenon(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leHourVamp, 0, 23,
-//         [](std::uint16_t value) {
-//             SaveManager::getInstance()->setHourVamp(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leHealthDepletionRate, 0, SHRT_MAX,
-//         [](std::uint16_t value) {
-//             SaveManager::getInstance()->setHealthDepletionRate(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leWeek, 0, SHRT_MAX,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setWeek(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leDay, 0, 7 - 1,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setDay(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leHour, 0, 24 - 1,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setHour(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leMinutes, 0, 60 - 1,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setMinutes(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leSeconds, 0, 60 - 1,
-//         [](std::int16_t value) {
-//             SaveManager::getInstance()->setSeconds(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leMilliseconds, 0, 600 - 1,
-//         [](std::uint16_t value) {
-//             SaveManager::getInstance()->setMilliseconds(value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leFrameCount, 0, UINT_MAX,
-//         [this](std::uint32_t value) {
-//             SaveManager::getInstance()->setFramecount(value);
-//             convertFrameToTime(SaveManager::getInstance()->getFrameCount(), ui->labelPlaytime);
-//         }
-//     );
-//
-//     // Initialize combo boxes and set their default values
-//     ComboBoxHelper::setup<SaveData::MapID>(
-//         ui->cbMap,
-//         SaveData::MORI,
-//         {
-//             {"Forest of Silence", SaveData::MORI},
-//             {"Castle Wall (Towers)", SaveData::TOU},
-//             {"Castle Wall (Main)", SaveData::TOUOKUJI},
-//             {"Villa (Yard)", SaveData::NAKANIWA},
-//             {"Villa (Foyer)", SaveData::BEKKAN_1F},
-//             {"Villa (Hallway)", SaveData::BEKKAN_2F},
-//             {"Villa (Maze Garden)", SaveData::MEIRO_TEIEN},
-//             {"Tunnel", SaveData::CHIKA_KODO},
-//             {"Underground Waterway", SaveData::CHIKA_SUIRO},
-//             {"Castle Center (Main)", SaveData::HONMARU_B1F},
-//             {"Castle Center (Bottom Elevator)", SaveData::HONMARU_1F},
-//             {"Castle Center (Gears)", SaveData::HONMARU_2F},
-//             {"Castle Center (Friendly Lizard-man)", SaveData::HONMARU_3F_MINAMI},
-//             {"Castle Center (Library)", SaveData::HONMARU_4F_MINAMI},
-//             {"Castle Center (Nitro Room)", SaveData::HONMARU_3F_KITA},
-//             {"Castle Center (Top Elevator)", SaveData::HONMARU_5F},
-//             {"Tower of Execution", SaveData::SHOKEI_TOU},
-//             {"Tower of Sorcery", SaveData::MAHOU_TOU},
-//             {"Tower of Science", SaveData::KAGAKU_TOU},
-//             {"Duel Tower", SaveData::KETTOU_TOU},
-//             {"Castle Keep Stairs", SaveData::TURO_TOKEITOU},
-//             {"Castle Keep", SaveData::TENSHU},
-//             {"Intro Cutscene Map", SaveData::ENDING_DUMMY},
-//             {"Clock Tower", SaveData::TOKEITOU_NAI},
-//             {"Dracula Desert", SaveData::DRACULA},
-//             {"Rose / Actrice Fan Room", SaveData::ROSE},
-//             {"Villa (Vampire Crypt)", SaveData::BEKKAN_BOSS},
-//             {"Room of Clocks", SaveData::TOU_TURO},
-//             {"Ending Map", SaveData::ENDING},
-//             {"Test Grid", SaveData::TEST_GRID}
-//         },
-//         [](SaveData::MapID value) { SaveManager::getInstance()->setMap(value); }
-//     );
-//
-//     ComboBoxHelper::setup<SaveData::PlayerCharacterID>(
-//         ui->cbCharacter, SaveData::REINHARDT,
-//         {
-//             {"Reinhardt", SaveData::REINHARDT},
-//             {"Carrie", SaveData::CARRIE}
-//         },
-//         [](SaveData::PlayerCharacterID value) { SaveManager::getInstance()->setCharacter(value); }
-//     );
-//
-//     ComboBoxHelper::setup<std::int32_t>(
-//         ui->cbButtonConfig,
-//         0,
-//         {
-//             {"Type A", 0},
-//             {"Type B", 1},
-//             {"Type C", 2}
-//         },
-//         [](std::int32_t value) { SaveManager::getInstance()->setButtonConfig(value); }
-//     );
-//
-//     ComboBoxHelper::setup<std::int32_t>(
-//         ui->cbSoundMode,
-//         0,
-//         {
-//             {"Stereo", 0},
-//             {"Monoaural", 1}
-//         },
-//         [](std::int32_t value) { SaveManager::getInstance()->setSoundMode(value); }
-//     );
-//
-//     ComboBoxHelper::setup<SaveData::SubweaponID>(
-//         ui->cbSubweapon,
-//         SaveData::SUBWEAPON_NONE,
-//         {
-//             {"None", SaveData::SUBWEAPON_NONE},
-//             {"Knife", SaveData::SUBWEAPON_KNIFE},
-//             {"Holy Water", SaveData::SUBWEAPON_HOLY_WATER},
-//             {"Cross", SaveData::SUBWEAPON_CROSS},
-//             {"Axe", SaveData::SUBWEAPON_AXE},
-//             {"Wooden Stake", SaveData::SUBWEAPON_WOODEN_STAKE},
-//             {"Rose", SaveData::SUBWEAPON_ROSE}
-//         },
-//         [](SaveData::SubweaponID value) { SaveManager::getInstance()->setSubweapon(value); }
-//     );
-//
-//     setupComboBoxBitflag(ui->cbDifficulty, comboBoxDataDifficulty);
-//     setupComboBoxBitflag(ui->cbReinhardtEnding, comboBoxDataEndingReinhardt);
-//     setupComboBoxBitflag(ui->cbCarrieEnding, comboBoxDataEndingCarrie);
-//
-//     ComboBoxHelper::setup<SaveData::eRegion>(
-//         ui->cbRegion,
-//         SaveData::USA,
-//         {
-//             {"USA", SaveData::USA},
-//             {"JPN", SaveData::JPN},
-//             {"PAL", SaveData::PAL}
-//         },
-//         [this](SaveData::eRegion value) {
-//             SaveManager::getInstance()->setRegion(value);
-//             switch (value) {
-//             default:
-//             case SaveData::USA:
-//                 ui->cbLanguage->setEnabled(false);
-//                 ui->cbLanguage->setCurrentIndex(0);
-//                 ui->cbLanguage->setItemText(0, "English");
-//                 ui->leItemsSpecial3->setEnabled(false);
-//                 ui->leItemsPoutPourri->setEnabled(true);
-//                 break;
-//
-//             case SaveData::JPN:
-//                 ui->cbLanguage->setEnabled(false);
-//                 ui->cbLanguage->setCurrentIndex(0);
-//                 ui->cbLanguage->setItemText(0, "Japanese");
-//                 ui->leItemsSpecial3->setEnabled(true);
-//                 ui->leItemsPoutPourri->setEnabled(false);
-//                 break;
-//
-//             case SaveData::PAL:
-//                 ui->cbLanguage->setEnabled(true);
-//                 ui->cbLanguage->setCurrentIndex(0);
-//                 ui->cbLanguage->setItemText(0, "English");
-//                 ui->leItemsSpecial3->setEnabled(true);
-//                 ui->leItemsPoutPourri->setEnabled(false);
-//                 break;
-//             }
-//         }
-//     );
-//
-//     ComboBoxHelper::setup<SaveData::eLanguage>(
-//         ui->cbLanguage,
-//         SaveData::ENGLISH,
-//         {
-//             {"English", SaveData::ENGLISH},
-//             {"German", SaveData::GERMAN},
-//             {"French", SaveData::FRENCH}
-//         },
-//         [](std::int32_t value) { SaveManager::getInstance()->setLanguage(value); }
-//     );
-//
-//     // Initialize cbLanguage to USA values
-//     ui->cbLanguage->setEnabled(false);
-//     ui->cbLanguage->setCurrentIndex(0);
-//     ui->cbLanguage->setCurrentText("English");
-//
-//     // Initialize pages and the buttons that travel to those pages
-//     // When each button is pressed, "onPageButtonClicked" will be called passing
-//     // the desired page by arguments
-//     connect(ui->buttonMain, &QPushButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackedWidgetPages, pageGeneral);
-//     });
-//
-//     connect(ui->buttonItems, &QPushButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackedWidgetPages, pageItems);
-//     });
-//
-//     connect(ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackedWidgetPages, pageEventFlags);
-//     });
-//
-//     // In order to avoid the checkbox from being disabled,
-//     // we ensure that its parent is MainWindow (since it's never disabled by the "enableUiComponents" function)
-//     ui->cboxEnabled->setParent(this);
-//     setupCheckBox(ui->cboxEnabled, SaveData::SAVE_FLAG_ACTIVE,
-//         [this](std::uint32_t value) {
-//             SaveManager::getInstance()->setFlags(value);
-//             updateWindowVisibility(true);
-//         },
-//
-//         [this](std::uint32_t value) {
-//             SaveManager::getInstance()->unsetFlags(value);
-//             updateWindowVisibility(false);
-//         }
-//     );
-//
-//     setupCheckBox(ui->cboxHardMode, SaveData::SAVE_FLAG_HARD_MODE_UNLOCKED,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxUseAlternateCostume, SaveData::SAVE_FLAG_COSTUME_IS_BEING_USED,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxReinhardtCostume, SaveData::SAVE_FLAG_HAVE_REINHARDT_ALT_COSTUME,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxCarrieCostume, SaveData::SAVE_FLAG_HAVE_CARRIE_ALT_COSTUME,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxNitro, SaveData::SAVE_FLAG_CAN_EXPLODE_ON_JUMPING,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setFlags(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetFlags(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxVamp, SaveData::PLAYER_FLAG_VAMP,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxPoison, SaveData::PLAYER_FLAG_POISON,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
-//     );
-//
-//     setupCheckBox(ui->cboxSto, SaveData::PLAYER_FLAG_STO,
-//         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
-//         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
-//     );
-// }
-
-// void MainWindow::setupPageItems() {
-//     // Jewels
-//     setupLineEditNumberUnsigned(ui->leItemsSpecial1, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SPECIAL1, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsSpecial2, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SPECIAL2, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsSpecial3, 0, 1,
-//         [](std::uint8_t value) {
-//             // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SPECIAL3, value);
-//             }
-//         }
-//     );
-//
-//     // Healing and effect-cure items
-//     setupLineEditNumberUnsigned(ui->leItemsRoastChicken, 0, 10,
-//         [](std::uint8_t value) {
-//             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-//             std::int32_t actualItemId = SaveData::ITEM_ID_ROAST_CHICKEN;
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 actualItemId++;
-//             }
-//
-//             SaveManager::getInstance()->setItem(actualItemId, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsRoastBeef, 0, 10,
-//         [](std::uint8_t value) {
-//             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-//             std::int32_t actualItemId = SaveData::ITEM_ID_ROAST_BEEF;
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 actualItemId++;
-//             }
-//
-//             SaveManager::getInstance()->setItem(actualItemId, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsPurifying, 0, 10,
-//         [](std::uint8_t value) {
-//             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-//             std::int32_t actualItemId = SaveData::ITEM_ID_PURIFYING;
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 actualItemId++;
-//             }
-//
-//             SaveManager::getInstance()->setItem(actualItemId, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsCureAmpoule, 0, 10,
-//         [](std::uint8_t value) {
-//             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-//             std::int32_t actualItemId = SaveData::ITEM_ID_CURE_AMPOULE;
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 actualItemId++;
-//             }
-//
-//             SaveManager::getInstance()->setItem(actualItemId, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsPoutPourri, 0, 10,
-//         [](std::uint8_t value) {
-//             // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-//             if (SaveManager::getInstance()->getRegion() == SaveData::USA) {
-//                 SaveManager::getInstance()->setItem(SaveData::ITEM_ID_POUT_POURRI, value);
-//             }
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsHealingKit, 0, 10,
-//         [](std::uint8_t value) {
-//             // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-//             std::int32_t actualItemId = SaveData::ITEM_ID_HEALING_KIT;
-//             if (SaveManager::getInstance()->getRegion() == SaveData::PAL ||
-//                 SaveManager::getInstance()->getRegion() == SaveData::JPN) {
-//                 actualItemId++;
-//             }
-//
-//             SaveManager::getInstance()->setItem(actualItemId, value);
-//         }
-//     );
-//
-//     // Quest Items
-//     setupLineEditNumberUnsigned(ui->leItemsSunCard, 0, 10,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SUN_CARD, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsMoonCard, 0, 10,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MOON_CARD, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsNitro, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MAGICAL_NITRO, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsMandragora, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_MANDRAGORA, value);
-//         }
-//     );
-//
-//     // Keys
-//     setupLineEditNumberUnsigned(ui->leKeyScience1, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY1, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyScience2, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY2, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyScience3, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_SCIENCE_KEY3, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyClocktower1, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY1, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyClocktower2, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY2, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyClocktower3, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CLOCKTOWER_KEY3, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyChamber, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_CHAMBER_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyCopper, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_COPPER_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyExecution, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_EXECUTION_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyGarden, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_GARDEN_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyLeftTower, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_LEFT_TOWER_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyArchives, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_ARCHIVES_KEY, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leKeyStoreroom, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_STOREROOM_KEY, value);
-//         }
-//     );
-//
-//     // Unused items
-//     setupLineEditNumberUnsigned(ui->leItemsER, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_ENGAGEMENT_RING, value);
-//         }
-//     );
-//
-//     setupLineEditNumberUnsigned(ui->leItemsIG, 0, 1,
-//         [](std::uint8_t value) {
-//             SaveManager::getInstance()->setItem(SaveData::ITEM_ID_INCANDESCENT_GAZE, value);
-//         }
-//     );
-// }
-
-// void MainWindow::setupPageEventFlags() {
-//     /* Page 1 */
-//     ui->labelSet0->setText("Set 0 (Forest of Silence, Intro Narration Map, Test Grid)");
-//     hexBitflagLineEdits[0] = createGridFlag(ui->gridFlagSet0, 0, 0);
-//
-//     ui->labelSet1->setText("Set 1 (Villa Foyer, Villa Hallway)");
-//     hexBitflagLineEdits[1] = createGridFlag(ui->gridFlagSet1, 1, 0);
-//
-//     ui->labelSet2->setText("Set 2 (Underground Waterway, Castle Center - Top elevator room)");
-//     hexBitflagLineEdits[2] = createGridFlag(ui->gridFlagSet2, 2, 0);
-//
-//     /* Page 2 */
-//     ui->labelSet3->setText("Set 3 (Castle Center - Friendly lizard man, Castle Center - Nitro room)");
-//     hexBitflagLineEdits[3] = createGridFlag(ui->gridFlagSet3, 3, 0);
-//
-//     ui->labelSet4->setText("Set 4 (Tower of Execution, Tower of Sorcery, Duel Tower)");
-//     hexBitflagLineEdits[4] = createGridFlag(ui->gridFlagSet4, 4, 0);
-//
-//     ui->labelSet5->setText("Set 5 (Castle Keep - Stairs, Castle Keep, Clock Tower)");
-//     hexBitflagLineEdits[5] = createGridFlag(ui->gridFlagSet5, 5, 0);
-//
-//     /* Page 3 */
-//     ui->labelSet6->setText("Set 6 (Dracula Desert, Rose / Actriese room, Room of Clocks)");
-//     hexBitflagLineEdits[6] = createGridFlag(ui->gridFlagSet6, 6, 0);
-//
-//     ui->labelSet7->setText("Set 7 (Tower of Science - Turrets)");
-//     hexBitflagLineEdits[7] = createGridFlag(ui->gridFlagSet7, 7, 0);
-//
-//     ui->labelSet8->setText("Set 8 (Castle Center - Bottom Elevator, Castle Center - Gears room)");
-//     hexBitflagLineEdits[8] = createGridFlag(ui->gridFlagSet8, 8, 0);
-//
-//     /* Page 4 */
-//     ui->labelSet9->setText("Set 9 (Villa - Front Yard)");
-//     hexBitflagLineEdits[9] = createGridFlag(ui->gridFlagSet9, 9, 0);
-//
-//     ui->labelSet10->setText("Set 10 (Castle Wall - Main)");
-//     hexBitflagLineEdits[10] = createGridFlag(ui->gridFlagSet10, 10, 0);
-//
-//     ui->labelSet11->setText("Set 11 (Maze Garden, Castle Center - Library)");
-//     hexBitflagLineEdits[11] = createGridFlag(ui->gridFlagSet11, 11, 0);
-//
-//     /* Page 5 */
-//     ui->labelSet12->setText("Set 12 (Tunnel)");
-//     hexBitflagLineEdits[12] = createGridFlag(ui->gridFlagSet12, 12, 0);
-//
-//     ui->labelSet13->setText("Set 13 (Castle Center - Main)");
-//     hexBitflagLineEdits[13] = createGridFlag(ui->gridFlagSet13, 13, 0);
-//
-//     ui->labelSet14->setText("Set 14 (Castle Wall - Towers)");
-//     hexBitflagLineEdits[14] = createGridFlag(ui->gridFlagSet14, 14, 0);
-//
-//     /* Page 6 */
-//     ui->labelSet15->setText("Set 15 (Tower of Science)");
-//     hexBitflagLineEdits[15] = createGridFlag(ui->gridFlagSet15, 15, 0);
-//
-//
-//     // Initialize pages and the buttons that travel to those pages
-//     // When each button is pressed, "onPageButtonClicked" will be called passing
-//     // the desired page by arguments
-//     connect(ui->rbEventFlagPage1, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage1);
-//     });
-//
-//     connect(ui->rbEventFlagPage2, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage2);
-//     });
-//
-//     connect(ui->rbEventFlagPage3, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage3);
-//     });
-//
-//     connect(ui->rbEventFlagPage4, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage4);
-//     });
-//
-//     connect(ui->rbEventFlagPage5, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage5);
-//     });
-//
-//     connect(ui->rbEventFlagPage6, &QRadioButton::clicked, this, [this]() {
-//         onPageButtonClicked(ui->stackWidgetEventFlagsPages, ui->EventFlagsPage6);
-//     });
-// }
 
 /**
  * @brief Given a save data struct, fill all the UI components with the data from the save.
  */
-void MainWindow::populateMainWindow(SaveData* saveData) {
+void MainWindow::populateMainWindow(SaveData* saveData) const
+{
     if (saveData == nullptr) {
         return;
     }
@@ -711,22 +105,8 @@ void MainWindow::populateMainWindow(SaveData* saveData) {
     pageEventFlags->populate(saveData);
 }
 
-/**
- * When we press on a checkbox, a setter function will be called that will set a certain value.
- * Likewise, when we uncheck them, an unsetter function will be called which will remove the value setted in the setter.
- */
-void MainWindow::setupCheckBox(QCheckBox* checkBox, std::uint32_t value, std::function<void(std::uint32_t)> setter, std::function<void(std::uint32_t)> unsetter) {
-    connect(checkBox, &QCheckBox::toggled, [setter, unsetter, value](bool checked) {
-        if (checked) {
-            setter(value);
-        }
-        else {
-            unsetter(value);
-        }
-    });
-}
-
-void MainWindow::openFile(const QString& filename) {
+void MainWindow::openFile(const QString& filename)
+{
     std::int32_t result = FileManager::getInstance()->openFile(filename);
 
     if (result == -1) {
@@ -743,16 +123,19 @@ void MainWindow::openFile(const QString& filename) {
     updateSlotMenuCheckedState(SaveManager::getInstance()->currentSave, SaveManager::getInstance()->isMain);
 }
 
-void MainWindow::fileOpenMenu() {
+void MainWindow::fileOpenMenu()
+{
     // With these settings, we can obtain the last opened save directory
     QSettings settings("CV64SaveEditor", "Castlevania 64 Save Editor");
 
     // Retrieve the last opened file path
-    QString lastOpenedDir = settings.value("lastOpenedDir", QDir::homePath()).toString();
+    const auto lastOpenedDir = settings.value("lastOpenedDir", QDir::homePath()).toString();
 
     // Open file menu in the last opened directory by default
-    QString filename = QFileDialog::getOpenFileName(
-        this, "Open File", lastOpenedDir,
+    const auto filename = QFileDialog::getOpenFileName(
+        this,
+        "Open File",
+        lastOpenedDir,
         "All accepted filetypes (*.mpk *.pak *.note *.eep *.n64 *.t64);;"
         "Individual note (*.note);;"
         "Controller Pak data (*.mpk *.pak);;"
@@ -774,7 +157,8 @@ void MainWindow::fileOpenMenu() {
     }
 }
 
-void MainWindow::fileSaveMenu() {
+void MainWindow::fileSaveMenu()
+{
     if (!FileManager::getInstance()->wasFileOpened()) {
         QMessageBox::critical(this, "Error", "Open a file in local before trying to save.");
         return;
@@ -804,7 +188,8 @@ void MainWindow::fileSaveMenu() {
     QMessageBox::information(this, "Save", "Saved successfully");
 }
 
-void MainWindow::fileSaveAsMenu() {
+void MainWindow::fileSaveAsMenu()
+{
     /// @note Scrapping this since we need to save empty saves in order to save New Game+ files.
     /*
     if (SaveManager::getInstance()->areAllSavesDisabled()) {
@@ -815,10 +200,12 @@ void MainWindow::fileSaveAsMenu() {
 
     // Retrieve the last "Save As..." directory
     QSettings settings("CV64SaveEditor", "Castlevania 64 Save Editor");
-    QString lastSaveAsDirectory = settings.value("lastSaveDir", QDir::homePath()).toString();
+    const auto lastSaveAsDirectory = settings.value("lastSaveDir", QDir::homePath()).toString();
 
-    QString filepath = QFileDialog::getSaveFileName(
-        this, "Save As...", lastSaveAsDirectory,
+    const auto filepath = QFileDialog::getSaveFileName(
+        this,
+        "Save As...",
+        lastSaveAsDirectory,
         "Individual note (*.note);;"
         "Cartridge (Japanese version only) (*.eep)"
     );
@@ -846,12 +233,13 @@ void MainWindow::fileSaveAsMenu() {
     /// ~/.config/CV64SaveEditor/Castlevania 64 Save Editor.conf
     /// In Windows, the dir is stored at this registry:
     /// HKEY_CURRENT_USER\Software\CV64SaveEditor\Castlevania 64 Save Editor
-    QFileInfo fileInfo(filepath);
+    const QFileInfo fileInfo(filepath);
     settings.setValue("lastSaveDir", fileInfo.absolutePath());
     QMessageBox::information(this, "Save", "Saved successfully");
 }
 
-void MainWindow::setupFileMenu() {
+void MainWindow::setupFileMenu()
+{
     // Setup the "Open" button
     connect(ui->actionOpenFile, &QAction::triggered, this, &MainWindow::fileOpenMenu);
 
@@ -863,15 +251,14 @@ void MainWindow::setupFileMenu() {
 
     // Setup the "Exit" button
     connect(ui->actionExit, &QAction::triggered, this, []() {
-        QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Exit", "Are you sure you want to quit?", QMessageBox::Yes | QMessageBox::No);
-
-        if (reply == QMessageBox::Yes) {
+        if (const auto reply = QMessageBox::question(nullptr, "Exit", "Are you sure you want to quit?", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
             QApplication::exit();
         }
     });
 }
 
-void MainWindow::setupSlotMenu() {
+void MainWindow::setupSlotMenu()
+{
     QMenu* menuSlot = menuBar()->addMenu("Slot");
     menuSlot->setObjectName("Slot");
 
@@ -915,7 +302,8 @@ void MainWindow::setupSlotMenu() {
 
 /// When clicking on a slot option, check it, and *also uncheck* any other unselected options
 /// This is done for the "Main" and "Beginning of Stage" slot menu options
-void MainWindow::updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool isMainSave) {
+void MainWindow::updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool isMainSave)
+{
     SaveManager* saveManager = SaveManager::getInstance();
 
     for (std::uint32_t i = 0; i < NUM_SAVES; ++i) {
@@ -927,123 +315,13 @@ void MainWindow::updateSlotMenuCheckedState(std::int32_t selectedSlotIndex, bool
     saveManager->currentSave = selectedSlotIndex;
 }
 
-void MainWindow::setupEditMenu() {
+void MainWindow::setupEditMenu()
+{
     connect(ui->actionCopy, &QAction::triggered, this, [this]() {
         onCopy(this);
     });
     connect(ui->actionDelete, &QAction::triggered, this, &MainWindow::onDelete);
     connect(ui->actionDelete_All, &QAction::triggered, this, &MainWindow::onDeleteAll);
-}
-
-/**
- * @brief Allows both decimal and hexadecimal numbers to be innputted.
- */
-// void MainWindow::handleNumberOnlyInputUnsigned(std::function<void(std::uint32_t)> setter, QLineEdit* lineEdit) {
-//     if (!lineEdit) {
-//         return;
-//     }
-//
-//     QString text = lineEdit->text();
-//     bool ok = false;
-//     std::uint32_t value = 0;
-//
-//     if (text.startsWith("0x", Qt::CaseInsensitive)) {
-//         value = text.mid(2).toUInt(&ok, 16);
-//     }
-//     else {
-//         value = text.toUInt(&ok, 10);
-//     }
-//
-//     if (ok) {
-//         const std::uint32_t minValue = lineEdit->property("minValue").toUInt();
-//         const std::uint32_t maxValue = lineEdit->property("maxValue").toUInt();
-//
-//         value = qBound<std::uint32_t>(minValue, value, maxValue);
-//
-//         // We call this function just before setting the text
-//         checkMandragoraAndNitroLineEdits();
-//
-//         lineEdit->setText(QString::number(value));
-//
-//         setter(value);
-//     }
-// }
-
-/// With this function, we can have more control during lineEdit initialization.
-/// In this case, we make it so that we can add a min and max value to each lineEdit without much copy-pasting
-// void MainWindow::setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter) {
-//     // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
-//     // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
-//     QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
-//     const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
-//     lineEdit->setValidator(validator);
-//
-//     lineEdit->setProperty("minValue", minValue);
-//     lineEdit->setProperty("maxValue", maxValue);
-//
-//     connect(lineEdit, &QLineEdit::editingFinished, this, [this, setter, lineEdit]() {
-//         handleNumberOnlyInputUnsigned(setter, lineEdit);
-//     });
-// }
-
-/// Same as "setupComboBox", but this is meant for comboboxes which are supposed to assign bitflags to a value instead,
-/// such as the combo box for setting the game's difficulty
-void MainWindow::setupComboBoxBitflag(QComboBox* comboBox, const Ui::ComboBoxData& array) {
-    comboBox->clear();
-
-    for (const auto& map: array) {
-        for (const auto& entry: map) {
-            comboBox->addItem(QString::fromStdString(entry.first), QVariant(entry.second));
-        }
-    }
-
-    connect(comboBox, &QComboBox::currentIndexChanged, [this, comboBox, array](std::int32_t) {
-        this->handleComboBoxSelection(comboBox, array);
-    });
-
-    comboBox->setCurrentIndex(0);
-    handleComboBoxSelection(comboBox, array);
-}
-
-void MainWindow::updateBitSelection(std::uint32_t newValue, const Ui::ComboBoxData& comboBoxData) {
-    for (const auto& data: comboBoxData) {
-        for (const auto& entry: data) {
-            SaveManager::getInstance()->unsetFlags(entry.second);
-        }
-    }
-
-    SaveManager::getInstance()->setFlags(newValue);
-}
-
-void MainWindow::handleComboBoxSelection(QComboBox* comboBox, const Ui::ComboBoxData& array) {
-    std::int32_t index = comboBox->currentIndex();
-    if (index >= 0) {
-        std::int32_t value = comboBox->itemData(index).toInt();
-        this->updateBitSelection(value, array);
-    }
-}
-
-void MainWindow::selectComboBoxOption(QComboBox& comboBox, const QVariant data) {
-    // Workaround to fix a bug where some comboboxes wouldn't update properly when setting
-    // an option whose value was 0.
-    if (data.toInt() == 0) {
-        comboBox.setCurrentIndex(0);
-        return;
-    }
-
-    std::int32_t index = comboBox.findData(data);
-
-    if (index != -1) {
-        comboBox.setCurrentIndex(index);
-    }
-}
-
-void MainWindow::onPageButtonClicked(QStackedWidget* stackedWidget, const QWidget* page) {
-    switchPage(stackedWidget, page);
-}
-
-void MainWindow::switchPage(QStackedWidget* stackedWidget, const QWidget* page) {
-    stackedWidget->setCurrentIndex(stackedWidget->indexOf(page));
 }
 
 /// The player can only have a Mandragora *OR* a Magical Nitro at the same time.
@@ -1062,85 +340,8 @@ void MainWindow::switchPage(QStackedWidget* stackedWidget, const QWidget* page) 
 //     }
 // }
 
-/**
- * @brief Creates the event flag grid dynamically.
- */
-// QLineEdit* MainWindow::createGridFlag(QGridLayout* gridLayout, std::int32_t flagSet, std::uint32_t flags) {
-//     auto* hexBitflagDisplay = new QLineEdit();
-//     hexBitflagDisplay->setAlignment(Qt::AlignRight);
-//     hexBitflagDisplay->setText(QString("%1").arg(flags, 1, 10, QChar('0')));
-//
-//     /// Ensure that we're putting "hexBitflagDisplay" in the right most part of the checkboxes, on the 1st row, 8th column
-//     /// @note We also add an extra row and column for printing the column / row number
-//     gridLayout->addWidget(hexBitflagDisplay, 0, 9, 5, 1);
-//     // Add numbers on top and to the right showing the column / row number respectively
-//     for (std::uint32_t i = 0; i < 8; ++i) {
-//         auto* colLabel = new QLabel(QString::number(7 - i));
-//         colLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
-//         gridLayout->addWidget(colLabel, 0, i + 1);
-//     }
-//
-//     for (std::uint32_t i = 0; i < 4; ++i) {
-//         auto* rowLabel = new QLabel(QString::number(i));
-//         rowLabel->setAlignment(Qt::AlignCenter);  // Center the row numbers
-//         gridLayout->addWidget(rowLabel, 4 - i, 0);
-//     }
-//
-//     QVector<QCheckBox*> checkBoxes(32);
-//
-//     // Create 32 checkboxes (one for each bit)
-//     for (std::uint32_t i = 0; i < 32; ++i) {
-//         auto* checkBox = new QCheckBox();
-//         // Set the checked state based on the flag value
-//         checkBox->setChecked(flags & (1 << i));
-//         // Add the checkbox to the grid layout. Then place it in a 4x8 grid
-//         // We add +1 so that we don't print the checkboxes in the same row / column as the numbers
-//         std::int32_t row = 3 - (i / 8);
-//         std::int32_t col = 8 - (i % 8);
-//         gridLayout->addWidget(checkBox, row + 1, col);
-//
-//         checkBoxes[i] = checkBox;
-//     }
-//
-//     // Since now each checkbox is initialized, we can go ahead and connect them + add the function to handle them when toggled
-//     for (std::uint32_t j = 0; j < 32; j++) {
-//         // Make sure that each checkbox is updated *on-the-fly* as we edit the hex value from the line edit
-//         // To do so, we directly define a lambda function that does this for us. This is executed when pressing any of the checkboxes
-//         connect(checkBoxes[j], &QCheckBox::toggled, this, [checkBoxes, hexBitflagDisplay]() {
-//             std::uint32_t updatedFlags = 0;
-//             for (std::int32_t m = 0; m < 32; ++m) {
-//                 if (checkBoxes[m]->isChecked()) {
-//                     updatedFlags |= (1 << m);
-//                 }
-//             }
-//             hexBitflagDisplay->setText(QString("%1").arg(updatedFlags, 1, 10, QChar('0')));
-//         });
-//     }
-//
-//     // Lastly, we connect the "hexBitflagDisplay" and add a handling function that will update all
-//     // checkboxes depending on the hex bitflag value passed in the "hexBitflagDisplay" line edit
-//     connect(hexBitflagDisplay, &QLineEdit::textChanged, this, [checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
-//         bool ok = false;
-//         std::uint32_t newFlags = text.toUInt(&ok, 10);
-//
-//         SaveManager::getInstance()->setEventFlags(flagSet, newFlags);
-//
-//         // Ensure we limit the input value up to 0xFFFFFFFF
-//         if (ok && newFlags <= 0xFFFFFFFF) {
-//             for (std::int32_t k = 0; k < 32; ++k) {
-//                 checkBoxes[k]->setChecked(newFlags & (1 << k));
-//             }
-//         }
-//         else {
-//             hexBitflagDisplay->setText("0");
-//         }
-//     });
-//
-//     // We return "hexBitflagDisplay" so that we can access to it later for changing the event flag values by editing the lineEdit
-//     return hexBitflagDisplay;
-// }
-
-void MainWindow::enableUIComponents(bool enable) {
+void MainWindow::enableUIComponents(bool enable)
+{
     // This function is now scrapped as it sometimes is necessary to edit a disabled save
     // (fo example, to activate New Game+)
     return;
@@ -1172,7 +373,8 @@ void MainWindow::enableUIComponents(bool enable) {
 }
 
 /// This function ensures that the "Enabled" checkbox is only visible for "Main" saves
-// void MainWindow::updateCheckboxEnabledVisibility() const {
+// void MainWindow::updateCheckboxEnabledVisibility() const
+// {
 //     if (!isMain) {
 //         ui->cboxEnabled->hide();
 //     }
@@ -1182,7 +384,8 @@ void MainWindow::enableUIComponents(bool enable) {
 // }
 
 /// Make sure to always have the "Beginning of Stage" save enabled only if the "Main" save is enabled
-void MainWindow::updateWindowVisibility(bool enable) {
+void MainWindow::updateWindowVisibility(bool enable)
+{
 //     if (BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)
 //         && !isMain) {
 //         enableUIComponents(true);
@@ -1192,22 +395,11 @@ void MainWindow::updateWindowVisibility(bool enable) {
 //     }
 }
 
-/// Given a framecount (in 30fps), converts it from frames to hours, minutes and seconds
-// void MainWindow::convertFrameToTime(const std::uint32_t frameCount, QLabel* output) {
-//     std::int32_t totalSeconds = frameCount / 30;
-//     std::int32_t hours = totalSeconds / 3600;
-//     std::int32_t minutes = (totalSeconds % 3600) / 60;
-//     std::int32_t seconds = totalSeconds % 60;
-//
-//     output->setText(QString("%1:%2:%3").arg(hours, 2, 10, QChar('0'))
-//                         .arg(minutes, 2, 10, QChar('0'))
-//                         .arg(seconds, 2, 10, QChar('0')));
-// }
-
 /**
  * @brief Copy the currently-opened save slot to another slot.
  */
-void MainWindow::onCopy(QWidget* parent) {
+void MainWindow::onCopy(QWidget* parent)
+{
     SaveManager* saveManager = SaveManager::getInstance();
     // The save slot where the data will be copied over
     std::uint32_t destSaveSlot = 0;
@@ -1236,7 +428,7 @@ void MainWindow::onCopy(QWidget* parent) {
         // If trying to copy the current save slot into an slot marked as "Enabled", then ask first if the user
         // wants to overwrite the data.
         if (BITS_HAS(saveManager->getSaveSlot(destSaveSlot).mainSave.flags, SaveData::SAVE_FLAG_ACTIVE)) {
-            QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Clear All", "An existing save exists on the destination slot\n"
+            const auto reply = QMessageBox::question(nullptr, "Clear All", "An existing save exists on the destination slot\n"
                                                                                             "Do you want to replace it?", QMessageBox::Yes | QMessageBox::No);
 
             if (reply == QMessageBox::No) {
@@ -1252,10 +444,9 @@ void MainWindow::onCopy(QWidget* parent) {
 /**
  * @brief Clear a the currently opened save slot.
  */
-void MainWindow::onDelete() {
-    QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Clear", "Are you sure you want to clear the current save?", QMessageBox::Yes | QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
+void MainWindow::onDelete()
+{
+    if (const auto reply = QMessageBox::question(nullptr, "Clear", "Are you sure you want to clear the current save?", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
         SaveManager::getInstance()->getCurrentSaveSlot().clear();
         populateMainWindow(&SaveManager::getInstance()->getCurrentSave());
         updateWindowVisibility(BITS_HAS(SaveManager::getInstance()->getCurrentSaveSlot().mainSave.flags, SaveData::SAVE_FLAG_ACTIVE));
@@ -1265,10 +456,9 @@ void MainWindow::onDelete() {
 /**
  * @brief Clear all save slots within the current save file.
  */
-void MainWindow::onDeleteAll() {
-    QMessageBox::StandardButton reply = QMessageBox::question(nullptr, "Clear All", "Are you sure you want to clear all saves?", QMessageBox::Yes | QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
+void MainWindow::onDeleteAll()
+{
+    if (const auto reply = QMessageBox::question(nullptr, "Clear All", "Are you sure you want to clear all saves?", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
         for (std::int32_t i = 0; i < NUM_SAVES; i++) {
             SaveManager::getInstance()->getSaveSlot(i).clear();
             populateMainWindow(&SaveManager::getInstance()->getCurrentSave());

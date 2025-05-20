@@ -422,24 +422,10 @@ void GeneralForm::setup()
     );
 
     // Initialize cbLanguage to USA values
-    ui->cbLanguage->setEnabled(false);
-    ui->cbLanguage->setCurrentIndex(0);
-    ui->cbLanguage->setCurrentText("English");
-
-    // Initialize pages and the buttons that travel to those pages
-    // When each button is pressed, "onPageButtonClicked" will be called passing
-    // the desired page by arguments
-    // connect(ui->buttonMain, &QPushButton::clicked, this, [this]() {
-    //     onPageButtonClicked(ui->stackedWidgetPages, pageGeneral);
-    // });
-    //
-    // connect(ui->buttonItems, &QPushButton::clicked, this, [this]() {
-    //     onPageButtonClicked(ui->stackedWidgetPages, pageItems);
-    // });
-    //
-    // connect(ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
-    //     onPageButtonClicked(ui->stackedWidgetPages, pageEventFlags);
-    // });
+    // ui->cbLanguage->setEnabled(false);
+    // ui->cbLanguage->setCurrentIndex(0);
+    // ui->cbLanguage->setCurrentText("English");
+    // ComboBoxHelper::setCurrentValue(ui->cbRegion, SaveData::USA);
 
     // In order to avoid the checkbox from being disabled,
     // we ensure that its parent is MainWindow (since it's never disabled by the "enableUiComponents" function)
@@ -512,6 +498,9 @@ void GeneralForm::setup()
         [](std::uint32_t value) { SaveManager::getInstance()->setPlayerStatus(value); },
         [](std::uint32_t value) { SaveManager::getInstance()->unsetPlayerStatus(value); }
     );
+
+    // Uncheck the "save enabled checkbox" when opening the program
+    ui->cboxEnabled->setChecked(false);
 }
 
 void GeneralForm::populate(SaveData *saveData) const
