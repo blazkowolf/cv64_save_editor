@@ -18,7 +18,7 @@
 #include <functional>
 #include <utility>
 
-namespace ComboBoxHelper {
+namespace ComboBox {
 
 template <typename TValue>
 struct Item

@@ -4,7 +4,7 @@
 #include <QCheckBox>
 #include <QObject>
 
-namespace CheckBoxHelper {
+namespace CheckBox {
 
 /**
  * When we press on a checkbox, a setter function will be called that will set a certain value.

@@ -2,7 +2,7 @@
 #include "ui_items.h"
 #include "save/Save.h"
 #include "save/SaveManager.h"
-#include "LineEditHelper.h"
+#include "util/lineedit.h"
 
 ItemsForm::ItemsForm(QWidget *parent)
     : QWidget(parent)
@@ -29,10 +29,10 @@ void ItemsForm::setup()
     const QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
     const auto *validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
     // Jewels
-    LineEditHelper::setup(m_ui->leItemsSpecial1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsSpecial1, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsSpecial1->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SPECIAL1, value);
+        SaveManager::setItem(Save::Item::SPECIAL1, value);
     });
 
     // LineEditHelper::setup(ui->leItemsSpecial2, 0, 1,
@@ -40,10 +40,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SPECIAL2, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsSpecial2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsSpecial2, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsSpecial2->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SPECIAL2, value);
+        SaveManager::setItem(Save::Item::SPECIAL2, value);
     });
 
     // LineEditHelper::setup(ui->leItemsSpecial3, 0, 1,
@@ -55,12 +55,13 @@ void ItemsForm::setup()
     //         }
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsSpecial3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsSpecial3, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsSpecial3->setText(QString::number(value));
         // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-        if (auto *inst = SaveManager::getInstance(); inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
-            inst->setItem(Save::Item::SPECIAL3, value);
+        if (const auto *inst = SaveManager::getInstance();
+            inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
+            SaveManager::setItem(Save::Item::SPECIAL3, value);
         }
     });
 
@@ -77,12 +78,12 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(actualItemId, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsRoastChicken, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsRoastChicken, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsRoastChicken->setText(QString::number(value));
-        auto *inst = SaveManager::getInstance();
+        const auto *inst = SaveManager::getInstance();
         // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-        inst->setItem(actualItemId(inst, Save::Item::ROAST_CHICKEN), value);
+        SaveManager::setItem(actualItemId(inst, Save::Item::ROAST_CHICKEN), value);
     });
 
     // LineEditHelper::setup(ui->leItemsRoastBeef, 0, 10,
@@ -97,12 +98,12 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(actualItemId, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsRoastBeef, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsRoastBeef, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsRoastBeef->setText(QString::number(value));
-        auto *inst = SaveManager::getInstance();
+        const auto *inst = SaveManager::getInstance();
         // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-        inst->setItem(actualItemId(inst, Save::Item::ROAST_BEEF), value);
+        SaveManager::setItem(actualItemId(inst, Save::Item::ROAST_BEEF), value);
     });
 
     // LineEditHelper::setup(ui->leItemsPurifying, 0, 10,
@@ -117,12 +118,12 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(actualItemId, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsPurifying, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsPurifying, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsPurifying->setText(QString::number(value));
-        auto *inst = SaveManager::getInstance();
+        const auto *inst = SaveManager::getInstance();
         // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-        inst->setItem(actualItemId(inst, Save::Item::PURIFYING), value);
+        SaveManager::setItem(actualItemId(inst, Save::Item::PURIFYING), value);
     });
 
     // LineEditHelper::setup(ui->leItemsCureAmpoule, 0, 10,
@@ -137,12 +138,12 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(actualItemId, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsCureAmpoule, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsCureAmpoule, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsCureAmpoule->setText(QString::number(value));
-        auto *inst = SaveManager::getInstance();
+        const auto *inst = SaveManager::getInstance();
         // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-        inst->setItem(actualItemId(inst, Save::Item::CURE_AMPOULE), value);
+        SaveManager::setItem(actualItemId(inst, Save::Item::CURE_AMPOULE), value);
     });
 
     // LineEditHelper::setup(ui->leItemsPoutPourri, 0, 10,
@@ -153,12 +154,12 @@ void ItemsForm::setup()
     //         }
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsPoutPourri, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsPoutPourri, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsPoutPourri->setText(QString::number(value));
         // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-        if (auto *inst = SaveManager::getInstance(); inst->getRegion() == Save::Region::USA) {
-            inst->setItem(Save::Item::POUT_POURRI, value);
+        if (const auto *inst = SaveManager::getInstance(); inst->getRegion() == Save::Region::USA) {
+            SaveManager::setItem(Save::Item::POUT_POURRI, value);
         }
     });
 
@@ -174,12 +175,12 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(actualItemId, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsHealingKit, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsHealingKit, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsHealingKit->setText(QString::number(value));
-        auto *inst = SaveManager::getInstance();
+        const auto *inst = SaveManager::getInstance();
         // In the JPN and PAL versions, this item's ID is the same as USA, but added +1.
-        inst->setItem(actualItemId(inst, Save::Item::HEALING_KIT), value);
+        SaveManager::setItem(actualItemId(inst, Save::Item::HEALING_KIT), value);
     });
 
     // Quest Items
@@ -188,10 +189,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SUN_CARD, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsSunCard, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsSunCard, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsSunCard->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SUN_CARD, value);
+        SaveManager::setItem(Save::Item::SUN_CARD, value);
     });
 
     // LineEditHelper::setup(ui->leItemsMoonCard, 0, 10,
@@ -199,10 +200,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_MOON_CARD, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsMoonCard, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
+    LineEdit::setup(m_ui->leItemsMoonCard, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 10);
         m_ui->leItemsMoonCard->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::MOON_CARD, value);
+        SaveManager::setItem(Save::Item::MOON_CARD, value);
     });
 
     // LineEditHelper::setup(ui->leItemsNitro, 0, 1,
@@ -210,10 +211,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_MAGICAL_NITRO, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsNitro, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsNitro, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsNitro->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::MAGICAL_NITRO, value);
+        SaveManager::setItem(Save::Item::MAGICAL_NITRO, value);
     });
 
     // LineEditHelper::setup(ui->leItemsMandragora, 0, 1,
@@ -221,10 +222,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_MANDRAGORA, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsMandragora, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsMandragora, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsMandragora->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::MANDRAGORA, value);
+        SaveManager::setItem(Save::Item::MANDRAGORA, value);
     });
 
     // Keys
@@ -233,10 +234,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY1, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyScience1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyScience1, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyScience1->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SCIENCE_KEY1, value);
+        SaveManager::setItem(Save::Item::SCIENCE_KEY1, value);
     });
 
     // LineEditHelper::setup(ui->leKeyScience2, 0, 1,
@@ -244,10 +245,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY2, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyScience2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyScience2, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyScience2->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SCIENCE_KEY2, value);
+        SaveManager::setItem(Save::Item::SCIENCE_KEY2, value);
     });
 
     // LineEditHelper::setup(ui->leKeyScience3, 0, 1,
@@ -255,10 +256,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY3, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyScience3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyScience3, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyScience3->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::SCIENCE_KEY3, value);
+        SaveManager::setItem(Save::Item::SCIENCE_KEY3, value);
     });
 
     // LineEditHelper::setup(ui->leKeyClocktower1, 0, 1,
@@ -266,10 +267,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY1, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyClocktower1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyClocktower1, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyClocktower1->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::CLOCKTOWER_KEY1, value);
+        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, value);
     });
 
     // LineEditHelper::setup(ui->leKeyClocktower2, 0, 1,
@@ -277,10 +278,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY2, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyClocktower2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyClocktower2, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyClocktower2->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::CLOCKTOWER_KEY2, value);
+        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, value);
     });
 
     // LineEditHelper::setup(ui->leKeyClocktower3, 0, 1,
@@ -288,10 +289,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY3, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyClocktower3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyClocktower3, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyClocktower3->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::CLOCKTOWER_KEY3, value);
+        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, value);
     });
 
     // LineEditHelper::setup(ui->leKeyChamber, 0, 1,
@@ -299,10 +300,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CHAMBER_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyChamber, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyChamber, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyChamber->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::CHAMBER_KEY, value);
+        SaveManager::setItem(Save::Item::CHAMBER_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyCopper, 0, 1,
@@ -310,10 +311,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_COPPER_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyCopper, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyCopper, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyCopper->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::COPPER_KEY, value);
+        SaveManager::setItem(Save::Item::COPPER_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyExecution, 0, 1,
@@ -321,10 +322,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_EXECUTION_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyExecution, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyExecution, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyExecution->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::EXECUTION_KEY, value);
+        SaveManager::setItem(Save::Item::EXECUTION_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyGarden, 0, 1,
@@ -332,10 +333,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_GARDEN_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyGarden, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyGarden, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyGarden->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::GARDEN_KEY, value);
+        SaveManager::setItem(Save::Item::GARDEN_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyLeftTower, 0, 1,
@@ -343,10 +344,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_LEFT_TOWER_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyLeftTower, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyLeftTower, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyLeftTower->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::LEFT_TOWER_KEY, value);
+        SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyArchives, 0, 1,
@@ -354,10 +355,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_ARCHIVES_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyArchives, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyArchives, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyArchives->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::ARCHIVES_KEY, value);
+        SaveManager::setItem(Save::Item::ARCHIVES_KEY, value);
     });
 
     // LineEditHelper::setup(ui->leKeyStoreroom, 0, 1,
@@ -365,10 +366,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_STOREROOM_KEY, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leKeyStoreroom, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leKeyStoreroom, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leKeyStoreroom->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::STOREROOM_KEY, value);
+        SaveManager::setItem(Save::Item::STOREROOM_KEY, value);
     });
 
     // Unused items
@@ -377,10 +378,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_ENGAGEMENT_RING, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsER, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsER, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsER->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::ENGAGEMENT_RING, value);
+        SaveManager::setItem(Save::Item::ENGAGEMENT_RING, value);
     });
 
     // LineEditHelper::setup(ui->leItemsIG, 0, 1,
@@ -388,10 +389,10 @@ void ItemsForm::setup()
     //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_INCANDESCENT_GAZE, value);
     //     }
     // );
-    LineEditHelper::setup(m_ui->leItemsIG, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEditHelper::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    LineEdit::setup(m_ui->leItemsIG, QString::number(0), validator, [this](const QString &text) {
+        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
         m_ui->leItemsIG->setText(QString::number(value));
-        SaveManager::getInstance()->setItem(Save::Item::INCANDESCENT_GAZE, value);
+        SaveManager::setItem(Save::Item::INCANDESCENT_GAZE, value);
     });
 }
 
@@ -406,11 +407,9 @@ void ItemsForm::populate(Save::Data *saveData) const
     m_ui->leItemsSpecial1->setText(QString::number(saveData->getItem(Save::Item::SPECIAL1)));
     m_ui->leItemsSpecial2->setText(QString::number(saveData->getItem(Save::Item::SPECIAL2)));
 
-    if (SaveManager::getInstance()->getRegion() == Save::Region::PAL ||
-        SaveManager::getInstance()->getRegion() == Save::Region::JPN) {
+    if (inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
         m_ui->leItemsSpecial3->setText(QString::number(saveData->getItem(Save::Item::SPECIAL3)));
-    }
-    else {
+    } else {
         m_ui->leItemsSpecial3->setText("0");
     }
 
@@ -420,10 +419,9 @@ void ItemsForm::populate(Save::Data *saveData) const
     m_ui->leItemsPurifying->setText(QString::number(saveData->getItem(actualItemId(inst, Save::Item::PURIFYING))));
     m_ui->leItemsCureAmpoule->setText(QString::number(saveData->getItem(actualItemId(inst, Save::Item::CURE_AMPOULE))));
 
-    if (SaveManager::getInstance()->getRegion() == Save::Region::USA) {
+    if (inst->getRegion() == Save::Region::USA) {
         m_ui->leItemsPoutPourri->setText(QString::number(saveData->getItem(Save::Item::POUT_POURRI)));
-    }
-    else {
+    } else {
         m_ui->leItemsPoutPourri->setText("0");
     }
 

@@ -7,7 +7,7 @@
  * @author 
  */
 
-#include "../include/windows/MainWindow.h"
+#include "windows/MainWindow.h"
 #include "save/SaveManager.h"
 #include "file/FileManager.h"
 #include <QApplication>

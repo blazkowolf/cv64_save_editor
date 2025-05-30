@@ -1,6 +1,6 @@
 #include "windows/eventflags.h"
 
-#include "CheckBoxHelper.h"
+#include "util/checkbox.h"
 #include "ui_eventflags.h"
 #include "save/SaveManager.h"
 
@@ -74,11 +74,11 @@ QLineEdit* createGridFlag(SaveManager *instance, TTarget *target, QGridLayout* g
 
     // Lastly, we connect the "hexBitflagDisplay" and add a handling function that will update all
     // checkboxes depending on the hex bitflag value passed in the "hexBitflagDisplay" line edit
-    QObject::connect(hexBitflagDisplay, &QLineEdit::textChanged, target, [instance, checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
+    QObject::connect(hexBitflagDisplay, &QLineEdit::textChanged, target, [checkBoxes, hexBitflagDisplay, flagSet](const QString& text) {
         bool ok = false;
-        std::uint32_t newFlags = text.toUInt(&ok, 10);
+        const auto newFlags = text.toUInt(&ok, 10);
 
-        instance->setEventFlags(flagSet, newFlags);
+        SaveManager::setEventFlags(flagSet, newFlags);
 
         // Ensure we limit the input value up to 0xFFFFFFFF
         if (ok && newFlags <= 0xFFFFFFFF) {
@@ -191,7 +191,7 @@ void EventFlagsForm::populate(Save::Data *saveData) const
     }
     // Event flag grids. We edit each of the line edits associated to the event flags to assign the hex value gotten
     // from the save data. Then, the checkboxes will be ticked / unticked automatically
-    for (unsigned int i = 0; i < Save::NUM_EVENT_FLAGS; i++) {
+    for (std::int32_t i = 0; i < Save::NUM_EVENT_FLAGS; i++) {
         m_hexBitflagLineEdits[i]->setText(QString::number(saveData->getEventFlags(i)));
     }
 }

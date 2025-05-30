@@ -9,7 +9,7 @@
 
 #include "file/FileManager.h"
 #include "save/SaveManager.h"
-#include "../../include/windows/ControllerPakSelectionWindow.h"
+#include "windows/ControllerPakSelectionWindow.h"
 #include <QMessageBox>
 
 /**

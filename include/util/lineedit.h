@@ -1,5 +1,5 @@
 /**
- * @file LineEditHelper.h
+ * @file lineedit.h
  *
  * Provides common setup utilities for bootstrapping a LineEdit.
  */
@@ -12,7 +12,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 
-namespace LineEditHelper {
+namespace LineEdit {
 
 inline void setup(QLineEdit *le, const QString &defaultValue, const QValidator *validator = nullptr, const std::function<void(QString)> &function = {})
 {
@@ -58,23 +58,6 @@ TValue handleUnsignedInteger(const QString &text, const TValue min, const TValue
     // checkMandragoraAndNitroLineEdits();
     return value;
 }
-
-/// With this function, we can have more control during lineEdit initialization.
-/// In this case, we make it so that we can add a min and max value to each lineEdit without much copy-pasting
-// void setupLineEditNumberUnsigned(QLineEdit* lineEdit, const std::uint32_t minValue, const std::uint32_t maxValue, std::function<void(std::uint32_t)> setter) {
-//     // Using this regex, we can accept either only hex values (preceded "0x") or decimal values
-//     // of up to 8 digits long (to prevent them from overflowing the max std::int32_t / uint)
-//     QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
-//     const auto* validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
-//     lineEdit->setValidator(validator);
-//
-//     lineEdit->setProperty("minValue", minValue);
-//     lineEdit->setProperty("maxValue", maxValue);
-//
-//     connect(lineEdit, &QLineEdit::editingFinished, this, [this, setter, lineEdit]() {
-//         handleNumberOnlyInputUnsigned(setter, lineEdit);
-//     });
-// }
 
 }
 

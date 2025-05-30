@@ -14,15 +14,15 @@ Save::Region SaveManager::getRegion() const {
     return m_region;
 }
 
-void SaveManager::setRegion(Save::Region region_) {
-    m_region = region_;
+void SaveManager::setRegion(const Save::Region region) {
+    m_region = region;
 }
 
 void SaveManager::setLanguage(const Save::Language language) {
     getInstance()->getCurrentSave().language = language;
 }
 
-Save::Language SaveManager::getLanguage() const {
+Save::Language SaveManager::getLanguage() {
     return getInstance()->getCurrentSave().language;
 }
 
@@ -94,7 +94,7 @@ void SaveManager::setFrameCount(const std::uint32_t gameplay_framecount) {
     getInstance()->getCurrentSave().gameplay_framecount = gameplay_framecount;
 }
 
-std::uint32_t SaveManager::getFrameCount() const {
+std::uint32_t SaveManager::getFrameCount() {
     return getInstance()->getCurrentSave().gameplay_framecount;
 }
 
@@ -118,7 +118,7 @@ void SaveManager::setMap(const Save::Map map) {
     getInstance()->getCurrentSave().map = map;
 }
 
-std::uint32_t SaveManager::getFlags() const {
+std::uint32_t SaveManager::getFlags() {
     return getInstance()->getCurrentSave().flags;
 }
 
@@ -130,7 +130,7 @@ void SaveManager::unsetFlags(const std::uint32_t flags) {
     BITS_UNSET(getInstance()->getCurrentSave().flags, flags);
 }
 
-std::uint32_t SaveManager::getPlayerStatus() const {
+std::uint32_t SaveManager::getPlayerStatus() {
     return getInstance()->getCurrentSave().player_status;
 }
 
@@ -171,7 +171,7 @@ void SaveManager::unassignEventFlags(const std::int32_t flagSet, const std::uint
 std::uint32_t SaveManager::calcFirstChecksum(const QByteArray& dataFromFile) {
     std::uint32_t checksum = 0;
 
-    std::uint32_t numElements = dataFromFile.size();
+    const std::uint32_t numElements = dataFromFile.size();
     const auto* data = reinterpret_cast<const std::uint8_t*>(dataFromFile.constData());
 
     for (std::int32_t i = 0; i < numElements; i++) {
@@ -189,8 +189,8 @@ std::uint32_t SaveManager::calcFirstChecksum(const QByteArray& dataFromFile) {
 std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
     std::uint32_t checksum = 0;
 
-    std::uint32_t numElements = dataFromFile.size() / 4;
-    const auto data = reinterpret_cast<const std::uint32_t*>(dataFromFile.constData());
+    const std::uint32_t numElements = dataFromFile.size() / 4;
+    const auto *data = reinterpret_cast<const std::uint32_t*>(dataFromFile.constData());
 
     for (std::int32_t i = 0; i < numElements; i++) {
         checksum ^= data[i];
@@ -201,19 +201,12 @@ std::uint32_t SaveManager::calcSecondChecksum(const QByteArray& dataFromFile) {
 
 /**
  * If none of the saves are enabled, return true.
- * This allows us, for example, to prevent saving if none of the saves's "Enabled" checkbox are checked.
+ * This allows us, for example, to prevent saving if none of the saves' "Enabled" checkbox are checked.
  */
 bool SaveManager::areAllSavesDisabled() const {
     return std::all_of(std::cbegin(m_saves), std::cend(m_saves), [](const Save::Slot& save) {
         return BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE);
     });
-    // for (const auto &save : saves) {
-    //     if (BITS_HAS(save.mainSave.flags, Save::SAVE_FLAG_ACTIVE)) {
-    //         return false;
-    //     }
-    // }
-    //
-    // return true;
 }
 
 /**

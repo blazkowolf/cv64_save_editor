@@ -8,8 +8,8 @@
  * @author 
  */
 
-#include "../../include/windows/MainWindow.h"
-#include "ComboBoxHelper.h"
+#include "windows/MainWindow.h"
+#include "util/combobox.h"
 #include "save/Save.h"
 #include "save/SaveManager.h"
 #include "file/FileManager.h"
