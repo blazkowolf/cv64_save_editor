@@ -2,6 +2,7 @@
 #include "ui_items.h"
 #include "save/Save.h"
 #include "save/SaveManager.h"
+#include "util/checkbox.h"
 #include "util/lineedit.h"
 
 ItemsForm::ItemsForm(QWidget *parent)
@@ -28,42 +29,35 @@ void ItemsForm::setup()
 {
     const QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
     const auto *validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
+
     // Jewels
-    LineEdit::setup(m_ui->leItemsSpecial1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsSpecial1->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::SPECIAL1, value);
-    });
+    CheckBox::setup(
+        m_ui->chbSpecial1,
+        [] { SaveManager::setItem(Save::Item::SPECIAL1, 1); },
+        [] {  SaveManager::setItem(Save::Item::SPECIAL1, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leItemsSpecial2, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SPECIAL2, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leItemsSpecial2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsSpecial2->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::SPECIAL2, value);
-    });
+    CheckBox::setup(
+        m_ui->chbSpecial2,
+        [] { SaveManager::setItem(Save::Item::SPECIAL2, 1); },
+        [] {  SaveManager::setItem(Save::Item::SPECIAL2, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leItemsSpecial3, 0, 1,
-    //     [](std::uint8_t value) {
-    //         // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-    //         if (SaveManager::getInstance()->getRegion() == Save::PAL ||
-    //             SaveManager::getInstance()->getRegion() == Save::JPN) {
-    //             SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SPECIAL3, value);
-    //         }
+    // LineEdit::setup(m_ui->leItemsSpecial3, QString::number(0), validator, [this](const QString &text) {
+    //     const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
+    //     m_ui->leItemsSpecial3->setText(QString::number(value));
+    //     // This item is version exclusive. Ensure we're only setting it when its associated region is set.
+    //     FIXME: bring back this conditional logic for SPECIAL3
+    //     if (const auto *inst = SaveManager::getInstance();
+    //         inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
+    //         SaveManager::setItem(Save::Item::SPECIAL3, value);
     //     }
-    // );
-    LineEdit::setup(m_ui->leItemsSpecial3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsSpecial3->setText(QString::number(value));
-        // This item is version exclusive. Ensure we're only setting it when its associated region is set.
-        if (const auto *inst = SaveManager::getInstance();
-            inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
-            SaveManager::setItem(Save::Item::SPECIAL3, value);
-        }
-    });
+    // });
+    CheckBox::setup(
+        m_ui->chbSpecial3,
+        [] { SaveManager::setItem(Save::Item::SPECIAL3, 1); },
+        [] {  SaveManager::setItem(Save::Item::SPECIAL3, 0); }
+    );
 
     // Healing and effect-cure items
     // LineEditHelper::setup(ui->leItemsRoastChicken, 0, 10,
@@ -229,148 +223,83 @@ void ItemsForm::setup()
     });
 
     // Keys
-    // LineEditHelper::setup(ui->leKeyScience1, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY1, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyScience1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyScience1->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::SCIENCE_KEY1, value);
-    });
+    CheckBox::setup(
+        m_ui->chbScienceKey1,
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY1, 1); },
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY1, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyScience2, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY2, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyScience2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyScience2->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::SCIENCE_KEY2, value);
-    });
+    CheckBox::setup(
+        m_ui->chbScienceKey2,
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY2, 1); },
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY2, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyScience3, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_SCIENCE_KEY3, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyScience3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyScience3->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::SCIENCE_KEY3, value);
-    });
+    CheckBox::setup(
+        m_ui->chbScienceKey3,
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY3, 1); },
+        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY3, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyClocktower1, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY1, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyClocktower1, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyClocktower1->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, value);
-    });
+    CheckBox::setup(
+        m_ui->chbClocktowerKey1,
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, 1); },
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyClocktower2, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY2, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyClocktower2, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyClocktower2->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, value);
-    });
+    CheckBox::setup(
+        m_ui->chbClocktowerKey2,
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, 1); },
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyClocktower3, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CLOCKTOWER_KEY3, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyClocktower3, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyClocktower3->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, value);
-    });
+    CheckBox::setup(
+        m_ui->chbClocktowerKey3,
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, 1); },
+        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyChamber, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_CHAMBER_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyChamber, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyChamber->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::CHAMBER_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbChamberKey,
+        [] { SaveManager::setItem(Save::Item::CHAMBER_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::CHAMBER_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyCopper, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_COPPER_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyCopper, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyCopper->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::COPPER_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbCopperKey,
+        [] { SaveManager::setItem(Save::Item::COPPER_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::COPPER_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyExecution, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_EXECUTION_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyExecution, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyExecution->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::EXECUTION_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbExecutionKey,
+        [] { SaveManager::setItem(Save::Item::EXECUTION_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::EXECUTION_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyGarden, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_GARDEN_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyGarden, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyGarden->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::GARDEN_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbGardenKey,
+        [] { SaveManager::setItem(Save::Item::GARDEN_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::GARDEN_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyLeftTower, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_LEFT_TOWER_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyLeftTower, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyLeftTower->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbLeftTowerKey,
+        [] { SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyArchives, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_ARCHIVES_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyArchives, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyArchives->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::ARCHIVES_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbArchivesKey,
+        [] { SaveManager::setItem(Save::Item::ARCHIVES_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::ARCHIVES_KEY, 0); }
+    );
 
-    // LineEditHelper::setup(ui->leKeyStoreroom, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_STOREROOM_KEY, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leKeyStoreroom, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leKeyStoreroom->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::STOREROOM_KEY, value);
-    });
+    CheckBox::setup(
+        m_ui->chbStoreroomKey,
+        [] { SaveManager::setItem(Save::Item::STOREROOM_KEY, 1); },
+        [] { SaveManager::setItem(Save::Item::STOREROOM_KEY, 0); }
+    );
 
     // Unused items
     // LineEditHelper::setup(ui->leItemsER, 0, 1,
@@ -404,14 +333,18 @@ void ItemsForm::populate(Save::Data *saveData) const
 
     const auto *inst = SaveManager::getInstance();
 
-    m_ui->leItemsSpecial1->setText(QString::number(saveData->getItem(Save::Item::SPECIAL1)));
-    m_ui->leItemsSpecial2->setText(QString::number(saveData->getItem(Save::Item::SPECIAL2)));
+    m_ui->chbSpecial1->setChecked(saveData->getItem(Save::Item::SPECIAL1) > 0);
+    m_ui->chbSpecial2->setChecked(saveData->getItem(Save::Item::SPECIAL2) > 0);
 
-    if (inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
-        m_ui->leItemsSpecial3->setText(QString::number(saveData->getItem(Save::Item::SPECIAL3)));
-    } else {
-        m_ui->leItemsSpecial3->setText("0");
-    }
+    // if (inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) {
+    //     m_ui->leItemsSpecial3->setText(QString::number(saveData->getItem(Save::Item::SPECIAL3)));
+    // } else {
+    //     m_ui->leItemsSpecial3->setText("0");
+    // }
+    m_ui->chbSpecial3->setChecked(
+        (inst->getRegion() == Save::Region::PAL || inst->getRegion() == Save::Region::JPN) &&
+        saveData->getItem(Save::Item::SPECIAL3) > 0
+    );
 
     m_ui->leItemsRoastChicken->setText(QString::number(saveData->getItem(actualItemId(inst, Save::Item::ROAST_CHICKEN))));
     m_ui->leItemsRoastBeef->setText(QString::number(saveData->getItem(actualItemId(inst, Save::Item::ROAST_BEEF))));
@@ -429,19 +362,19 @@ void ItemsForm::populate(Save::Data *saveData) const
     m_ui->leItemsMoonCard->setText(QString::number(saveData->getItem(Save::Item::MOON_CARD)));
     m_ui->leItemsNitro->setText(QString::number(saveData->getItem(Save::Item::MAGICAL_NITRO)));
     m_ui->leItemsMandragora->setText(QString::number(saveData->getItem(Save::Item::MANDRAGORA)));
-    m_ui->leKeyArchives->setText(QString::number(saveData->getItem(Save::Item::ARCHIVES_KEY)));
-    m_ui->leKeyLeftTower->setText(QString::number(saveData->getItem(Save::Item::LEFT_TOWER_KEY)));
-    m_ui->leKeyStoreroom->setText(QString::number(saveData->getItem(Save::Item::STOREROOM_KEY)));
-    m_ui->leKeyGarden->setText(QString::number(saveData->getItem(Save::Item::GARDEN_KEY)));
-    m_ui->leKeyCopper->setText(QString::number(saveData->getItem(Save::Item::COPPER_KEY)));
-    m_ui->leKeyChamber->setText(QString::number(saveData->getItem(Save::Item::CHAMBER_KEY)));
-    m_ui->leKeyExecution->setText(QString::number(saveData->getItem(Save::Item::EXECUTION_KEY)));
-    m_ui->leKeyScience1->setText(QString::number(saveData->getItem(Save::Item::SCIENCE_KEY1)));
-    m_ui->leKeyScience2->setText(QString::number(saveData->getItem(Save::Item::SCIENCE_KEY2)));
-    m_ui->leKeyScience3->setText(QString::number(saveData->getItem(Save::Item::SCIENCE_KEY3)));
-    m_ui->leKeyClocktower1->setText(QString::number(saveData->getItem(Save::Item::CLOCKTOWER_KEY1)));
-    m_ui->leKeyClocktower2->setText(QString::number(saveData->getItem(Save::Item::CLOCKTOWER_KEY2)));
-    m_ui->leKeyClocktower3->setText(QString::number(saveData->getItem(Save::Item::CLOCKTOWER_KEY3)));
+    m_ui->chbArchivesKey->setChecked(saveData->getItem(Save::Item::ARCHIVES_KEY) > 0);
+    m_ui->chbLeftTowerKey->setChecked(saveData->getItem(Save::Item::LEFT_TOWER_KEY) > 0);
+    m_ui->chbStoreroomKey->setChecked(saveData->getItem(Save::Item::STOREROOM_KEY) > 0);
+    m_ui->chbGardenKey->setChecked(saveData->getItem(Save::Item::GARDEN_KEY) > 0);
+    m_ui->chbCopperKey->setChecked(saveData->getItem(Save::Item::COPPER_KEY) > 0);
+    m_ui->chbChamberKey->setChecked(saveData->getItem(Save::Item::CHAMBER_KEY) > 0);
+    m_ui->chbExecutionKey->setChecked(saveData->getItem(Save::Item::EXECUTION_KEY) > 0);
+    m_ui->chbScienceKey1->setChecked(saveData->getItem(Save::Item::SCIENCE_KEY1) > 0);
+    m_ui->chbScienceKey2->setChecked(saveData->getItem(Save::Item::SCIENCE_KEY2) > 0);
+    m_ui->chbScienceKey3->setChecked(saveData->getItem(Save::Item::SCIENCE_KEY3) > 0);
+    m_ui->chbClocktowerKey1->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY1) > 0);
+    m_ui->chbClocktowerKey2->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY2) > 0);
+    m_ui->chbClocktowerKey3->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY3) > 0);
     m_ui->leItemsER->setText(QString::number(saveData->getItem(Save::Item::ENGAGEMENT_RING)));
     m_ui->leItemsIG->setText(QString::number(saveData->getItem(Save::Item::INCANDESCENT_GAZE)));
 }

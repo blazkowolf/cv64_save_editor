@@ -2,74 +2,19 @@
 <ui version="4.0">
  <class>ItemsForm</class>
  <widget class="QWidget" name="ItemsForm">
-  <widget class="QWidget" name="gridLayoutWidget_9">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>20</y>
-     <width>266</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridJewels">
-    <item row="1" column="4">
-     <widget class="QLabel" name="labelItemsSpecial3">
-      <property name="text">
-       <string>Special 3</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <widget class="QLineEdit" name="leItemsSpecial3">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="labelItemsSpecial1">
-      <property name="text">
-       <string>Special 1</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="leItemsSpecial2">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="leItemsSpecial1">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <widget class="QLabel" name="labelItemsSpecial2">
-      <property name="text">
-       <string>Special 2</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>691</width>
+    <height>486</height>
+   </rect>
+  </property>
   <widget class="QWidget" name="gridLayoutWidget_10">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>130</y>
+     <x>60</x>
+     <y>250</y>
      <width>506</width>
      <height>61</height>
     </rect>
@@ -182,8 +127,8 @@
   <widget class="QWidget" name="gridLayoutWidget_11">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>200</y>
+     <x>60</x>
+     <y>320</y>
      <width>506</width>
      <height>61</height>
     </rect>
@@ -262,8 +207,8 @@
   <widget class="QWidget" name="gridLayoutWidget_13">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>550</y>
+     <x>190</x>
+     <y>410</y>
      <width>245</width>
      <height>55</height>
     </rect>
@@ -308,8 +253,8 @@
   <widget class="QLabel" name="labelTitleUnusedItems">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>530</y>
+     <x>250</x>
+     <y>390</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -321,82 +266,11 @@
     <enum>Qt::TextFormat::MarkdownText</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="labelTitleJewels">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>0</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>**== Jewels ==**</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::TextFormat::MarkdownText</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelTitleQuestItems">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>300</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>**== Quest items ==**</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::TextFormat::MarkdownText</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>510</y>
-     <width>671</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Orientation::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>280</y>
-     <width>671</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Orientation::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_4">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>671</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Orientation::Horizontal</enum>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelTitleUsableItems">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>100</y>
+     <x>260</x>
+     <y>220</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -408,382 +282,181 @@
     <enum>Qt::TextFormat::MarkdownText</enum>
    </property>
   </widget>
-  <widget class="QLineEdit" name="leKeyGarden">
+  <widget class="QGroupBox" name="gbJewels">
    <property name="geometry">
     <rect>
-     <x>341</x>
-     <y>348</y>
-     <width>114</width>
-     <height>26</height>
+     <x>10</x>
+     <y>10</y>
+     <width>111</width>
+     <height>131</height>
     </rect>
    </property>
-   <property name="text">
-    <string>0</string>
+   <property name="title">
+    <string>Jewels</string>
    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QVBoxLayout" name="vlJewels">
+      <item>
+       <widget class="QCheckBox" name="chbSpecial1">
+        <property name="text">
+         <string>Special 1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chbSpecial2">
+        <property name="text">
+         <string>Special 2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chbSpecial3">
+        <property name="text">
+         <string>Special 3</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
   </widget>
-  <widget class="QLabel" name="labelCopper">
+  <widget class="QGroupBox" name="gbKeys">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>320</y>
-     <width>77</width>
-     <height>20</height>
+     <x>130</x>
+     <y>10</y>
+     <width>391</width>
+     <height>191</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Copper Key</string>
+   <property name="title">
+    <string>Keys</string>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelLeftTowerKey">
-   <property name="geometry">
-    <rect>
-     <x>115</x>
-     <y>321</y>
-     <width>97</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Left Tower Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelClockTower1">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>453</y>
-     <width>114</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Clocktower Key 1</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelExecution">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>393</y>
-     <width>92</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Execution Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelScience1">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>390</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Science Key 1</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelScience3">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>390</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Science Key 3</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelClockTower3">
-   <property name="geometry">
-    <rect>
-     <x>392</x>
-     <y>453</y>
-     <width>114</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Clocktower Key 3</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelClockTower2">
-   <property name="geometry">
-    <rect>
-     <x>271</x>
-     <y>453</y>
-     <width>114</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Clocktower Key 2</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyChamber">
-   <property name="geometry">
-    <rect>
-     <x>583</x>
-     <y>348</y>
-     <width>97</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyArchives">
-   <property name="geometry">
-    <rect>
-     <x>11</x>
-     <y>348</y>
-     <width>97</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyClocktower2">
-   <property name="geometry">
-    <rect>
-     <x>271</x>
-     <y>480</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyCopper">
-   <property name="geometry">
-    <rect>
-     <x>462</x>
-     <y>348</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelGardenKey">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>320</y>
-     <width>76</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Garden Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelChamber">
-   <property name="geometry">
-    <rect>
-     <x>583</x>
-     <y>321</y>
-     <width>88</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Chamber Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyScience1">
-   <property name="geometry">
-    <rect>
-     <x>205</x>
-     <y>420</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyClocktower1">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>480</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyStoreroom">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>348</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelStoreroom">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>321</y>
-     <width>99</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Storeroom Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyScience2">
-   <property name="geometry">
-    <rect>
-     <x>326</x>
-     <y>420</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyLeftTower">
-   <property name="geometry">
-    <rect>
-     <x>115</x>
-     <y>348</y>
-     <width>98</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelScience2">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>390</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Science Key 2</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyScience3">
-   <property name="geometry">
-    <rect>
-     <x>447</x>
-     <y>420</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelArchivesKey">
-   <property name="geometry">
-    <rect>
-     <x>11</x>
-     <y>321</y>
-     <width>83</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Archives Key</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyClocktower3">
-   <property name="geometry">
-    <rect>
-     <x>392</x>
-     <y>480</y>
-     <width>114</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="leKeyExecution">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>420</y>
-     <width>98</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QGridLayout" name="glKeys">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="chbArchivesKey">
+        <property name="text">
+         <string>Archives Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="chbChamberKey">
+        <property name="text">
+         <string>Chamber Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="chbClocktowerKey1">
+        <property name="text">
+         <string>Clocktower Key 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="chbLeftTowerKey">
+        <property name="text">
+         <string>Left Tower Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="chbExecutionKey">
+        <property name="text">
+         <string>Execution Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="chbClocktowerKey2">
+        <property name="text">
+         <string>Clocktower Key 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chbStoreroomKey">
+        <property name="text">
+         <string>Storeroom Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="chbScienceKey1">
+        <property name="text">
+         <string>Science Key 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="chbClocktowerKey3">
+        <property name="text">
+         <string>Clocktower Key 3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chbGardenKey">
+        <property name="text">
+         <string>Garden Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="chbScienceKey2">
+        <property name="text">
+         <string>Science Key 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="chbCopperKey">
+        <property name="text">
+         <string>Copper Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="chbScienceKey3">
+        <property name="text">
+         <string>Science Key 3</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

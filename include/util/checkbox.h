@@ -22,6 +22,17 @@ void setup(QCheckBox* cb, TValue value, const std::function<void(TValue)> &sette
     });
 }
 
+inline void setup(QCheckBox* cb, const std::function<void()> &setter, const std::function<void()> &unsetter)
+{
+    QObject::connect(cb, &QCheckBox::toggled, [setter, unsetter](const bool checked) {
+        if (checked) {
+            setter();
+        } else {
+            unsetter();
+        }
+    });
+}
+
 }
 
 #endif //CHECKBOXHELPER_H
