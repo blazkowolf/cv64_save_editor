@@ -17,65 +17,11 @@
    <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget_8">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>660</y>
-      <width>295</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="glBottomButtons">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="buttonMain">
-       <property name="text">
-        <string>Main</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="buttonEventFlags">
-       <property name="text">
-        <string>Event Flags</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="buttonItems">
-       <property name="text">
-        <string>Items</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QStackedWidget" name="stackedWidgetPages">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>701</width>
-      <height>621</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>-1</number>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>630</y>
-      <width>671</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="stackedWidgetPages"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

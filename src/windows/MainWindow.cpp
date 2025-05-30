@@ -22,6 +22,7 @@
 #include <QFileDialog>      // QFileDialog
 #include <QSpinBox>         // QSpinBox
 #include <QLineEdit>
+#include <QVBoxLayout>
 
 // Static instance for this window. We use this to access this window's functions in some parts of the code
 MainWindow* MainWindow::m_instance = nullptr;
@@ -41,28 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     // Initialize pages
-    m_ui->stackedWidgetPages->addWidget(m_pageGeneral);
-    m_ui->stackedWidgetPages->addWidget(m_pageItems);
-    m_ui->stackedWidgetPages->addWidget(m_pageEventFlags);
+    m_ui->stackedWidgetPages->addTab(m_pageGeneral, "Main");
+    m_ui->stackedWidgetPages->addTab(m_pageItems, "Items");
+    m_ui->stackedWidgetPages->addTab(m_pageEventFlags, "Event Flags");
 
     m_pageGeneral->setup();
     m_pageItems->setup();
     m_pageEventFlags->setup();
-
-    // Initialize pages and the buttons that travel to those pages
-    // When each button is pressed, "onPageButtonClicked" will be called passing
-    // the desired page by arguments
-    QObject::connect(m_ui->buttonMain, &QPushButton::clicked, this, [this]() {
-        m_ui->stackedWidgetPages->setCurrentWidget(m_pageGeneral);
-    });
-
-    QObject::connect(m_ui->buttonItems, &QPushButton::clicked, this, [this]() {
-        m_ui->stackedWidgetPages->setCurrentWidget(m_pageItems);
-    });
-
-    QObject::connect(m_ui->buttonEventFlags, &QPushButton::clicked, this, [this]() {
-        m_ui->stackedWidgetPages->setCurrentWidget(m_pageEventFlags);
-    });
 
     // Initialize toolbar options
     setupFileMenu();
