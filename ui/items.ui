@@ -7,457 +7,360 @@
     <x>0</x>
     <y>0</y>
     <width>691</width>
-    <height>486</height>
+    <height>478</height>
    </rect>
   </property>
-  <widget class="QWidget" name="gridLayoutWidget_10">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>250</y>
-     <width>506</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridHealing">
-    <item row="2" column="6">
-     <widget class="QLineEdit" name="leItemsPurifying">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <widget class="QLabel" name="labelItemsRoastBeef">
-      <property name="text">
-       <string>Roast Beef</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QLineEdit" name="leItemsHealingKit">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="7">
-     <widget class="QLabel" name="labelItemsCureAmpoule">
-      <property name="text">
-       <string>Cure Ampoule</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5">
-     <widget class="QLabel" name="labelItemsHealingKit">
-      <property name="text">
-       <string>Healing Kit</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="leItemsRoastBeef">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="8">
-     <widget class="QLabel" name="labelItemsPoutPourri">
-      <property name="text">
-       <string>Pout Pourri</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="labelItemsRoastChicken">
-      <property name="text">
-       <string>Roast Chicken</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="8">
-     <widget class="QLineEdit" name="leItemsPoutPourri">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="leItemsRoastChicken">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="6">
-     <widget class="QLabel" name="labelItemsPurifying">
-      <property name="text">
-       <string>Purifying</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="7">
-     <widget class="QLineEdit" name="leItemsCureAmpoule">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="gridLayoutWidget_11">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>320</y>
-     <width>506</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridQuest">
-    <item row="1" column="4">
-     <widget class="QLabel" name="labelItemsMoonCard">
-      <property name="text">
-       <string>Moon Card</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <widget class="QLabel" name="labelItemsSunCard">
-      <property name="text">
-       <string>Sun Card</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QLineEdit" name="leItemsNitro">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5">
-     <widget class="QLabel" name="labelItemsNitro">
-      <property name="text">
-       <string>Magical Nitro</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <widget class="QLineEdit" name="leItemsMoonCard">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="leItemsSunCard">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="6">
-     <widget class="QLabel" name="labelItemsMandragora">
-      <property name="text">
-       <string>Mandragora</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="6">
-     <widget class="QLineEdit" name="leItemsMandragora">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="gridLayoutWidget_13">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>410</y>
-     <width>245</width>
-     <height>55</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridItemsUnused">
-    <item row="1" column="3">
-     <widget class="QLabel" name="labelItemsIG">
-      <property name="text">
-       <string>Incandescent gaze</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="leItemsER">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="leItemsIG">
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="labelItemsER">
-      <property name="text">
-       <string>Engagement ring</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QLabel" name="labelTitleUnusedItems">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>390</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>**== Unused items ==**</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::TextFormat::MarkdownText</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelTitleUsableItems">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>220</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>**== Usable items ==**</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::TextFormat::MarkdownText</enum>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="gbJewels">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>111</width>
-     <height>131</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Jewels</string>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QVBoxLayout" name="vlJewels">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QGridLayout" name="glUnique">
+     <item row="0" column="0">
+      <widget class="QGroupBox" name="gbJewels">
+       <property name="title">
+        <string>Jewels</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QVBoxLayout" name="vlJewels">
+          <item>
+           <widget class="QCheckBox" name="chbSpecial1">
+            <property name="text">
+             <string>Special 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chbSpecial2">
+            <property name="text">
+             <string>Special 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chbSpecial3">
+            <property name="text">
+             <string>Special 3</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1" rowspan="2">
+      <widget class="QGroupBox" name="gbKeys">
+       <property name="title">
+        <string>Keys</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QGridLayout" name="glKeys">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="chbArchivesKey">
+            <property name="text">
+             <string>Archives Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="chbChamberKey">
+            <property name="text">
+             <string>Chamber Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="chbClocktowerKey1">
+            <property name="text">
+             <string>Clocktower Key 1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chbLeftTowerKey">
+            <property name="text">
+             <string>Left Tower Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="chbExecutionKey">
+            <property name="text">
+             <string>Execution Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="chbClocktowerKey2">
+            <property name="text">
+             <string>Clocktower Key 2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chbStoreroomKey">
+            <property name="text">
+             <string>Storeroom Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="chbScienceKey1">
+            <property name="text">
+             <string>Science Key 1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QCheckBox" name="chbClocktowerKey3">
+            <property name="text">
+             <string>Clocktower Key 3</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="chbGardenKey">
+            <property name="text">
+             <string>Garden Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="chbScienceKey2">
+            <property name="text">
+             <string>Science Key 2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="chbCopperKey">
+            <property name="text">
+             <string>Copper Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="chbScienceKey3">
+            <property name="text">
+             <string>Science Key 3</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QGroupBox" name="gbUnused">
+       <property name="title">
+        <string>Unused</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QVBoxLayout" name="vlUnused">
+          <item>
+           <widget class="QCheckBox" name="chbItemsER">
+            <property name="text">
+             <string>Engagement ring</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chbItemsIG">
+            <property name="text">
+             <string>Incandescent gaze</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbConsumables">
+     <property name="title">
+      <string>Consumables</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QCheckBox" name="chbSpecial1">
-        <property name="text">
-         <string>Special 1</string>
-        </property>
-       </widget>
+       <layout class="QFormLayout" name="flConsumables">
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelItemsRoastChicken">
+          <property name="text">
+           <string>Roast Chicken</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="leItemsRoastChicken"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelItemsRoastBeef">
+          <property name="text">
+           <string>Roast Beef</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="leItemsRoastBeef"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelItemsHealingKit">
+          <property name="text">
+           <string>Healing Kit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="leItemsHealingKit"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelItemsPurifying">
+          <property name="text">
+           <string>Purifying</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="leItemsPurifying"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="labelItemsCureAmpoule">
+          <property name="text">
+           <string>Cure Ampoule</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="leItemsCureAmpoule"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="labelItemsPoutPourri">
+          <property name="text">
+           <string>Pout Pourri</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="leItemsPoutPourri"/>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="chbSpecial2">
-        <property name="text">
-         <string>Special 2</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chbSpecial3">
-        <property name="text">
-         <string>Special 3</string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="glQuest">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="leItemsSunCard"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelItemsSunCard">
+          <property name="text">
+           <string>Sun Card</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelItemsMoonCard">
+          <property name="text">
+           <string>Moon Card</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="chbItemsMagicalNitro">
+            <property name="text">
+             <string>Magical Nitro</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chbItemsMandragora">
+            <property name="text">
+             <string>Mandragora</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="leItemsMoonCard"/>
+        </item>
+       </layout>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="gbKeys">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>10</y>
-     <width>391</width>
-     <height>191</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Keys</string>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <layout class="QGridLayout" name="glKeys">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="chbArchivesKey">
-        <property name="text">
-         <string>Archives Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="chbChamberKey">
-        <property name="text">
-         <string>Chamber Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QCheckBox" name="chbClocktowerKey1">
-        <property name="text">
-         <string>Clocktower Key 1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="chbLeftTowerKey">
-        <property name="text">
-         <string>Left Tower Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="chbExecutionKey">
-        <property name="text">
-         <string>Execution Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QCheckBox" name="chbClocktowerKey2">
-        <property name="text">
-         <string>Clocktower Key 2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chbStoreroomKey">
-        <property name="text">
-         <string>Storeroom Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="chbScienceKey1">
-        <property name="text">
-         <string>Science Key 1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QCheckBox" name="chbClocktowerKey3">
-        <property name="text">
-         <string>Clocktower Key 3</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="chbGardenKey">
-        <property name="text">
-         <string>Garden Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="chbScienceKey2">
-        <property name="text">
-         <string>Science Key 2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="chbCopperKey">
-        <property name="text">
-         <string>Copper Key</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QCheckBox" name="chbScienceKey3">
-        <property name="text">
-         <string>Science Key 3</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

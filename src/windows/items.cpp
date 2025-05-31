@@ -25,23 +25,23 @@ Save::Item actualItemId(const SaveManager *instance, Save::Item item)
     return item;
 }
 
+void setupExclusiveItem(QCheckBox *checkBox, Save::Item item)
+{
+    CheckBox::setup(
+        checkBox,
+        [item] { SaveManager::setItem(item, 1); },
+        [item] { SaveManager::setItem(item, 0); }
+    );
+}
+
 void ItemsForm::setup()
 {
     const QRegularExpression acceptDecimalAndHexRegex(R"(^(\d{1,8}|0[xX][0-9A-Fa-f]{1,8})$)");
     const auto *validator = new QRegularExpressionValidator(acceptDecimalAndHexRegex, this);
 
     // Jewels
-    CheckBox::setup(
-        m_ui->chbSpecial1,
-        [] { SaveManager::setItem(Save::Item::SPECIAL1, 1); },
-        [] {  SaveManager::setItem(Save::Item::SPECIAL1, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbSpecial2,
-        [] { SaveManager::setItem(Save::Item::SPECIAL2, 1); },
-        [] {  SaveManager::setItem(Save::Item::SPECIAL2, 0); }
-    );
+    setupExclusiveItem(m_ui->chbSpecial1, Save::Item::SPECIAL1);
+    setupExclusiveItem(m_ui->chbSpecial2, Save::Item::SPECIAL2);
 
     // LineEdit::setup(m_ui->leItemsSpecial3, QString::number(0), validator, [this](const QString &text) {
     //     const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
@@ -56,7 +56,7 @@ void ItemsForm::setup()
     CheckBox::setup(
         m_ui->chbSpecial3,
         [] { SaveManager::setItem(Save::Item::SPECIAL3, 1); },
-        [] {  SaveManager::setItem(Save::Item::SPECIAL3, 0); }
+        [] { SaveManager::setItem(Save::Item::SPECIAL3, 0); }
     );
 
     // Healing and effect-cure items
@@ -200,129 +200,27 @@ void ItemsForm::setup()
         SaveManager::setItem(Save::Item::MOON_CARD, value);
     });
 
-    // LineEditHelper::setup(ui->leItemsNitro, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_MAGICAL_NITRO, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leItemsNitro, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsNitro->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::MAGICAL_NITRO, value);
-    });
-
-    // LineEditHelper::setup(ui->leItemsMandragora, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_MANDRAGORA, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leItemsMandragora, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsMandragora->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::MANDRAGORA, value);
-    });
+    setupExclusiveItem(m_ui->chbItemsMagicalNitro, Save::Item::MAGICAL_NITRO);
+    setupExclusiveItem(m_ui->chbItemsMandragora, Save::Item::MANDRAGORA);
 
     // Keys
-    CheckBox::setup(
-        m_ui->chbScienceKey1,
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY1, 1); },
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY1, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbScienceKey2,
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY2, 1); },
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY2, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbScienceKey3,
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY3, 1); },
-        [] { SaveManager::setItem(Save::Item::SCIENCE_KEY3, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbClocktowerKey1,
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, 1); },
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY1, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbClocktowerKey2,
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, 1); },
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY2, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbClocktowerKey3,
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, 1); },
-        [] { SaveManager::setItem(Save::Item::CLOCKTOWER_KEY3, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbChamberKey,
-        [] { SaveManager::setItem(Save::Item::CHAMBER_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::CHAMBER_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbCopperKey,
-        [] { SaveManager::setItem(Save::Item::COPPER_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::COPPER_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbExecutionKey,
-        [] { SaveManager::setItem(Save::Item::EXECUTION_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::EXECUTION_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbGardenKey,
-        [] { SaveManager::setItem(Save::Item::GARDEN_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::GARDEN_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbLeftTowerKey,
-        [] { SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::LEFT_TOWER_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbArchivesKey,
-        [] { SaveManager::setItem(Save::Item::ARCHIVES_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::ARCHIVES_KEY, 0); }
-    );
-
-    CheckBox::setup(
-        m_ui->chbStoreroomKey,
-        [] { SaveManager::setItem(Save::Item::STOREROOM_KEY, 1); },
-        [] { SaveManager::setItem(Save::Item::STOREROOM_KEY, 0); }
-    );
+    setupExclusiveItem(m_ui->chbScienceKey1, Save::Item::SCIENCE_KEY1);
+    setupExclusiveItem(m_ui->chbScienceKey2, Save::Item::SCIENCE_KEY2);
+    setupExclusiveItem(m_ui->chbScienceKey3, Save::Item::SCIENCE_KEY3);
+    setupExclusiveItem(m_ui->chbClocktowerKey1, Save::Item::CLOCKTOWER_KEY1);
+    setupExclusiveItem(m_ui->chbClocktowerKey2, Save::Item::CLOCKTOWER_KEY2);
+    setupExclusiveItem(m_ui->chbClocktowerKey3, Save::Item::CLOCKTOWER_KEY3);
+    setupExclusiveItem(m_ui->chbChamberKey, Save::Item::CHAMBER_KEY);
+    setupExclusiveItem(m_ui->chbCopperKey, Save::Item::COPPER_KEY);
+    setupExclusiveItem(m_ui->chbExecutionKey, Save::Item::EXECUTION_KEY);
+    setupExclusiveItem(m_ui->chbGardenKey, Save::Item::GARDEN_KEY);
+    setupExclusiveItem(m_ui->chbLeftTowerKey, Save::Item::LEFT_TOWER_KEY);
+    setupExclusiveItem(m_ui->chbArchivesKey, Save::Item::ARCHIVES_KEY);
+    setupExclusiveItem(m_ui->chbStoreroomKey, Save::Item::STOREROOM_KEY);
 
     // Unused items
-    // LineEditHelper::setup(ui->leItemsER, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_ENGAGEMENT_RING, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leItemsER, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsER->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::ENGAGEMENT_RING, value);
-    });
-
-    // LineEditHelper::setup(ui->leItemsIG, 0, 1,
-    //     [](std::uint8_t value) {
-    //         SaveManager::getInstance()->setItem(Save::Item::ITEM_ID_INCANDESCENT_GAZE, value);
-    //     }
-    // );
-    LineEdit::setup(m_ui->leItemsIG, QString::number(0), validator, [this](const QString &text) {
-        const auto value = LineEdit::handleUnsignedInteger<std::uint8_t>(text, 0, 1);
-        m_ui->leItemsIG->setText(QString::number(value));
-        SaveManager::setItem(Save::Item::INCANDESCENT_GAZE, value);
-    });
+    setupExclusiveItem(m_ui->chbItemsER, Save::Item::ENGAGEMENT_RING);
+    setupExclusiveItem(m_ui->chbItemsIG, Save::Item::INCANDESCENT_GAZE);
 }
 
 void ItemsForm::populate(Save::Data *saveData) const
@@ -360,8 +258,8 @@ void ItemsForm::populate(Save::Data *saveData) const
 
     m_ui->leItemsSunCard->setText(QString::number(saveData->getItem(Save::Item::SUN_CARD)));
     m_ui->leItemsMoonCard->setText(QString::number(saveData->getItem(Save::Item::MOON_CARD)));
-    m_ui->leItemsNitro->setText(QString::number(saveData->getItem(Save::Item::MAGICAL_NITRO)));
-    m_ui->leItemsMandragora->setText(QString::number(saveData->getItem(Save::Item::MANDRAGORA)));
+    m_ui->chbItemsMagicalNitro->setChecked(saveData->getItem(Save::Item::MAGICAL_NITRO) > 0);
+    m_ui->chbItemsMandragora->setChecked(saveData->getItem(Save::Item::MANDRAGORA) > 0);
     m_ui->chbArchivesKey->setChecked(saveData->getItem(Save::Item::ARCHIVES_KEY) > 0);
     m_ui->chbLeftTowerKey->setChecked(saveData->getItem(Save::Item::LEFT_TOWER_KEY) > 0);
     m_ui->chbStoreroomKey->setChecked(saveData->getItem(Save::Item::STOREROOM_KEY) > 0);
@@ -375,6 +273,6 @@ void ItemsForm::populate(Save::Data *saveData) const
     m_ui->chbClocktowerKey1->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY1) > 0);
     m_ui->chbClocktowerKey2->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY2) > 0);
     m_ui->chbClocktowerKey3->setChecked(saveData->getItem(Save::Item::CLOCKTOWER_KEY3) > 0);
-    m_ui->leItemsER->setText(QString::number(saveData->getItem(Save::Item::ENGAGEMENT_RING)));
-    m_ui->leItemsIG->setText(QString::number(saveData->getItem(Save::Item::INCANDESCENT_GAZE)));
+    m_ui->chbItemsER->setChecked(saveData->getItem(Save::Item::ENGAGEMENT_RING) > 0);
+    m_ui->chbItemsIG->setChecked(saveData->getItem(Save::Item::INCANDESCENT_GAZE) > 0);
 }
