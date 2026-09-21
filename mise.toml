@@ -1,0 +1,5 @@
+[tasks."build:configure"]
+run = 'cmake -B build -S .'
+
+[tasks.build]
+run = 'cmake --build build'
